@@ -41,7 +41,7 @@ export const login = async (loginData: LoginSchemaType) => {
     return {
       success: true,
       token: response.data.token as string,
-      data: response.data.data as AuthUser,
+      user: response.data.data as AuthUser,
       message: response.data.message || "Login successful",
     };
   } catch (error) {
@@ -63,7 +63,7 @@ export const whoAmI = async () => {
 
     return {
       success: true,
-      data: response.data.data as AuthUser,
+      user: response.data.data as AuthUser,
       message: "User fetched successfully",
     };
   } catch (error) {

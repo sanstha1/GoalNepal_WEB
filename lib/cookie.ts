@@ -1,45 +1,54 @@
 "use server"
+
 import { cookies } from "next/headers"
 
-export interface UserData {
-    _id: string; 
-    
-    email : string;  
-    profilePicture ?: string ; 
-    role : 'user' | 'admin'; 
-    createdAt : string; 
-    updatedAt : string; 
-    [key:string] : unknown; 
-
+interface UserData {
+    _id: string;
+    fullName: string;
+    email: string;
+    role: string;
+    profilePicture?: string | null; // Added | null here
+    createdAt: string;
+    updatedAt: string;
+    [key: string]: unknown;
 }
-
 
 export const setAuthToken = async (token: string) => {
     const cookieStore = await cookies();
-    cookieStore.set({ name: "auth_token", value: token })
+    cookieStore.set({
+        name: 'token',
+        value: token,
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production'
+    })
 }
+
 export const getAuthToken = async () => {
     const cookieStore = await cookies();
-    const token = cookieStore.get("auth_token")?.value;
-    return token || null;
+    return cookieStore.get('token')?.value || null;
 }
-export const setUserData = async (userData: unknown) => {
+
+export const setUserData = async (userData: UserData) => {
     const cookieStore = await cookies();
-    // cookie can only store string
-    // convert object to string -> JSON.stringify "{}"
-    cookieStore.set({ name: "user_data", value: JSON.stringify(userData) })
+    cookieStore.set({
+        name: 'user', 
+        value: JSON.stringify(userData),
+        path: '/',
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production'
+    })
 }
-export const getUserData = async () => {
+
+export const getUserData = async (): Promise<UserData | null> => {
     const cookieStore = await cookies();
-    const userData = cookieStore.get("user_data")?.value;
-    if (userData) {
-        // convert string to object -> JSON.parse
-        return JSON.parse(userData);
-    }
-    return null;
+    const userData = cookieStore.get('user')?.value || null;
+    return userData ? JSON.parse(userData) : null;
 }
+
 export const clearAuthCookies = async () => {
     const cookieStore = await cookies();
-    cookieStore.delete("auth_token");
-    cookieStore.delete("user_data");
+    cookieStore.delete('token');
+    cookieStore.delete('user');
 }

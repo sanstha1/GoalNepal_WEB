@@ -1,9 +1,10 @@
 export interface AuthUser {
-  id: string;
+  _id: string;
   fullName: string; 
   email: string;
   profilePicture?: string | null;
-  role?: "user" | "admin" | string;
+  role: string;
   createdAt: string;
-  updatedAt?: string;
+  updatedAt: string;
+  [key: string]: unknown;
 }

@@ -39,7 +39,7 @@ export const handleRegister = async (data: RegisterSchemaType) => {
     return {
       success: true,
       message: "Registration successful",
-      data: response.data as AuthUser,
+      user: response.data as AuthUser,
     };
   } catch (error) {
     return {
@@ -73,10 +73,9 @@ export const handleLogin = async (data: LoginSchemaType) => {
       path: "/",
     });
 
-    // ✅ USER DATA (used by app)
+    
     (await
-          // ✅ USER DATA (used by app)
-          cookieStore).set("user", JSON.stringify(response.data), {
+          cookieStore).set("user", JSON.stringify(response.user), {
       sameSite: "lax",
       path: "/",
     });
@@ -84,7 +83,7 @@ export const handleLogin = async (data: LoginSchemaType) => {
     return {
       success: true,
       message: "Login successful",
-      data: response.data as AuthUser,
+      data: response.user as AuthUser,
     };
   } catch (error) {
     return {
@@ -117,7 +116,7 @@ export const handleWhoAmI = async () => {
     return {
       success: true,
       message: "User data fetched successfully",
-      data: result.data as AuthUser,
+      user: result.user as AuthUser,
     };
   } catch (error) {
     return {
@@ -149,7 +148,7 @@ export const handleUpdateProfile = async (profileData: FormData) => {
     return {
       success: true,
       message: "Profile updated successfully",
-      data: result.data as AuthUser,
+      user: result.data as AuthUser,
     };
   } catch (error) {
     return {
