@@ -10,8 +10,6 @@ import type {
 import type { AuthUser } from "../types/AuthUser";
 import type { AdminRegisterData } from "@/app/admin/register/schema";
 
-/* -------------------------------- REGISTER -------------------------------- */
-
 export const register = async (registerData: RegisterSchemaType) => {
   try {
     const response = await axios.post(API.AUTH.REGISTER, registerData);
@@ -32,16 +30,15 @@ export const register = async (registerData: RegisterSchemaType) => {
   }
 };
 
-/* ---------------------------------- LOGIN ---------------------------------- */
-
 export const login = async (loginData: LoginSchemaType) => {
   try {
     const response = await axios.post(API.AUTH.LOGIN, loginData);
 
+    // Backend returns: { token, user: { id, fullName, email, profilePicture } }
     return {
       success: true,
       token: response.data.token as string,
-      user: response.data.data as AuthUser,
+      user: response.data.user as AuthUser, // Changed from response.data.data to response.data.user
       message: response.data.message || "Login successful",
     };
   } catch (error) {
@@ -55,12 +52,15 @@ export const login = async (loginData: LoginSchemaType) => {
   }
 };
 
-/* -------------------------------- WHO AM I --------------------------------- */
-
-export const whoAmI = async () => {
+export const whoAmI = async (token?: string) => {
   try {
-    const response = await axios.get(API.AUTH.WHOAMI);
+    const config = token 
+      ? { headers: { Authorization: `Bearer ${token}` } }
+      : {};
+    
+    const response = await axios.get(API.AUTH.WHOAMI, config);
 
+    // Backend returns: { success: true, data: user }
     return {
       success: true,
       user: response.data.data as AuthUser,
@@ -77,12 +77,17 @@ export const whoAmI = async () => {
   }
 };
 
-/* ------------------------------ UPDATE PROFILE ------------------------------ */
-
 export const updateProfile = async (profileData: FormData) => {
   try {
-    const response = await axios.put(
-      API.AUTH.UPDATE_PROFILE,
+    const userDataString = await import('../cookie').then(m => m.getUserData());
+    const userData = userDataString ? await userDataString : null;
+    
+    if (!userData || !userData._id) {
+      throw new Error("User not found");
+    }
+
+    const response = await axios.post(
+      `/api/profile/upload-profile-picture/${userData._id}`,
       profileData,
       {
         headers: {
@@ -91,6 +96,7 @@ export const updateProfile = async (profileData: FormData) => {
       }
     );
 
+    // Backend returns: { success: true, message, data: user }
     return {
       success: true,
       data: response.data.data as AuthUser,
@@ -106,8 +112,6 @@ export const updateProfile = async (profileData: FormData) => {
     );
   }
 };
-
-/* ----------------------------- ADMIN REGISTER ------------------------------- */
 
 export const handleAdminRegister = async (
   adminData: AdminRegisterData

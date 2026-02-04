@@ -2,8 +2,14 @@ export const API = {
     AUTH: {
         REGISTER : "/api/auth/register",
         LOGIN : "/api/auth/login",
-        WHOAMI: '/api/auth/whoami',
-        UPDATE_PROFILE : "/api/auth/profile",
+        WHOAMI: '/api/profile/me',
+        UPDATE_PROFILE : "/api/profile/upload-profile-picture",
+    },
+    PROFILE: {
+        ME: '/api/profile/me',
+        GET_BY_ID: '/api/profile',
+        UPDATE: '/api/profile',
+        UPLOAD_PICTURE: '/api/profile/upload-profile-picture',
     },
     ADMIN: {
         REGISTER: "/api/admin/register",

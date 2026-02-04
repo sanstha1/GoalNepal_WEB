@@ -9,7 +9,7 @@ import { User, Mail, Bell, Moon, Camera } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
-  const { user, setUser, logout, loading } = useAuth();
+  const { user, setUser, logout, loading, refreshUser } = useAuth();
   const router = useRouter();
   const [uploadingImage, setUploadingImage] = useState(false);
   const [notifications, setNotifications] = useState(true);
@@ -17,10 +17,13 @@ export default function ProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!loading && !user) {
-      toast.info("Please log in to view your profile");
-    }
-  }, [user, loading]);
+    const loadUserData = async () => {
+      if (!loading && !user) {
+        await refreshUser();
+      }
+    };
+    loadUserData();
+  }, [loading, user, refreshUser]);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -45,8 +48,8 @@ export default function ProfilePage() {
       } else {
         toast.error(response.message || "Update failed");
       }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
+      console.error("Upload error:", error);
       toast.error("An unexpected error occurred during upload");
     } finally {
       setUploadingImage(false);
