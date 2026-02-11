@@ -14,6 +14,8 @@ import {
   login,
   whoAmI,
   updateProfile,
+  requestPasswordReset,
+  resetPassword,
 } from "@/lib/api/auth";
 
 import {
@@ -73,7 +75,6 @@ export const handleLogin = async (data: LoginSchemaType) => {
       maxAge: 60 * 60 * 24 * 7
     });
 
-    // Fetch full user data using whoAmI since login only returns basic info
     console.log('handleLogin - Fetching full user data via whoAmI');
     try {
       const userResult = await whoAmI(response.token);
@@ -103,7 +104,6 @@ export const handleLogin = async (data: LoginSchemaType) => {
         };
       } else {
         console.error('handleLogin - whoAmI failed, falling back to login user data');
-        // Fallback: use user data from login response
         const userString = JSON.stringify(response.user);
         cookieStore.set('user', userString, {
           httpOnly: false,
@@ -121,7 +121,6 @@ export const handleLogin = async (data: LoginSchemaType) => {
       }
     } catch (whoAmIError) {
       console.error('handleLogin - whoAmI error:', whoAmIError);
-      // Fallback: use user data from login response
       const userString = JSON.stringify(response.user);
       cookieStore.set('user', userString, {
         httpOnly: false,
@@ -226,6 +225,52 @@ export const handleUpdateProfile = async (profileData: FormData) => {
     return {
       success: false,
       message: (error as Error).message || "Update profile action failed",
+    };
+  }
+};
+
+export const handleRequestPasswordReset = async (email: string) => {
+  try {
+    const response = await requestPasswordReset(email);
+    
+    if (response.success) {
+      return {
+        success: true,
+        message: "Password reset email sent successfully",
+      };
+    }
+    
+    return {
+      success: false,
+      message: response.message || "Request password reset failed",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: (error as Error).message || "Request password reset action failed",
+    };
+  }
+};
+
+export const handleResetPassword = async (token: string, newPassword: string) => {
+  try {
+    const response = await resetPassword(token, newPassword);
+    
+    if (response.success) {
+      return {
+        success: true,
+        message: "Password has been reset successfully",
+      };
+    }
+    
+    return {
+      success: false,
+      message: response.message || "Reset password failed",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: (error as Error).message || "Reset password action failed",
     };
   }
 };

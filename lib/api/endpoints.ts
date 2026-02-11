@@ -4,6 +4,8 @@ export const API = {
         LOGIN : "/api/auth/login",
         WHOAMI: '/api/profile/me',
         UPDATE_PROFILE : "/api/profile/upload-profile-picture",
+        REQUEST_PASSWORD_RESET: '/api/auth/request-password-reset',
+        RESET_PASSWORD: (token: string) => `/api/auth/reset-password/${token}`,
     },
     PROFILE: {
         ME: '/api/profile/me',

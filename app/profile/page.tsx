@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { handleUpdateProfile } from "@/lib/actions/auth-action";
 import { toast } from "react-toastify";
 import Header from "@/components/header";
-import { User, Mail, Bell, Moon, Camera } from "lucide-react";
+import { User, Mail, Bell, Moon, Camera, LogOut, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
@@ -14,6 +14,7 @@ export default function ProfilePage() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -54,6 +55,19 @@ export default function ProfilePage() {
     } finally {
       setUploadingImage(false);
     }
+  };
+
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = () => {
+    setShowLogoutModal(false);
+    logout();
+  };
+
+  const cancelLogout = () => {
+    setShowLogoutModal(false);
   };
 
   const getImageUrl = (imagePath?: string | null) => {
@@ -209,14 +223,54 @@ export default function ProfilePage() {
             </div>
 
             <button 
-              onClick={logout} 
+              onClick={handleLogoutClick} 
               className="w-full bg-white border border-gray-200 text-gray-400 py-4 rounded-2xl font-bold hover:bg-red-50 hover:text-red-500 hover:border-red-100 transition-all flex items-center justify-center gap-2 group"
             >
+              <LogOut size={20} />
               Logout
             </button>
           </div>
         </div>
       </main>
+
+      {showLogoutModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
+            <button
+              onClick={cancelLogout}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <X size={24} />
+            </button>
+            
+            <div className="text-center">
+              <div className="bg-red-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <LogOut size={32} className="text-red-500" />
+              </div>
+              
+              <h2 className="text-2xl font-bold text-gray-800 mb-3">Logout Confirmation</h2>
+              <p className="text-gray-600 mb-8">
+                Are you sure you want to logout? You&apos;ll need to sign in again to access your account.
+              </p>
+              
+              <div className="flex gap-4">
+                <button
+                  onClick={cancelLogout}
+                  className="flex-1 py-3 px-6 bg-gray-100 text-gray-700 rounded-2xl font-bold hover:bg-gray-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmLogout}
+                  className="flex-1 py-3 px-6 bg-red-500 text-white rounded-2xl font-bold hover:bg-red-600 transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

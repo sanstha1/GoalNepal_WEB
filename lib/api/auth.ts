@@ -34,11 +34,10 @@ export const login = async (loginData: LoginSchemaType) => {
   try {
     const response = await axios.post(API.AUTH.LOGIN, loginData);
 
-    // Backend returns: { token, user: { id, fullName, email, profilePicture } }
     return {
       success: true,
       token: response.data.token as string,
-      user: response.data.user as AuthUser, // Changed from response.data.data to response.data.user
+      user: response.data.user as AuthUser,
       message: response.data.message || "Login successful",
     };
   } catch (error) {
@@ -60,7 +59,6 @@ export const whoAmI = async (token?: string) => {
     
     const response = await axios.get(API.AUTH.WHOAMI, config);
 
-    // Backend returns: { success: true, data: user }
     return {
       success: true,
       user: response.data.data as AuthUser,
@@ -96,7 +94,6 @@ export const updateProfile = async (profileData: FormData) => {
       }
     );
 
-    // Backend returns: { success: true, message, data: user }
     return {
       success: true,
       data: response.data.data as AuthUser,
@@ -109,6 +106,46 @@ export const updateProfile = async (profileData: FormData) => {
       err.response?.data?.message ||
         err.message ||
         "Update profile failed"
+    );
+  }
+};
+
+export const requestPasswordReset = async (email: string) => {
+  try {
+    const response = await axios.post(API.AUTH.REQUEST_PASSWORD_RESET, { email });
+    
+    return {
+      success: true,
+      data: response.data.data,
+      message: response.data.message || "Password reset email sent successfully",
+    };
+  } catch (error) {
+    const err = error as AxiosError<{ message?: string }>;
+
+    throw new Error(
+      err.response?.data?.message ||
+        err.message ||
+        "Request password reset failed"
+    );
+  }
+};
+
+export const resetPassword = async (token: string, newPassword: string) => {
+  try {
+    const response = await axios.post(API.AUTH.RESET_PASSWORD(token), { newPassword });
+    
+    return {
+      success: true,
+      data: response.data.data,
+      message: response.data.message || "Password reset successfully",
+    };
+  } catch (error) {
+    const err = error as AxiosError<{ message?: string }>;
+
+    throw new Error(
+      err.response?.data?.message ||
+        err.message ||
+        "Reset password failed"
     );
   }
 };
