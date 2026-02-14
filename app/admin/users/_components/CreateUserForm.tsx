@@ -7,7 +7,7 @@ import { useRef, useState, useTransition } from "react";
 import { toast } from "react-toastify";
 import { handleCreateUser } from "@/lib/actions/admin/user-action";
 
-export default function CreateUserForm() {
+export default function CreateUserForm({ onSuccess }: { onSuccess?: () => void }) {
     const [pending, startTransition] = useTransition();
     const { register, handleSubmit, control, reset, formState: { errors, isSubmitting } } = useForm<UserData>({
         resolver: zodResolver(UserSchema)
@@ -44,7 +44,6 @@ export default function CreateUserForm() {
             try {
                 const formData = new FormData();
                 
-                // Full name added here
                 formData.append('fullName', data.fullName);
                 formData.append('email', data.email);
                 formData.append('password', data.password);
@@ -63,6 +62,7 @@ export default function CreateUserForm() {
                 reset();
                 handleDismissImage();
                 toast.success('Profile Created successfully');
+                onSuccess?.();
 
             } catch (error: unknown) {
                 const message = error instanceof Error ? error.message : 'Create profile failed';
@@ -73,16 +73,16 @@ export default function CreateUserForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Profile Image Preview */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 bg-[#fefee3] p-6 rounded-lg">
             <div className="mb-4">
                 {previewImage ? (
                     <div className="relative w-24 h-24">
-                        {/* <img
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
                             src={previewImage}
                             alt="Profile Image Preview"
-                            className="w-24 h-24 rounded-full object-cover border border-gray-200"
-                        /> */}
+                            className="w-24 h-24 rounded-full object-cover border border-black"
+                        />
                         <Controller
                             name="profilePicture"
                             control={control}
@@ -98,15 +98,14 @@ export default function CreateUserForm() {
                         />
                     </div>
                 ) : (
-                    <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300">
-                        <span className="text-gray-400 text-xs text-center">No Image</span>
+                    <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center border-2 border-dashed border-black">
+                        <span className="text-black text-xs text-center">No Image</span>
                     </div>
                 )}
             </div>
 
-            {/* Profile Image Input */}
             <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Profile Image</label>
+                <label className="block text-sm font-medium mb-1 text-black">Profile Image</label>
                 <Controller
                     name="profilePicture"
                     control={control}
@@ -116,7 +115,7 @@ export default function CreateUserForm() {
                             type="file"
                             onChange={(e) => handleImageChange(e.target.files?.[0], onChange)}
                             accept=".jpg,.jpeg,.png,.webp"
-                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
+                            className="block w-full text-sm text-black file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-black file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-50"
                         />
                     )}
                 />
@@ -125,13 +124,12 @@ export default function CreateUserForm() {
                 )}
             </div>
 
-            {/* Full Name */}
             <div className="space-y-1">
-                <label className="text-sm font-medium" htmlFor="fullName">Full Name</label>
+                <label className="text-sm font-medium text-black" htmlFor="fullName">Full Name</label>
                 <input
                     id="fullName"
                     type="text"
-                    className="h-10 w-full rounded-md border border-black/10 bg-background px-3 text-sm outline-none focus:border-foreground/40"
+                    className="h-10 w-full rounded-md border border-black bg-white px-3 text-sm outline-none focus:border-black text-black placeholder:text-black/60"
                     {...register("fullName")}
                     placeholder="Santosh Shrestha"
                 />
@@ -140,13 +138,12 @@ export default function CreateUserForm() {
                 )}
             </div>
 
-            {/* Email */}
             <div className="space-y-1">
-                <label className="text-sm font-medium" htmlFor="email">Email</label>
+                <label className="text-sm font-medium text-black" htmlFor="email">Email</label>
                 <input
                     id="email"
                     type="email"
-                    className="h-10 w-full rounded-md border border-black/10 bg-background px-3 text-sm outline-none focus:border-foreground/40"
+                    className="h-10 w-full rounded-md border border-black bg-white px-3 text-sm outline-none focus:border-black text-black placeholder:text-black/60"
                     {...register("email")}
                     placeholder="sthasantosh@example.com"
                 />
@@ -155,13 +152,12 @@ export default function CreateUserForm() {
                 )}
             </div>
 
-            {/* Password */}
             <div className="space-y-1">
-                <label className="text-sm font-medium" htmlFor="password">Password</label>
+                <label className="text-sm font-medium text-black" htmlFor="password">Password</label>
                 <input
                     id="password"
                     type="password"
-                    className="h-10 w-full rounded-md border border-black/10 bg-background px-3 text-sm outline-none focus:border-foreground/40"
+                    className="h-10 w-full rounded-md border border-black bg-white px-3 text-sm outline-none focus:border-black text-black placeholder:text-black/60"
                     {...register("password")}
                     placeholder="••••••"
                 />
@@ -170,13 +166,12 @@ export default function CreateUserForm() {
                 )}
             </div>
 
-            {/* Confirm Password */}
             <div className="space-y-1">
-                <label className="text-sm font-medium" htmlFor="confirmPassword">Confirm password</label>
+                <label className="text-sm font-medium text-black" htmlFor="confirmPassword">Confirm password</label>
                 <input
                     id="confirmPassword"
                     type="password"
-                    className="h-10 w-full rounded-md border border-black/10 bg-background px-3 text-sm outline-none focus:border-foreground/40"
+                    className="h-10 w-full rounded-md border border-black bg-white px-3 text-sm outline-none focus:border-black text-black placeholder:text-black/60"
                     {...register("confirmPassword")}
                     placeholder="••••••"
                 />
@@ -185,7 +180,6 @@ export default function CreateUserForm() {
                 )}
             </div>
 
-            {/* Submit Button */}
             <button
                 type="submit"
                 disabled={isSubmitting || pending}

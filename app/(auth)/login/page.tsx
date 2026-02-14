@@ -30,8 +30,14 @@ export default function LoginPage() {
       const result = await handleLogin(data);
 
       if (result.success) {
-        toast.success("Welcome back! Login successful.");
-        router.replace("/home");
+        if (result.data?.role === "admin") {
+          toast.success("Admin logged in successfully!");
+          router.replace("/admin");
+        } else {
+          toast.success("Welcome back! Login successful.");
+          router.replace("/home");
+        }
+        
         router.refresh();
       } else {
         toast.error(result.message ?? "Invalid credentials");

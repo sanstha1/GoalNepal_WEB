@@ -3,17 +3,14 @@ import Sidebar from "./_components/Sidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
-        <div className='flex w-full min-h-screen'>
+        <div className='flex w-full h-screen overflow-hidden'>
             <div className='page-wrapper flex w-full'>
-                {/* Header/sidebar */}
                 <div className='xl:block hidden'>
                     <Sidebar />
                 </div>
-                <div className='w-full bg-background'>
-                    {/* Top Header  */}
+                <div className='w-full flex flex-col overflow-hidden'>
                     <Header />
-                    {/* Body Content  */}
-                    <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 p-2">
+                    <main className="bg-[#fefee3] mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 p-2 flex-1 overflow-auto">
                         {children}
                     </main>
                 </div>
