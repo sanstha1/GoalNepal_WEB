@@ -20,7 +20,14 @@ export const API = {
             GET_ALL: '/api/admin/users/all',
             GET_BY_ID: '/api/admin/users',
             UPDATE: '/api/admin/users',
-            DELETE: '/api/admin/users'
-        }
-    }
+            DELETE: '/api/admin/users',
+        },
+        TOURNAMENT: {
+            CREATE: '/api/tournaments',
+            GET_ALL: '/api/tournaments',
+            GET_BY_ID: (id: string) => `/api/tournaments/${id}`,
+            UPDATE: (id: string) => `/api/tournaments/${id}`,
+            DELETE: (id: string) => `/api/tournaments/${id}`,
+        },
+    },
 }

@@ -7,6 +7,7 @@ import Image from "next/image";
 const ADMIN_LINKS = [
     { href: "/admin", label: "Dashboard" },
     { href: "/admin/users", label: "Users" },
+    { href: "/admin/tournaments", label: "Tournaments" },
 ];
 
 export default function Sidebar() {
@@ -40,22 +41,21 @@ export default function Sidebar() {
                 </div>
 
                 <nav className="p-2 space-y-1">
-                    {
-                        ADMIN_LINKS.map(link => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive(link.href)
-                                    ? 'bg-white text-black'
-                                    : 'text-white hover:bg-white/10'
-                                    }`}
-                            >
-                                <span>{link.label}</span>
-                            </Link >
-                        ))
-                    }
-                </nav >
-            </aside >
+                    {ADMIN_LINKS.map(link => (
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                                isActive(link.href)
+                                    ? "bg-white text-black"
+                                    : "text-white hover:bg-white/10"
+                            }`}
+                        >
+                            <span>{link.label}</span>
+                        </Link>
+                    ))}
+                </nav>
+            </aside>
         </>
     );
 }
