@@ -22,7 +22,9 @@ interface EditUserFormProps {
 const getImageUrl = (imagePath?: string) => {
   if (!imagePath) return "";
   if (imagePath.startsWith("http")) return imagePath;
-  return `http://localhost:3000${imagePath}`;
+  const filename = imagePath.split("/").pop();
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5050";
+  return `${baseUrl}/profile_pictures/${filename}`;
 };
 
 export default function EditUserForm({ user, onSuccess }: EditUserFormProps) {
@@ -65,20 +67,11 @@ export default function EditUserForm({ user, onSuccess }: EditUserFormProps) {
     startTransition(async () => {
       try {
         const formData = new FormData();
-        
         formData.append('fullName', data.fullName);
         formData.append('email', data.email);
-        
-        if (data.password) {
-          formData.append('password', data.password);
-        }
-        if (data.confirmPassword) {
-          formData.append('confirmPassword', data.confirmPassword);
-        }
-
-        if (data.profilePicture) {
-          formData.append('profilePicture', data.profilePicture);
-        }
+        if (data.password) formData.append('password', data.password);
+        if (data.confirmPassword) formData.append('confirmPassword', data.confirmPassword);
+        if (data.profilePicture) formData.append('profilePicture', data.profilePicture);
 
         const response = await handleUpdateUser(user._id, formData);
 
@@ -89,7 +82,6 @@ export default function EditUserForm({ user, onSuccess }: EditUserFormProps) {
         reset();
         toast.success('Profile updated successfully');
         onSuccess?.();
-
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : 'Update profile failed';
         toast.error(message);
@@ -104,7 +96,7 @@ export default function EditUserForm({ user, onSuccess }: EditUserFormProps) {
           <div className="relative w-24 h-24">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={previewImage || getImageUrl(user.profilePicture) || ""}
+              src={previewImage || getImageUrl(user.profilePicture)}
               alt="Profile Image Preview"
               className="w-24 h-24 rounded-full object-cover border border-black"
             />
@@ -158,9 +150,7 @@ export default function EditUserForm({ user, onSuccess }: EditUserFormProps) {
           {...register("fullName")}
           placeholder="Santosh Shrestha"
         />
-        {errors.fullName && (
-          <p className="text-xs text-red-600">{errors.fullName.message}</p>
-        )}
+        {errors.fullName && <p className="text-xs text-red-600">{errors.fullName.message}</p>}
       </div>
 
       <div className="space-y-1">
@@ -172,9 +162,7 @@ export default function EditUserForm({ user, onSuccess }: EditUserFormProps) {
           {...register("email")}
           placeholder="sthasantosh@example.com"
         />
-        {errors.email && (
-          <p className="text-xs text-red-600">{errors.email.message}</p>
-        )}
+        {errors.email && <p className="text-xs text-red-600">{errors.email.message}</p>}
       </div>
 
       <div className="space-y-1">
@@ -186,9 +174,7 @@ export default function EditUserForm({ user, onSuccess }: EditUserFormProps) {
           {...register("password")}
           placeholder="••••••"
         />
-        {errors.password && (
-          <p className="text-xs text-red-600">{errors.password.message}</p>
-        )}
+        {errors.password && <p className="text-xs text-red-600">{errors.password.message}</p>}
       </div>
 
       <div className="space-y-1">
@@ -200,9 +186,7 @@ export default function EditUserForm({ user, onSuccess }: EditUserFormProps) {
           {...register("confirmPassword")}
           placeholder="••••••"
         />
-        {errors.confirmPassword && (
-          <p className="text-xs text-red-600">{errors.confirmPassword.message}</p>
-        )}
+        {errors.confirmPassword && <p className="text-xs text-red-600">{errors.confirmPassword.message}</p>}
       </div>
 
       <button

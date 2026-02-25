@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Trophy, Newspaper, Heart, User, Bell } from "lucide-react";
+import { Trophy, Newspaper, Bookmark, User, Bell } from "lucide-react";
 
 export default function Header() {
   const pathname = usePathname();
@@ -17,16 +17,15 @@ export default function Header() {
     <header className="w-full bg-[#4a4a4a] border-b border-gray-600 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
         <Link href="/home" className="cursor-pointer">
-        <Image
-          src="/images/GoalNepalLogo.png"
-          alt="GoalNepal Logo"
-          width={100}
-          height={100}
-        />
+          <Image
+            src="/images/GoalNepalLogo.png"
+            alt="GoalNepal Logo"
+            width={100}
+            height={100}
+          />
         </Link>
 
         <nav className="flex items-center gap-8 text-white">
-
           <Link
             href="/tournaments"
             className={pathname === "/tournaments" ? activeClass : normalClass}
@@ -47,7 +46,7 @@ export default function Header() {
             href="/saved"
             className={pathname === "/saved" ? activeClass : normalClass}
           >
-            <Heart className="w-5 h-5" />
+            <Bookmark className="w-5 h-5" />
             <span>Saved</span>
           </Link>
 
@@ -65,7 +64,6 @@ export default function Header() {
               3
             </span>
           </button>
-
         </nav>
       </div>
     </header>

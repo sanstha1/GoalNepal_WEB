@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
+import { SavedProvider } from "@/context/SavedContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -32,22 +32,23 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-     
       <body className="antialiased">
         <AuthProvider>
-          {children}
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
+          <SavedProvider>
+            {children}
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
+          </SavedProvider>
         </AuthProvider>
       </body>
     </html>

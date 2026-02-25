@@ -26,25 +26,11 @@ export default function Page() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
-      
-      console.log("Fetching users with token:", token ? "exists" : "missing");
-      
-      const response = await fetch("http://localhost:5050/api/admin/users", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
+      const response = await fetch("/api/admin/users");
       const result = await response.json();
-      
-      console.log("Users API response:", result);
-      
       if (result.success) {
-        console.log("Users data:", result.data);
         setUsers(result.data || []);
       } else {
-        console.error("API returned error:", result.message);
         toast.error(result.message || "Failed to fetch users");
       }
     } catch (error) {
@@ -82,19 +68,10 @@ export default function Page() {
 
   const confirmDelete = async () => {
     if (!selectedUser) return;
-
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        `http://localhost:5050/api/admin/users/${selectedUser._id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
+      const response = await fetch(`/api/admin/users/${selectedUser._id}`, {
+        method: "DELETE",
+      });
       const result = await response.json();
       if (result.success) {
         toast.success("User deleted successfully");
@@ -113,7 +90,8 @@ export default function Page() {
   const getImageUrl = (imagePath?: string) => {
     if (!imagePath) return null;
     if (imagePath.startsWith("http")) return imagePath;
-    return `http://localhost:5050/${imagePath}`;
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5050";
+    return `${baseUrl}/profile_pictures/${imagePath.split("/").pop()}`;
   };
 
   return (
@@ -137,21 +115,11 @@ export default function Page() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  User
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Email
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Role
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Created
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -160,7 +128,7 @@ export default function Page() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="shrink-0 h-10 w-10">
-                        {user.profilePicture && getImageUrl(user.profilePicture) ? (
+                        {getImageUrl(user.profilePicture) ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
                             className="h-10 w-10 rounded-full object-cover"
@@ -176,9 +144,7 @@ export default function Page() {
                         )}
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">
-                          {user.fullName}
-                        </div>
+                        <div className="text-sm font-medium text-gray-900">{user.fullName}</div>
                       </div>
                     </div>
                   </td>
@@ -194,16 +160,10 @@ export default function Page() {
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button
-                      onClick={() => handleEditClick(user)}
-                      className="text-blue-600 hover:text-blue-900 mr-4"
-                    >
+                    <button onClick={() => handleEditClick(user)} className="text-blue-600 hover:text-blue-900 mr-4">
                       <Pencil size={18} />
                     </button>
-                    <button
-                      onClick={() => handleDeleteClick(user)}
-                      className="text-red-600 hover:text-red-900"
-                    >
+                    <button onClick={() => handleDeleteClick(user)} className="text-red-600 hover:text-red-900">
                       <Trash2 size={18} />
                     </button>
                   </td>
@@ -223,16 +183,10 @@ export default function Page() {
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <button
-              onClick={() => setShowCreateModal(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
-            >
+            <button onClick={() => setShowCreateModal(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
               <X size={24} />
             </button>
-
-            <h1 className="text-2xl font-bold mb-6 text-gray-800">
-              Create New User
-            </h1>
+            <h1 className="text-2xl font-bold mb-6 text-gray-800">Create New User</h1>
             <CreateUserForm onSuccess={handleCreateSuccess} />
           </div>
         </div>
@@ -242,15 +196,11 @@ export default function Page() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button
-              onClick={() => {
-                setShowEditModal(false);
-                setSelectedUser(null);
-              }}
+              onClick={() => { setShowEditModal(false); setSelectedUser(null); }}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
             >
               <X size={24} />
             </button>
-
             <h1 className="text-2xl font-bold mb-6 text-gray-800">Edit User</h1>
             <EditUserForm user={selectedUser} onSuccess={handleEditSuccess} />
           </div>
@@ -261,35 +211,24 @@ export default function Page() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
             <button
-              onClick={() => {
-                setShowDeleteModal(false);
-                setSelectedUser(null);
-              }}
+              onClick={() => { setShowDeleteModal(false); setSelectedUser(null); }}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
             >
               <X size={24} />
             </button>
-
             <div className="text-center">
               <div className="bg-red-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Trash2 size={32} className="text-red-500" />
               </div>
-
-              <h2 className="text-2xl font-bold text-gray-800 mb-3">
-                Delete User
-              </h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-3">Delete User</h2>
               <p className="text-gray-600 mb-8">
                 Are you sure you want to delete{" "}
                 <span className="font-semibold">{selectedUser.fullName}</span>?
                 This action cannot be undone.
               </p>
-
               <div className="flex gap-4">
                 <button
-                  onClick={() => {
-                    setShowDeleteModal(false);
-                    setSelectedUser(null);
-                  }}
+                  onClick={() => { setShowDeleteModal(false); setSelectedUser(null); }}
                   className="flex-1 py-3 px-6 bg-gray-100 text-gray-700 rounded-2xl font-bold hover:bg-gray-200 transition-colors"
                 >
                   Cancel

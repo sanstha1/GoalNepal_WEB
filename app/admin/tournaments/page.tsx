@@ -14,7 +14,6 @@ import {
   ImagePlus,
   X,
   PlusCircle,
-  ArrowLeft,
   Loader2,
 } from "lucide-react";
 
@@ -97,12 +96,6 @@ export default function AddTournamentPage() {
       <div className="max-w-3xl mx-auto py-8 px-4 sm:px-6">
 
         <div className="flex items-center gap-4 mb-8">
-          <button
-            onClick={() => router.back()}
-            className="w-10 h-10 flex items-center justify-center bg-white rounded-xl border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors"
-          >
-            <ArrowLeft size={18} className="text-gray-600" />
-          </button>
           <div>
             <h1 className="text-2xl font-bold text-gray-800">Add Tournament</h1>
             <p className="text-gray-500 text-sm">Create a new football or futsal tournament</p>
