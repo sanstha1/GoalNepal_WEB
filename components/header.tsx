@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Trophy, Newspaper, Bookmark, User, Bell } from "lucide-react";
+import { Trophy, Newspaper, Bookmark, User } from "lucide-react";
 
 export default function Header() {
   const pathname = usePathname();
@@ -58,12 +58,7 @@ export default function Header() {
             <span>Profile</span>
           </Link>
 
-          <button className="relative hover:text-gray-300 transition">
-            <Bell className="w-6 h-6" />
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-              3
-            </span>
-          </button>
+          
         </nav>
       </div>
     </header>

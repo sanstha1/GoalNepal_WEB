@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { handleUpdateProfile } from "@/lib/actions/auth-action";
 import { toast } from "react-toastify";
 import Header from "@/components/header";
-import { User, Mail, Bell, Moon, Camera, LogOut, X, Trophy, Users, Lock, Shield, Star, Target } from "lucide-react";
+import { User, Mail, Camera, LogOut, X, Trophy, Users, Lock, Shield, Star, Target } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
@@ -13,8 +13,6 @@ export default function ProfilePage() {
   const router = useRouter();
   const [uploadingImage, setUploadingImage] = useState(false);
   const [displayImageUrl, setDisplayImageUrl] = useState<string | null>(null);
-  const [notifications, setNotifications] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordForm, setPasswordForm] = useState({ current: "", newPass: "", confirm: "" });
@@ -253,42 +251,6 @@ export default function ProfilePage() {
                   </div>
                   <span className="text-gray-300 text-lg">›</span>
                 </button>
-
-                <div className="border-t border-gray-50 pt-4 flex items-center justify-between px-2">
-                  <div className="flex items-start gap-4">
-                    <div className="p-2.5 rounded-xl bg-gray-50 text-gray-400">
-                      <Bell size={20} />
-                    </div>
-                    <div>
-                      <p className="font-bold text-gray-800">Notifications</p>
-                      <p className="text-sm text-gray-400">Match updates</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setNotifications(!notifications)}
-                    className={`w-12 h-6 rounded-full transition-all duration-200 relative shrink-0 ${notifications ? "bg-[#64748b]" : "bg-gray-200"}`}
-                  >
-                    <div className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${notifications ? "translate-x-7" : "translate-x-1"}`} />
-                  </button>
-                </div>
-
-                <div className="border-t border-gray-50 pt-4 flex items-center justify-between px-2">
-                  <div className="flex items-start gap-4">
-                    <div className="p-2.5 rounded-xl bg-gray-50 text-gray-400">
-                      <Moon size={20} />
-                    </div>
-                    <div>
-                      <p className="font-bold text-gray-800">Dark Mode</p>
-                      <p className="text-sm text-gray-400">Toggle theme</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setDarkMode(!darkMode)}
-                    className={`w-12 h-6 rounded-full transition-all duration-200 relative shrink-0 ${darkMode ? "bg-[#64748b]" : "bg-gray-200"}`}
-                  >
-                    <div className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${darkMode ? "translate-x-7" : "translate-x-1"}`} />
-                  </button>
-                </div>
               </div>
             </div>
 

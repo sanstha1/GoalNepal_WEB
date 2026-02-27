@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import Image from "next/image";
@@ -13,18 +13,34 @@ const poppins = Poppins({
 });
 
 export default function HomePage() {
+  const [scrollY, setScrollY] = useState(0);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col bg-[#fefee3]">
       <Header />
 
-      <section className="relative h-[85vh] flex items-center justify-center">
-        <Image
-          src="/images/football1.jpg"
-          alt="Football Background"
-          fill
-          priority
-          className="object-cover brightness-75"
-        />
+      <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
+        <div
+          className="absolute inset-0"
+          style={{ transform: mounted ? `translateY(${scrollY * 0.4}px)` : "translateY(0px)" }}
+        >
+          <Image
+            src="/images/football1.jpg"
+            alt="Football Background"
+            fill
+            priority
+            className="object-cover brightness-75"
+          />
+        </div>
 
         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
 
@@ -143,7 +159,7 @@ function Testimonial({
   return (
     <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
       <Quote className="mx-auto mb-4 text-[#6f849b]" />
-      <p className="text-gray-700 mb-6 italic">“{text}”</p>
+      <p className="text-gray-700 mb-6 italic">&quot;{text}&quot;</p>
       <h4 className="font-semibold text-black">{name}</h4>
       <span className="text-sm text-gray-500">{role}</span>
     </div>

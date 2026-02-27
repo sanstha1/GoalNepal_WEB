@@ -11,7 +11,7 @@ const newsItems = [
     time: "Today, 2:30 PM",
     title: "Nepal Football Championship 2025 Begins",
     description: "The much-awaited Nepal Football Championship kicked off today with an exciting opening match between Kathmandu FC and Valley United.",
-    image: "/images/news-1.jpg",
+    image: "/images/image1.jpeg",
     bgColor: "bg-blue-50",
   },
   {
@@ -20,7 +20,7 @@ const newsItems = [
     time: "Live Now",
     title: "LIVE: Championship Final - Mountain Kings vs City Stars",
     description: "The championship final is happening right now! Mountain Kings currently leading 2-1 with 15 minutes remaining.",
-    image: "/images/news-2.jpg",
+    image: "/images/image2.jpeg",
     bgColor: "bg-red-50",
   },
   {
@@ -29,7 +29,7 @@ const newsItems = [
     time: "Yesterday",
     title: "Yesterday's Results",
     description: "Kathmandu FC 3 - 1 Valley United | Pokhara United 2 - 2 Central Region",
-    image: "/images/news-3.jpg",
+    image: "/images/image3.jpeg",
     bgColor: "bg-green-50",
   },
   {
@@ -38,7 +38,7 @@ const newsItems = [
     time: "Today",
     title: "Man of the Match - Ronish Lama",
     description: "Outstanding performance with 3 goals and 2 assists in the championship opener. Ronish proved why he's one of the best players in Nepal.",
-    image: "/images/news-4.jpg",
+    image: "/images/image4.jpeg",
     bgColor: "bg-yellow-50",
   },
 ];
