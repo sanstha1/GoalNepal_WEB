@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import { MapPin, Calendar, Bookmark, Trophy, Users, Phone, Mail, Hash, X } from "lucide-react";
+import { MapPin, Calendar, Bookmark, Trophy, Users, Phone, Mail, Hash, X, IndianRupee } from "lucide-react";
 import { useSaved, Tournament } from "@/context/SavedContext";
 import { toast } from "react-toastify";
 
@@ -167,16 +167,17 @@ function RegistrationModal({ tournament, onClose }: { tournament: Tournament; on
     }
   };
 
+  const fee = tournament.registrationFee;
+  const hasFee = fee != null && fee > 0;
+
   return (
     <>
-      {/* Dark overlay — clicking closes modal */}
       <div
         className="fixed inset-0"
         style={{ backgroundColor: "rgba(0,0,0,0.6)", zIndex: 40 }}
         onClick={onClose}
       />
 
-      {/* Scroll container — above overlay, pointer-events only on modal box */}
       <div
         className="fixed inset-0 overflow-y-auto"
         style={{ zIndex: 41 }}
@@ -190,17 +191,110 @@ function RegistrationModal({ tournament, onClose }: { tournament: Tournament; on
             style={{ maxWidth: "448px" }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
             <div className="p-6 pb-4 border-b border-gray-100">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-2 flex-1 min-w-0">
                   <Trophy size={20} className="text-gray-700 shrink-0 mt-0.5" />
-                  <div className="min-w-0">
+                  <div className="min-w-0 w-full">
                     <p className="text-xs text-gray-400 font-medium mb-0.5">Registering for</p>
                     <h2 className="text-base font-bold text-gray-900 leading-snug">{tournament.title}</h2>
                     <p className="text-xs text-gray-500 mt-1">
                       {tournament.location} · {formatDateRange(tournament.startDate, tournament.endDate)}
                     </p>
+
+                    {hasFee ? (
+                      <div
+                        className="flex items-center gap-2 mt-3"
+                        style={{
+                          backgroundColor: "#fefce8",
+                          border: "1.5px solid #fbbf24",
+                          borderRadius: "10px",
+                          padding: "8px 12px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "26px",
+                            height: "26px",
+                            borderRadius: "50%",
+                            backgroundColor: "#f59e0b",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexShrink: 0,
+                          }}
+                        >
+                          <IndianRupee size={13} color="white" />
+                        </div>
+                        <div>
+                          <p style={{ fontSize: "10px", fontWeight: 600, color: "#92400e", margin: 0, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                            Registration Fee
+                          </p>
+                          <p style={{ fontSize: "15px", fontWeight: 800, color: "#78350f", margin: 0, lineHeight: 1.2 }}>
+                            NPR {fee!.toLocaleString()}
+                          </p>
+                        </div>
+                        <span
+                          style={{
+                            marginLeft: "auto",
+                            fontSize: "10px",
+                            fontWeight: 700,
+                            color: "#b45309",
+                            backgroundColor: "#fde68a",
+                            borderRadius: "100px",
+                            padding: "2px 8px",
+                          }}
+                        >
+                          Required
+                        </span>
+                      </div>
+                    ) : (
+                      <div
+                        className="flex items-center gap-2 mt-3"
+                        style={{
+                          backgroundColor: "#f0fdf4",
+                          border: "1.5px solid #86efac",
+                          borderRadius: "10px",
+                          padding: "8px 12px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "26px",
+                            height: "26px",
+                            borderRadius: "50%",
+                            backgroundColor: "#16a34a",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexShrink: 0,
+                          }}
+                        >
+                          <IndianRupee size={13} color="white" />
+                        </div>
+                        <div>
+                          <p style={{ fontSize: "10px", fontWeight: 600, color: "#166534", margin: 0, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                            Registration Fee
+                          </p>
+                          <p style={{ fontSize: "15px", fontWeight: 800, color: "#14532d", margin: 0, lineHeight: 1.2 }}>
+                            Free
+                          </p>
+                        </div>
+                        <span
+                          style={{
+                            marginLeft: "auto",
+                            fontSize: "10px",
+                            fontWeight: 700,
+                            color: "#15803d",
+                            backgroundColor: "#bbf7d0",
+                            borderRadius: "100px",
+                            padding: "2px 8px",
+                          }}
+                        >
+                          No Cost
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors shrink-0">
@@ -209,7 +303,6 @@ function RegistrationModal({ tournament, onClose }: { tournament: Tournament; on
               </div>
             </div>
 
-            {/* Fields */}
             <div className="p-6 space-y-4">
               <Field label="Team Name" value={form.teamName} onChange={setField("teamName")} placeholder="e.g. Eagles FC" icon={<Users size={15} />} error={errors.teamName} />
               <Field label="Captain Name" value={form.captainName} onChange={setField("captainName")} placeholder="Full name" icon={<Users size={15} />} error={errors.captainName} />
@@ -218,7 +311,6 @@ function RegistrationModal({ tournament, onClose }: { tournament: Tournament; on
               <Field label="Number of Players" value={form.playerCount} onChange={setField("playerCount")} placeholder={tournament.type === "futsal" ? "e.g. 5" : "e.g. 11"} icon={<Hash size={15} />} type="number" error={errors.playerCount} />
             </div>
 
-            {/* Buttons */}
             <div className="px-6 pb-6 space-y-2">
               <button
                 onClick={handleSubmit}

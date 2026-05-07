@@ -15,6 +15,7 @@ import {
   X,
   PlusCircle,
   Loader2,
+  IndianRupee,
 } from "lucide-react";
 
 type TournamentType = "football" | "futsal";
@@ -28,6 +29,7 @@ export default function AddTournamentPage() {
   const [organizer, setOrganizer] = useState("");
   const [prize, setPrize] = useState("");
   const [maxTeams, setMaxTeams] = useState("");
+  const [registrationFee, setRegistrationFee] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -72,6 +74,7 @@ export default function AddTournamentPage() {
       if (organizer.trim()) formData.append("organizer", organizer.trim());
       if (prize.trim()) formData.append("prize", prize.trim());
       if (maxTeams.trim()) formData.append("maxTeams", maxTeams.trim());
+      if (registrationFee.trim()) formData.append("registrationFee", registrationFee.trim());
       if (description.trim()) formData.append("description", description.trim());
       if (bannerFile) formData.append("bannerImage", bannerFile);
 
@@ -292,6 +295,23 @@ export default function AddTournamentPage() {
                     className="flex-1 text-gray-800 text-sm outline-none bg-transparent placeholder-gray-300"
                   />
                 </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1.5">
+                Registration Fee (NPR)
+              </label>
+              <div className="flex items-center gap-3 border border-gray-200 rounded-xl px-3.5 py-2.5 focus-within:border-[#4a4a4a] transition-colors">
+                <IndianRupee size={16} className="text-gray-400 shrink-0" />
+                <input
+                  type="number"
+                  value={registrationFee}
+                  onChange={(e) => setRegistrationFee(e.target.value)}
+                  placeholder="e.g., 500"
+                  min={0}
+                  className="flex-1 text-gray-800 text-sm outline-none bg-transparent placeholder-gray-300"
+                />
               </div>
             </div>
 

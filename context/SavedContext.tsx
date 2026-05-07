@@ -14,6 +14,7 @@ export interface Tournament {
   prize?: string;
   maxTeams?: number;
   description?: string;
+  registrationFee?: number | null;
 }
 
 interface SavedContextType {

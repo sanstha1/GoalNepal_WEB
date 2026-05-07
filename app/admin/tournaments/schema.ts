@@ -18,6 +18,12 @@ export const TournamentSchema = z.object({
         .refine((val) => !val || (!isNaN(Number(val)) && Number(val) >= 2), {
             message: "Max teams must be a number of at least 2",
         }),
+    registrationFee: z
+        .string()
+        .optional()
+        .refine((val) => !val || (!isNaN(Number(val)) && Number(val) >= 0), {
+            message: "Registration fee must be a non-negative number",
+        }),
     bannerImage: z
         .instanceof(File)
         .optional()
