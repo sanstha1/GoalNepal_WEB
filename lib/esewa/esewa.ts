@@ -5,7 +5,7 @@ export const createSignature = (
   transaction_uuid: string,
   product_code: string
 ) => {
-  const secret = process.env.ESEWA_SECRET_KEY!;
+  const secret = process.env.ESEWA_SECRET_KEY as string;
 
   const message = `total_amount=${total_amount},transaction_uuid=${transaction_uuid},product_code=${product_code}`;
 
