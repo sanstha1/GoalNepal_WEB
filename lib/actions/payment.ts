@@ -5,8 +5,7 @@ import { createSignature } from "@/lib/esewa/esewa";
 export async function initiateEsewaPayment(amount: number) {
   const transaction_uuid = Date.now().toString();
 
-  const product_code =
-    process.env.NEXT_PUBLIC_ESEWA_PRODUCT_CODE!;
+  const product_code = process.env.NEXT_PUBLIC_ESEWA_PRODUCT_CODE as string;
 
   const signature = createSignature(
     amount.toString(),
