@@ -91,12 +91,54 @@ function SuccessDialog({ tournamentTitle, onClose }: { tournamentTitle: string; 
   );
 }
 
-function PaymentModal({ tournament, onClose, onSuccess }: { tournament: Tournament; onClose: () => void; onSuccess: () => void }) {
+function PaymentModal({ tournament, onClose }: { tournament: Tournament; onClose: () => void; onSuccess: () => void }) {
   const [loading, setLoading] = useState(false);
 
   const handleEsewaPayment = async () => {
     setLoading(true);
-    setTimeout(() => { onSuccess(); setLoading(false); }, 1800);
+    try {
+      const res = await fetch("/api/esewa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: tournament.registrationFee }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) { toast.error("Failed to initiate payment"); setLoading(false); return; }
+
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
+
+      const fields: Record<string, string> = {
+        amount: String(tournament.registrationFee),
+        tax_amount: "0",
+        total_amount: String(tournament.registrationFee),
+        transaction_uuid: data.transaction_uuid,
+        product_code: data.product_code,
+        product_service_charge: "0",
+        product_delivery_charge: "0",
+        success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/tournaments?payment=success`,
+        failure_url: `${process.env.NEXT_PUBLIC_BASE_URL}/tournaments?payment=failed`,
+        signed_field_names: "total_amount,transaction_uuid,product_code",
+        signature: data.signature,
+      };
+
+      Object.entries(fields).forEach(([key, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+    } catch (err) {
+      console.error(err);
+      toast.error("Payment failed. Please try again.");
+      setLoading(false);
+    }
   };
 
   return (
@@ -230,7 +272,6 @@ function RegistrationModal({ tournament, onClose }: { tournament: Tournament; on
       <div className="fixed inset-0 overflow-y-auto" style={{ zIndex: 41 }}>
         <div className="flex min-h-full items-start justify-center px-4" style={{ paddingTop: "130px", paddingBottom: "60px" }}>
           <div className="bg-white rounded-3xl w-full shadow-2xl" style={{ maxWidth: "448px" }} onClick={(e) => e.stopPropagation()}>
-
             <div className="p-6 pb-4 border-b border-gray-100">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-2 flex-1 min-w-0">
