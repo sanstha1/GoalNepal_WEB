@@ -94,52 +94,56 @@ function SuccessDialog({ tournamentTitle, onClose }: { tournamentTitle: string; 
 function PaymentModal({ tournament, onClose }: { tournament: Tournament; onClose: () => void; onSuccess: () => void }) {
   const [loading, setLoading] = useState(false);
 
-  const handleEsewaPayment = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/esewa", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: tournament.registrationFee }),
-      });
+const handleEsewaPayment = async () => {
+  setLoading(true);
+  try {
+    const amount = String(tournament.registrationFee);
 
-      const data = await res.json();
-      if (!res.ok) { toast.error("Failed to initiate payment"); setLoading(false); return; }
+    const res = await fetch("/api/esewa", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount }),
+    });
 
-      const form = document.createElement("form");
-      form.method = "POST";
-      form.action = process.env.NEXT_PUBLIC_ESEWA_BASE_URL as string;
+    const data = await res.json();
+    if (!res.ok) { toast.error("Failed to initiate payment"); setLoading(false); return; }
 
-      const fields: Record<string, string> = {
-        amount: String(tournament.registrationFee),
-        tax_amount: "0",
-        total_amount: String(tournament.registrationFee),
-        transaction_uuid: data.transaction_uuid,
-        product_code: data.product_code,
-        product_service_charge: "0",
-        product_delivery_charge: "0",
-        success_url: `${window.location.origin}/payment-success`,
-        failure_url: `${window.location.origin}/payment-failure`,
-        signed_field_names: "total_amount,transaction_uuid,product_code",
-        signature: data.signature,
-      };
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
 
-      Object.entries(fields).forEach(([key, value]) => {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = key;
-        input.value = value;
-        form.appendChild(input);
-      });
+    const fields: Record<string, string> = {
+      amount: amount,
+      tax_amount: "0",
+      total_amount: amount,
+      transaction_uuid: data.transaction_uuid,
+      product_code: data.product_code,
+      product_service_charge: "0",
+      product_delivery_charge: "0",
+      success_url: `${window.location.origin}/payment-success`,
+      failure_url: `${window.location.origin}/payment-failure`,
+      signed_field_names: "total_amount,transaction_uuid,product_code",
+      signature: data.signature,
+    };
 
-      document.body.appendChild(form);
-      form.submit();
-    } catch (err) {
-      console.error(err);
-      toast.error("Payment failed. Please try again.");
-      setLoading(false);
-    }
-  };
+    console.log("=== FORM FIELDS ===");
+    Object.entries(fields).forEach(([key, value]) => {
+      console.log(`${key}: ${value}`);
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = value;
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+  } catch (err) {
+    console.error(err);
+    toast.error("Payment failed. Please try again.");
+    setLoading(false);
+  }
+};
 
   return (
     <div className="fixed inset-0 flex items-center justify-center px-4" style={{ backgroundColor: "rgba(0,0,0,0.75)", zIndex: 65 }}>
