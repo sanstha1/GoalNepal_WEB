@@ -3,81 +3,39 @@
 import { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import { MapPin, Calendar, Bookmark, Trophy, Users, Phone, Mail, Hash, X, IndianRupee } from "lucide-react";
+import { MapPin, Calendar, Bookmark, Trophy, Users, Phone, Mail, Hash, X, IndianRupee, ShieldCheck, ArrowRight } from "lucide-react";
 import { useSaved, Tournament } from "@/context/SavedContext";
 import { toast } from "react-toastify";
 
 const MONTHS = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-function formatDateRange(start: string, end: string): string {
-  const s = new Date(start);
-  const e = new Date(end);
+function formatDateRange(start: string, end: string) {
+  const s = new Date(start), e = new Date(end);
   return `${s.getDate()} ${MONTHS[s.getMonth() + 1]} - ${e.getDate()} ${MONTHS[e.getMonth() + 1]}, ${e.getFullYear()}`;
 }
 
-function getBannerUrl(bannerImage?: string | null): string | null {
+function getBannerUrl(bannerImage?: string | null) {
   if (!bannerImage) return null;
   if (bannerImage.startsWith("http")) return bannerImage;
-  const filename = bannerImage.split("/").pop();
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5050";
-  return `${baseUrl}/tournament_banners/${filename}`;
+  return `${baseUrl}/tournament_banners/${bannerImage.split("/").pop()}`;
 }
 
-interface FormData {
-  teamName: string;
-  captainName: string;
-  captainPhone: string;
-  captainEmail: string;
-  playerCount: string;
-}
+interface FormData { teamName: string; captainName: string; captainPhone: string; captainEmail: string; playerCount: string; }
+interface FormErrors { teamName?: string; captainName?: string; captainPhone?: string; captainEmail?: string; playerCount?: string; }
 
-interface FormErrors {
-  teamName?: string;
-  captainName?: string;
-  captainPhone?: string;
-  captainEmail?: string;
-  playerCount?: string;
-}
-
-interface FieldProps {
-  label: string;
-  value: string;
-  onChange: (val: string) => void;
-  placeholder: string;
-  icon: React.ReactNode;
-  type?: string;
-  error?: string;
-}
-
-function Field({ label, value, onChange, placeholder, icon, type = "text", error }: FieldProps) {
+function Field({ label, value, onChange, placeholder, icon, type = "text", error }: {
+  label: string; value: string; onChange: (v: string) => void; placeholder: string;
+  icon: React.ReactNode; type?: string; error?: string;
+}) {
   return (
     <div>
-      <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
-        {label}
-      </label>
+      <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>{label}</label>
       <div style={{ position: "relative" }}>
-        <div style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "#9ca3af", pointerEvents: "none" }}>
-          {icon}
-        </div>
+        <div style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "#9ca3af", pointerEvents: "none" }}>{icon}</div>
         <input
-          type={type}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          style={{
-            width: "100%",
-            paddingLeft: "36px",
-            paddingRight: "16px",
-            paddingTop: "12px",
-            paddingBottom: "12px",
-            fontSize: "14px",
-            color: "#111827",
-            backgroundColor: error ? "#fff1f2" : "#f9fafb",
-            border: `1.5px solid ${error ? "#f87171" : "#e5e7eb"}`,
-            borderRadius: "12px",
-            outline: "none",
-            boxSizing: "border-box",
-          }}
+          type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder}
+          style={{ width: "100%", paddingLeft: "36px", paddingRight: "16px", paddingTop: "12px", paddingBottom: "12px", fontSize: "14px", color: "#111827", backgroundColor: error ? "#fff1f2" : "#f9fafb", border: `1.5px solid ${error ? "#f87171" : "#e5e7eb"}`, borderRadius: "12px", outline: "none", boxSizing: "border-box" }}
           onFocus={(e) => { e.target.style.borderColor = "#111827"; e.target.style.backgroundColor = "#ffffff"; }}
           onBlur={(e) => { e.target.style.borderColor = error ? "#f87171" : "#e5e7eb"; e.target.style.backgroundColor = error ? "#fff1f2" : "#f9fafb"; }}
         />
@@ -87,31 +45,125 @@ function Field({ label, value, onChange, placeholder, icon, type = "text", error
   );
 }
 
+function PaymentSuccessDialog({ tournamentTitle, onClose }: { tournamentTitle: string; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center px-4" style={{ backgroundColor: "rgba(0,0,0,0.85)", zIndex: 70 }}>
+      <div className="bg-white w-full overflow-hidden" style={{ maxWidth: "380px", borderRadius: "24px" }}>
+        <div className="flex flex-col items-center justify-center" style={{ background: "linear-gradient(135deg, #16a34a, #15803d)", padding: "32px 24px 28px" }}>
+          <div className="flex items-center justify-center mb-4" style={{ width: "62px", height: "62px", borderRadius: "50%", backgroundColor: "rgba(255,255,255,0.2)", border: "2px solid rgba(255,255,255,0.5)" }}>
+            <svg width="30" height="30" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+          </div>
+          <h2 style={{ color: "white", fontSize: "20px", fontWeight: 800, margin: 0 }}>Payment Successful</h2>
+        </div>
+        <div style={{ padding: "24px" }}>
+          <div className="flex items-center gap-2 justify-center mb-4" style={{ backgroundColor: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: "999px", padding: "8px 16px" }}>
+            <Trophy size={13} style={{ color: "#16a34a" }} />
+            <span style={{ fontSize: "13px", fontWeight: 700, color: "#16a34a" }}>{tournamentTitle}</span>
+          </div>
+          <p style={{ fontSize: "14px", color: "#6b7280", lineHeight: "1.7", textAlign: "center", marginBottom: "22px" }}>Your registration fee has been paid and your team has been registered.</p>
+          <button onClick={onClose} style={{ width: "100%", height: "48px", borderRadius: "14px", backgroundColor: "#16a34a", color: "white", border: "none", fontWeight: 800, fontSize: "14px", cursor: "pointer" }}>Done</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SuccessDialog({ tournamentTitle, onClose }: { tournamentTitle: string; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center px-4" style={{ backgroundColor: "rgba(0,0,0,0.85)", zIndex: 60 }}>
-      <div className="bg-white w-full overflow-hidden" style={{ maxWidth: "360px", borderRadius: "20px", boxShadow: "0 24px 60px rgba(0,0,0,0.4)" }}>
-        <div className="flex flex-col items-center justify-center" style={{ background: "linear-gradient(135deg, #16a34a, #15803d)", padding: "28px 24px 24px" }}>
-          <div className="flex items-center justify-center mb-3" style={{ width: "56px", height: "56px", borderRadius: "50%", backgroundColor: "rgba(255,255,255,0.2)", border: "2px solid rgba(255,255,255,0.5)" }}>
-            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
+    <div className="fixed inset-0 flex items-center justify-center px-4" style={{ backgroundColor: "rgba(0,0,0,0.85)", zIndex: 70 }}>
+      <div className="bg-white w-full overflow-hidden" style={{ maxWidth: "380px", borderRadius: "24px" }}>
+        <div className="flex flex-col items-center justify-center" style={{ background: "linear-gradient(135deg, #111827, #374151)", padding: "32px 24px 28px" }}>
+          <div className="flex items-center justify-center mb-4" style={{ width: "62px", height: "62px", borderRadius: "50%", backgroundColor: "rgba(255,255,255,0.2)", border: "2px solid rgba(255,255,255,0.5)" }}>
+            <svg width="30" height="30" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
           </div>
-          <h2 style={{ color: "white", fontSize: "18px", fontWeight: 800, margin: 0 }}>Registration Submitted!</h2>
+          <h2 style={{ color: "white", fontSize: "20px", fontWeight: 800, margin: 0 }}>Registration Submitted!</h2>
         </div>
-        <div style={{ padding: "20px 24px 24px" }}>
-          <div className="flex items-center gap-2 justify-center mb-3" style={{ backgroundColor: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: "100px", padding: "6px 14px" }}>
-            <Trophy size={13} style={{ color: "#16a34a", flexShrink: 0 }} />
-            <span style={{ fontSize: "13px", fontWeight: 600, color: "#16a34a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "240px" }}>
-              {tournamentTitle}
-            </span>
+        <div style={{ padding: "24px" }}>
+          <div className="flex items-center gap-2 justify-center mb-4" style={{ backgroundColor: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: "999px", padding: "8px 16px" }}>
+            <Trophy size={13} style={{ color: "#374151" }} />
+            <span style={{ fontSize: "13px", fontWeight: 700, color: "#374151" }}>{tournamentTitle}</span>
           </div>
-          <p style={{ fontSize: "13px", color: "#6b7280", lineHeight: "1.6", marginBottom: "20px", textAlign: "center" }}>
-            Your team has been successfully registered. The organizer will review and confirm shortly.
-          </p>
-          <button onClick={onClose} style={{ width: "100%", height: "44px", backgroundColor: "#111827", color: "white", borderRadius: "12px", fontSize: "14px", fontWeight: 700, border: "none", cursor: "pointer" }}>
-            Done
-          </button>
+          <p style={{ fontSize: "14px", color: "#6b7280", lineHeight: "1.7", textAlign: "center", marginBottom: "22px" }}>Your team has been successfully registered. The organizer will review and confirm shortly.</p>
+          <button onClick={onClose} style={{ width: "100%", height: "48px", borderRadius: "14px", backgroundColor: "#111827", color: "white", border: "none", fontWeight: 800, fontSize: "14px", cursor: "pointer" }}>Done</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PaymentModal({ tournament, onClose, onSuccess }: { tournament: Tournament; onClose: () => void; onSuccess: () => void }) {
+  const [loading, setLoading] = useState(false);
+
+  const handleEsewaPayment = async () => {
+    setLoading(true);
+    setTimeout(() => { onSuccess(); setLoading(false); }, 1800);
+  };
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center px-4" style={{ backgroundColor: "rgba(0,0,0,0.75)", zIndex: 65 }}>
+      <div className="bg-white w-full overflow-hidden" style={{ maxWidth: "520px", borderRadius: "28px" }}>
+        <div style={{ padding: "26px" }}>
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div style={{ width: "58px", height: "58px", borderRadius: "18px", backgroundColor: "#dcfce7", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <IndianRupee size={26} color="#16a34a" />
+              </div>
+              <div>
+                <h2 style={{ fontSize: "24px", fontWeight: 800, color: "#111827", margin: 0 }}>Complete Registration</h2>
+                <p style={{ fontSize: "14px", color: "#6b7280", marginTop: "4px" }}>Secure your tournament slot with eSewa payment</p>
+              </div>
+            </div>
+            <button onClick={onClose} style={{ width: "38px", height: "38px", borderRadius: "50%", border: "none", backgroundColor: "#f3f4f6", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><X size={18} /></button>
+          </div>
+
+          <div style={{ marginTop: "24px", backgroundColor: "#f0fdf4", border: "1.5px solid #bbf7d0", borderRadius: "18px", padding: "18px" }}>
+            <div className="flex items-center justify-between">
+              <div>
+                <p style={{ fontSize: "12px", color: "#16a34a", fontWeight: 700, marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.06em" }}>Tournament</p>
+                <h3 style={{ fontSize: "18px", fontWeight: 800, color: "#14532d", margin: 0 }}>{tournament.title}</h3>
+              </div>
+              <div style={{ width: "52px", height: "52px", borderRadius: "16px", backgroundColor: "#16a34a", display: "flex", alignItems: "center", justifyContent: "center" }}><Trophy size={22} color="white" /></div>
+            </div>
+            <div className="flex items-center justify-between" style={{ marginTop: "18px", paddingTop: "18px", borderTop: "1px solid #bbf7d0" }}>
+              <div>
+                <p style={{ fontSize: "12px", color: "#6b7280", fontWeight: 700, marginBottom: "5px" }}>Registration Fee</p>
+                <h1 style={{ fontSize: "32px", fontWeight: 900, color: "#111827", margin: 0, lineHeight: 1 }}>NPR {tournament.registrationFee?.toLocaleString()}</h1>
+              </div>
+              <div style={{ backgroundColor: "#dcfce7", color: "#15803d", fontSize: "12px", fontWeight: 800, borderRadius: "999px", padding: "8px 14px" }}>Required</div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: "24px" }}>
+            <p style={{ fontSize: "13px", fontWeight: 700, color: "#374151", marginBottom: "12px" }}>Select Payment Method</p>
+            <div style={{ border: "2px solid #22c55e", borderRadius: "18px", padding: "18px" }}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div style={{ width: "52px", height: "52px", borderRadius: "50%", backgroundColor: "#16a34a", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: 900, fontSize: "28px" }}>e</div>
+                  <div>
+                    <h3 style={{ margin: 0, fontSize: "18px", fontWeight: 800, color: "#111827" }}>eSewa</h3>
+                    <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#6b7280" }}>Pay securely using eSewa</p>
+                  </div>
+                </div>
+                <div style={{ width: "42px", height: "42px", borderRadius: "50%", backgroundColor: "#dcfce7", display: "flex", alignItems: "center", justifyContent: "center" }}><ArrowRight size={18} color="#16a34a" /></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between" style={{ marginTop: "20px", backgroundColor: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: "14px", padding: "14px 16px" }}>
+            <div className="flex items-center gap-2">
+              <ShieldCheck size={16} color="#16a34a" />
+              <span style={{ fontSize: "13px", fontWeight: 700, color: "#15803d" }}>Your payment is 100% secure</span>
+            </div>
+            <ShieldCheck size={16} color="#16a34a" />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 mt-6">
+            <button onClick={onClose} disabled={loading} style={{ height: "50px", borderRadius: "14px", border: "none", backgroundColor: "#f3f4f6", color: "#374151", fontWeight: 800, cursor: "pointer" }}>Cancel</button>
+            <button onClick={handleEsewaPayment} disabled={loading} style={{ height: "50px", borderRadius: "14px", border: "none", background: "linear-gradient(135deg, #22c55e, #16a34a)", color: "white", fontWeight: 800, cursor: "pointer" }}>
+              {loading ? "Redirecting..." : "Pay with eSewa"}
+            </button>
+          </div>
+          <p style={{ textAlign: "center", fontSize: "12px", color: "#9ca3af", marginTop: "14px" }}>You will be redirected to eSewa to complete the payment.</p>
         </div>
       </div>
     </div>
@@ -122,7 +174,9 @@ function RegistrationModal({ tournament, onClose }: { tournament: Tournament; on
   const [form, setForm] = useState<FormData>({ teamName: "", captainName: "", captainPhone: "", captainEmail: "", playerCount: "" });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showFreeSuccess, setShowFreeSuccess] = useState(false);
 
   const setField = (field: keyof FormData) => (val: string) => {
     setForm((prev) => ({ ...prev, [field]: val }));
@@ -143,7 +197,7 @@ function RegistrationModal({ tournament, onClose }: { tournament: Tournament; on
     return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = async () => {
+  const handleProceed = async () => {
     if (!validate()) return;
     setIsLoading(true);
     try {
@@ -158,39 +212,25 @@ function RegistrationModal({ tournament, onClose }: { tournament: Tournament; on
         playerCount: Number(form.playerCount.trim()),
       });
       if (!result.success) { toast.error(result.message || "Registration failed"); return; }
-      setShowSuccess(true);
+      if (tournament.registrationFee && tournament.registrationFee > 0) setShowPayment(true);
+      else setShowFreeSuccess(true);
     } catch (err) {
-      console.error("Registration error:", err);
+      console.error(err);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const fee = tournament.registrationFee;
-  const hasFee = fee != null && fee > 0;
+  const hasFee = tournament.registrationFee && tournament.registrationFee > 0;
 
   return (
     <>
-      <div
-        className="fixed inset-0"
-        style={{ backgroundColor: "rgba(0,0,0,0.6)", zIndex: 40 }}
-        onClick={onClose}
-      />
+      <div className="fixed inset-0" style={{ backgroundColor: "rgba(0,0,0,0.6)", zIndex: 40 }} onClick={onClose} />
+      <div className="fixed inset-0 overflow-y-auto" style={{ zIndex: 41 }}>
+        <div className="flex min-h-full items-start justify-center px-4" style={{ paddingTop: "130px", paddingBottom: "60px" }}>
+          <div className="bg-white rounded-3xl w-full shadow-2xl" style={{ maxWidth: "448px" }} onClick={(e) => e.stopPropagation()}>
 
-      <div
-        className="fixed inset-0 overflow-y-auto"
-        style={{ zIndex: 41 }}
-      >
-        <div
-          className="flex min-h-full items-start justify-center px-4"
-          style={{ paddingTop: "130px", paddingBottom: "60px" }}
-        >
-          <div
-            className="bg-white rounded-3xl w-full shadow-2xl"
-            style={{ maxWidth: "448px" }}
-            onClick={(e) => e.stopPropagation()}
-          >
             <div className="p-6 pb-4 border-b border-gray-100">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-2 flex-1 min-w-0">
@@ -198,108 +238,26 @@ function RegistrationModal({ tournament, onClose }: { tournament: Tournament; on
                   <div className="min-w-0 w-full">
                     <p className="text-xs text-gray-400 font-medium mb-0.5">Registering for</p>
                     <h2 className="text-base font-bold text-gray-900 leading-snug">{tournament.title}</h2>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {tournament.location} · {formatDateRange(tournament.startDate, tournament.endDate)}
-                    </p>
-
-                    {hasFee ? (
-                      <div
-                        className="flex items-center gap-2 mt-3"
-                        style={{
-                          backgroundColor: "#fefce8",
-                          border: "1.5px solid #fbbf24",
-                          borderRadius: "10px",
-                          padding: "8px 12px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: "26px",
-                            height: "26px",
-                            borderRadius: "50%",
-                            backgroundColor: "#f59e0b",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            flexShrink: 0,
-                          }}
-                        >
+                    <p className="text-xs text-gray-500 mt-1">{tournament.location} · {formatDateRange(tournament.startDate, tournament.endDate)}</p>
+                    <div className={`flex items-center justify-between mt-3 px-3 py-2.5 rounded-xl ${hasFee ? "bg-amber-50 border border-amber-200" : "bg-green-50 border border-green-200"}`}>
+                      <div className="flex items-center gap-2">
+                        <div style={{ width: "28px", height: "28px", borderRadius: "50%", backgroundColor: hasFee ? "#f59e0b" : "#16a34a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                           <IndianRupee size={13} color="white" />
                         </div>
                         <div>
-                          <p style={{ fontSize: "10px", fontWeight: 600, color: "#92400e", margin: 0, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                            Registration Fee
-                          </p>
-                          <p style={{ fontSize: "15px", fontWeight: 800, color: "#78350f", margin: 0, lineHeight: 1.2 }}>
-                            NPR {fee!.toLocaleString()}
+                          <p style={{ fontSize: "10px", fontWeight: 600, color: hasFee ? "#92400e" : "#166534", margin: 0, textTransform: "uppercase", letterSpacing: "0.05em" }}>Registration Fee</p>
+                          <p style={{ fontSize: "15px", fontWeight: 800, color: hasFee ? "#78350f" : "#14532d", margin: 0, lineHeight: 1.2 }}>
+                            {hasFee ? `NPR ${tournament.registrationFee?.toLocaleString()}` : "Free"}
                           </p>
                         </div>
-                        <span
-                          style={{
-                            marginLeft: "auto",
-                            fontSize: "10px",
-                            fontWeight: 700,
-                            color: "#b45309",
-                            backgroundColor: "#fde68a",
-                            borderRadius: "100px",
-                            padding: "2px 8px",
-                          }}
-                        >
-                          Required
-                        </span>
                       </div>
-                    ) : (
-                      <div
-                        className="flex items-center gap-2 mt-3"
-                        style={{
-                          backgroundColor: "#f0fdf4",
-                          border: "1.5px solid #86efac",
-                          borderRadius: "10px",
-                          padding: "8px 12px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: "26px",
-                            height: "26px",
-                            borderRadius: "50%",
-                            backgroundColor: "#16a34a",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            flexShrink: 0,
-                          }}
-                        >
-                          <IndianRupee size={13} color="white" />
-                        </div>
-                        <div>
-                          <p style={{ fontSize: "10px", fontWeight: 600, color: "#166534", margin: 0, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                            Registration Fee
-                          </p>
-                          <p style={{ fontSize: "15px", fontWeight: 800, color: "#14532d", margin: 0, lineHeight: 1.2 }}>
-                            Free
-                          </p>
-                        </div>
-                        <span
-                          style={{
-                            marginLeft: "auto",
-                            fontSize: "10px",
-                            fontWeight: 700,
-                            color: "#15803d",
-                            backgroundColor: "#bbf7d0",
-                            borderRadius: "100px",
-                            padding: "2px 8px",
-                          }}
-                        >
-                          No Cost
-                        </span>
-                      </div>
-                    )}
+                      <span style={{ fontSize: "10px", fontWeight: 700, color: hasFee ? "#b45309" : "#15803d", backgroundColor: hasFee ? "#fde68a" : "#bbf7d0", borderRadius: "999px", padding: "2px 8px" }}>
+                        {hasFee ? "Required" : "No Cost"}
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors shrink-0">
-                  <X size={20} />
-                </button>
+                <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors shrink-0"><X size={20} /></button>
               </div>
             </div>
 
@@ -312,24 +270,18 @@ function RegistrationModal({ tournament, onClose }: { tournament: Tournament; on
             </div>
 
             <div className="px-6 pb-6 space-y-2">
-              <button
-                onClick={handleSubmit}
-                disabled={isLoading}
-                className="w-full h-12 bg-black text-white rounded-xl font-bold text-sm hover:bg-gray-800 transition-colors disabled:opacity-60 flex items-center justify-center"
-              >
-                {isLoading ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : "Submit Registration"}
+              <button onClick={handleProceed} disabled={isLoading} className="w-full h-12 bg-black text-white rounded-xl font-bold text-sm hover:bg-gray-800 transition-colors disabled:opacity-60 flex items-center justify-center">
+                {isLoading ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : hasFee ? "Continue to Payment" : "Submit Registration"}
               </button>
-              <button onClick={onClose} disabled={isLoading} className="w-full h-10 text-sm text-gray-500 hover:text-gray-700 transition-colors disabled:opacity-60">
-                Cancel
-              </button>
+              <button onClick={onClose} disabled={isLoading} className="w-full h-10 text-sm text-gray-500 hover:text-gray-700 transition-colors disabled:opacity-60">Cancel</button>
             </div>
           </div>
         </div>
       </div>
 
-      {showSuccess && (
-        <SuccessDialog tournamentTitle={tournament.title} onClose={() => { setShowSuccess(false); onClose(); }} />
-      )}
+      {showPayment && <PaymentModal tournament={tournament} onClose={() => setShowPayment(false)} onSuccess={() => { setShowPayment(false); setShowSuccess(true); }} />}
+      {showSuccess && <PaymentSuccessDialog tournamentTitle={tournament.title} onClose={() => { setShowSuccess(false); onClose(); }} />}
+      {showFreeSuccess && <SuccessDialog tournamentTitle={tournament.title} onClose={() => { setShowFreeSuccess(false); onClose(); }} />}
     </>
   );
 }
@@ -353,9 +305,7 @@ function TournamentCard({ tournament }: { tournament: Tournament }) {
             // eslint-disable-next-line @next/next/no-img-element
             <img src={bannerUrl} alt={tournament.title} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-200">
-              <Trophy size={40} className="text-gray-300" />
-            </div>
+            <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-200"><Trophy size={40} className="text-gray-300" /></div>
           )}
           <button onClick={handleToggle} className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full shadow flex items-center justify-center hover:scale-110 transition-transform">
             <Bookmark size={15} className={saved ? "text-black fill-black" : "text-gray-400"} />
@@ -369,18 +319,10 @@ function TournamentCard({ tournament }: { tournament: Tournament }) {
         <div className="p-5 flex flex-col flex-1">
           <h2 className="font-bold text-gray-900 text-base mb-3 line-clamp-2 leading-snug">{tournament.title}</h2>
           <div className="space-y-1.5 mb-4">
-            <div className="flex items-center gap-1.5 text-gray-500 text-sm">
-              <MapPin size={13} className="shrink-0" />
-              <span className="truncate">{tournament.location}</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-gray-500 text-sm">
-              <Calendar size={13} className="shrink-0" />
-              <span>{formatDateRange(tournament.startDate, tournament.endDate)}</span>
-            </div>
+            <div className="flex items-center gap-1.5 text-gray-500 text-sm"><MapPin size={13} className="shrink-0" /><span className="truncate">{tournament.location}</span></div>
+            <div className="flex items-center gap-1.5 text-gray-500 text-sm"><Calendar size={13} className="shrink-0" /><span>{formatDateRange(tournament.startDate, tournament.endDate)}</span></div>
           </div>
-          <button onClick={() => setShowModal(true)} className="mt-auto w-full bg-black text-white py-3 rounded-xl font-bold text-sm hover:bg-gray-800 transition-colors">
-            Register
-          </button>
+          <button onClick={() => setShowModal(true)} className="mt-auto w-full bg-black text-white py-3 rounded-xl font-bold text-sm hover:bg-gray-800 transition-colors">Register</button>
         </div>
       </div>
       {showModal && <RegistrationModal tournament={tournament} onClose={() => setShowModal(false)} />}
@@ -431,11 +373,7 @@ export default function TournamentsPage() {
   }, []);
 
   const filtered = filter === "all" ? tournaments : tournaments.filter((t) => t.type === filter);
-  const filters: { label: string; value: FilterType }[] = [
-    { label: "All", value: "all" },
-    { label: "Football", value: "football" },
-    { label: "Futsal", value: "futsal" },
-  ];
+  const filters: { label: string; value: FilterType }[] = [{ label: "All", value: "all" }, { label: "Football", value: "football" }, { label: "Futsal", value: "futsal" }];
 
   return (
     <div className="min-h-screen bg-[#fefee3] flex flex-col">
@@ -448,17 +386,13 @@ export default function TournamentsPage() {
           </div>
           <div className="flex gap-3 shrink-0">
             {filters.map(({ label, value }) => (
-              <button key={value} onClick={() => setFilter(value)} className={`px-6 py-2.5 rounded-xl font-bold text-sm border-2 border-black transition-all duration-150 ${filter === value ? "bg-black text-white" : "bg-white text-black hover:bg-gray-50"}`}>
-                {label}
-              </button>
+              <button key={value} onClick={() => setFilter(value)} className={`px-6 py-2.5 rounded-xl font-bold text-sm border-2 border-black transition-all duration-150 ${filter === value ? "bg-black text-white" : "bg-white text-black hover:bg-gray-50"}`}>{label}</button>
             ))}
           </div>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
-          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">{Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}</div>
         ) : error ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
             <Trophy size={48} className="text-gray-300 mb-4" />
@@ -472,9 +406,7 @@ export default function TournamentsPage() {
             {filter !== "all" && <button onClick={() => setFilter("all")} className="mt-3 text-sm text-gray-400 underline">Show all tournaments</button>}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((t) => <TournamentCard key={t._id} tournament={t} />)}
-          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">{filtered.map((t) => <TournamentCard key={t._id} tournament={t} />)}</div>
         )}
       </main>
       <Footer />
