@@ -96,32 +96,49 @@ function PaymentModal({ tournament, onClose }: { tournament: Tournament; onClose
 
   const handleEsewaPayment = async () => {
     setLoading(true);
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = process.env.NEXT_PUBLIC_ESEWA_BASE_URL as string;
-    const fields = {
-      amount: String(tournament.registrationFee),
-      tax_amount: "0",
-      total_amount: String(tournament.registrationFee),
-      transaction_uuid: Date.now().toString(),
-      product_code: process.env.NEXT_PUBLIC_ESEWA_PRODUCT_CODE as string,
-      product_service_charge: "0",
-      product_delivery_charge: "0",
-      success_url: `${window.location.origin}/payment-success`,
-      failure_url: `${window.location.origin}/payment-failure`,
-      signed_field_names: "total_amount,transaction_uuid,product_code",
-      signature: "WILL_BE_REPLACED_IF_BACKEND_USED",
-    };
-    Object.entries(fields).forEach(([key, value]) => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = key;
-      input.value = value;
-      form.appendChild(input);
-    });
-    document.body.appendChild(form);
-    form.submit();
-    setLoading(false);
+    try {
+      const res = await fetch("/api/esewa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: tournament.registrationFee }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) { toast.error("Failed to initiate payment"); setLoading(false); return; }
+
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = process.env.NEXT_PUBLIC_ESEWA_BASE_URL as string;
+
+      const fields: Record<string, string> = {
+        amount: String(tournament.registrationFee),
+        tax_amount: "0",
+        total_amount: String(tournament.registrationFee),
+        transaction_uuid: data.transaction_uuid,
+        product_code: data.product_code,
+        product_service_charge: "0",
+        product_delivery_charge: "0",
+        success_url: `${window.location.origin}/payment-success`,
+        failure_url: `${window.location.origin}/payment-failure`,
+        signed_field_names: "total_amount,transaction_uuid,product_code",
+        signature: data.signature,
+      };
+
+      Object.entries(fields).forEach(([key, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+    } catch (err) {
+      console.error(err);
+      toast.error("Payment failed. Please try again.");
+      setLoading(false);
+    }
   };
 
   return (
