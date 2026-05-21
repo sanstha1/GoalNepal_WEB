@@ -30,4 +30,8 @@ export const API = {
             DELETE: (id: string) => `/api/tournaments/${id}`,
         },
     },
+    NOTIFICATIONS: {
+        GET_ALL: '/api/notifications',
+        MARK_READ: '/api/notifications/mark-read',
+    },
 }

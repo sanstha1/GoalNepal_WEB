@@ -16,12 +16,12 @@ export const normalizeUser = (raw: unknown): AuthUser => {
   const user = raw as RawUser;
 
   return {
-    id: user._id ?? user.id ?? "",
+    _id: user._id ?? user.id ?? "",
     fullName: user.fullName ?? user.fullname ?? "",
     email: user.email ?? "",
     profilePicture: user.profilePicture ?? null,
     role: user.role ?? "user",
     createdAt: user.createdAt ?? new Date().toISOString(),
-    updatedAt: user.updatedAt,
+    updatedAt: user.updatedAt ?? new Date().toISOString(),
   };
 };
