@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Trophy, Newspaper, Bookmark, User, Bell, Settings, RefreshCw } from "lucide-react";
+import { Trophy, Newspaper, Bookmark, User, Bell, RefreshCw } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useNotifications, INotification } from "../hooks/useNotifications";
 
@@ -12,7 +12,7 @@ export default function Header() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const { notifications, unreadCount, markAllRead, loading, error, refetch } = useNotifications();
+  const { notifications, unreadCount, loading, error, refetch } = useNotifications();
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -79,24 +79,15 @@ export default function Header() {
 
             {open && (
               <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-2xl overflow-hidden z-50">
-                <div className="bg-[#ef5350] px-4 py-3 flex items-center justify-between">
+                <div className="bg-[#4a4a4a] border-b border-gray-600 px-4 py-3 flex items-center justify-between">
                   <span className="text-white font-bold text-base">Notifications</span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={refetch}
-                      title="Refresh"
-                      className="hover:opacity-80 transition"
-                    >
-                      <RefreshCw className="w-4 h-4 text-white" />
-                    </button>
-                    <button
-                      onClick={markAllRead}
-                      title="Mark all as read"
-                      className="hover:opacity-80 transition"
-                    >
-                      <Settings className="w-5 h-5 text-white" />
-                    </button>
-                  </div>
+                  <button
+                    onClick={refetch}
+                    title="Refresh"
+                    className="hover:opacity-80 transition"
+                  >
+                    <RefreshCw className="w-4 h-4 text-white" />
+                  </button>
                 </div>
 
                 <div className="divide-y divide-gray-100 max-h-96 overflow-y-auto">

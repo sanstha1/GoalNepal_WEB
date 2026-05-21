@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import axios from "@/lib/api/axios";
-import { API } from "@/lib/api/endpoints";
 
 export interface INotification {
   _id: string;
@@ -23,13 +21,19 @@ export function useNotifications() {
 
   const fetchNotifications = useCallback(async () => {
     try {
-      const response = await axios.get(API.NOTIFICATIONS.GET_ALL);
-      const data = response.data;
-      setNotifications(Array.isArray(data) ? data : data.notifications ?? []);
+      const res = await fetch("/api/notifications");
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(`Failed: ${res.status}`);
+        return;
+      }
+
+      setNotifications(Array.isArray(data) ? data : data.data ?? []);
       setError(null);
-    } catch (err: unknown) {
+    } catch (err) {
       console.error("Failed to fetch notifications", err);
-      setError(`Failed: ${err instanceof Error ? err.message : "Unknown error"}`);
+      setError("Network error");
     } finally {
       setLoading(false);
     }
@@ -37,9 +41,9 @@ export function useNotifications() {
 
   const markAllRead = useCallback(async () => {
     try {
-      await axios.patch(API.NOTIFICATIONS.MARK_READ);
+      await fetch("/api/notifications/mark-read", { method: "PATCH" });
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-    } catch (err: unknown) {
+    } catch (err) {
       console.error("Failed to mark notifications as read", err);
     }
   }, []);
