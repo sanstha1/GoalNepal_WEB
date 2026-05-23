@@ -1,7 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ArrowLeft, CheckCheck, Clock, Calendar } from "lucide-react";
+import { ArrowLeft, CheckCheck } from "lucide-react";
+import Header from "@/components/header";
+import { motion } from "framer-motion";
 import { useNotifications } from "@/hooks/useNotifications";
 
 interface Notification {
@@ -31,65 +33,99 @@ export default function NotificationsPage() {
     const d = new Date(date);
     const diff = Date.now() - d.getTime();
     const hours = Math.floor(diff / 3600000);
-    if (hours < 24) return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(diff / 86400000);
+    if (days < 7) return `${days}d ago`;
     return d.toLocaleDateString("en-US", {
-      weekday: "short",
       month: "short",
       day: "numeric",
-      year: "numeric",
     });
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="max-w-xl mx-auto px-4 py-4">
-
-        {/* Header */}
-        <div
-          className="rounded-2xl px-5 py-4 flex items-center justify-between mb-3"
-          style={{ background: "linear-gradient(135deg, #1e1e2e 0%, #2d2640 100%)" }}
-        >
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => router.back()}
-              className="w-9 h-9 rounded-full flex items-center justify-center border border-white/20 bg-white/8 text-white hover:bg-white/15 transition"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </button>
-            <h1 className="text-white font-semibold text-lg tracking-tight">
-              Notifications
-            </h1>
-            {unreadCount > 0 && (
-              <span className="text-xs font-medium text-white/70 bg-white/10 border border-white/15 px-2 py-0.5 rounded-full">
-                {unreadCount} new
-              </span>
-            )}
-          </div>
-          <button
-            onClick={markAllRead}
-            className="flex items-center gap-1.5 text-xs font-medium text-white/70 bg-white/8 border border-white/15 px-3 py-1.5 rounded-full hover:bg-white/15 hover:text-white transition"
-          >
-            <CheckCheck className="w-3.5 h-3.5" />
-            Mark all read
-          </button>
-        </div>
-
-        {/* Content */}
-        {loading ? (
-          <div className="py-16 text-center text-gray-400 text-sm">Loading...</div>
-        ) : notifications.length === 0 ? (
-          <div className="py-16 text-center text-gray-400 text-sm">No notifications yet</div>
-        ) : (
-          <>
-            {todayNotifs.length > 0 && (
-              <Section label="Today" notifications={todayNotifs} formatTime={formatTime} />
-            )}
-            {earlierNotifs.length > 0 && (
-              <Section label="Earlier" notifications={earlierNotifs} formatTime={formatTime} />
-            )}
-          </>
-        )}
+    <div
+      className="min-h-screen flex flex-col"
+      style={{ background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)" }}
+    >
+      <div style={{ position: "sticky", top: 0, left: 0, right: 0, zIndex: 50, width: "100%" }}>
+        <Header />
       </div>
+
+      <main className="flex-1 px-6 py-12">
+        <div className="max-w-3xl mx-auto w-full">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-8"
+          >
+            <div className="flex items-center gap-4 mb-2">
+              <motion.button
+                onClick={() => router.back()}
+                className="w-10 h-10 rounded-full flex items-center justify-center border border-white/10 bg-white/5 text-white hover:bg-white/10 transition"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </motion.button>
+              <div>
+                <h1 className="text-4xl font-bold text-white">Notifications</h1>
+                {unreadCount > 0 && (
+                  <p className="text-sm text-white/40 mt-1">{unreadCount} unread messages</p>
+                )}
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.button
+            onClick={markAllRead}
+            className="mb-8 flex items-center gap-2 text-sm font-semibold text-white px-4 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <CheckCheck className="w-4 h-4" />
+            Mark all as read
+          </motion.button>
+
+          {loading ? (
+            <motion.div
+              className="py-16 text-center text-white/40"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              Loading notifications...
+            </motion.div>
+          ) : notifications.length === 0 ? (
+            <motion.div
+              className="py-16 text-center text-white/40"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              No notifications yet
+            </motion.div>
+          ) : (
+            <div className="space-y-8">
+              {todayNotifs.length > 0 && (
+                <Section
+                  label="Today"
+                  notifications={todayNotifs}
+                  formatTime={formatTime}
+                />
+              )}
+              {earlierNotifs.length > 0 && (
+                <Section
+                  label="Earlier"
+                  notifications={earlierNotifs}
+                  formatTime={formatTime}
+                />
+              )}
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   );
 }
@@ -102,58 +138,104 @@ interface SectionProps {
 
 function Section({ label, notifications, formatTime }: SectionProps) {
   return (
-    <div className="mb-4">
-      <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 px-1 pb-2">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <p className="text-xs font-bold uppercase tracking-widest text-white/30 mb-4 px-2">
         {label}
       </p>
-      <div className="flex flex-col gap-1.5">
-        {notifications.map((n: Notification) => (
-          <NotifCard key={n._id} n={n} formatTime={formatTime} />
+      <div className="space-y-3">
+        {notifications.map((n: Notification, index: number) => (
+          <NotifCard
+            key={n._id}
+            n={n}
+            formatTime={formatTime}
+            index={index}
+          />
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 interface NotifCardProps {
   n: Notification;
   formatTime: (date: string) => string;
+  index: number;
 }
 
-function NotifCard({ n, formatTime }: NotifCardProps) {
-  const isToday = new Date(n.createdAt).toDateString() === new Date().toDateString();
+function NotifCard({ n, formatTime, index }: NotifCardProps) {
+  const getTypeColor = (type: string) => {
+    if (type === "NEW_TOURNAMENT") return "#e05d2e";
+    if (type === "PAYMENT") return "#22c55e";
+    return "#3b82f6";
+  };
+
+  const getTypeIcon = (type: string) => {
+    if (type === "NEW_TOURNAMENT") return "🏆";
+    if (type === "PAYMENT") return "💰";
+    return "📬";
+  };
 
   return (
-    <div
-      className={`
-        flex items-start gap-3.5 px-4 py-3.5 rounded-xl border cursor-pointer
-        transition-all duration-150 hover:-translate-y-px hover:shadow-sm
-        ${n.read
-          ? "bg-white border-gray-100"
-          : "bg-white border-l-[3px] border-l-violet-400 border-gray-100"
-        }
-      `}
+    <motion.div
+      className="rounded-xl border border-white/10 overflow-hidden shadow-lg group cursor-pointer"
+      style={{
+        background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+      }}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.08 }}
+      whileHover={{ scale: 1.01, borderColor: "rgba(224, 93, 46, 0.3)" }}
     >
-      <div
-        className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 ${
-          n.type === "NEW_TOURNAMENT" ? "bg-violet-50" : "bg-emerald-50"
-        }`}
-      >
-        {n.type === "NEW_TOURNAMENT" ? "🏆" : "📋"}
-      </div>
+      <div className="p-5 flex gap-4">
+        <div
+          className="w-12 h-12 rounded-lg flex items-center justify-center text-xl shrink-0 flex-none"
+          style={{
+            backgroundColor: `${getTypeColor(n.type)}20`,
+            borderLeft: `3px solid ${getTypeColor(n.type)}`,
+          }}
+        >
+          {getTypeIcon(n.type)}
+        </div>
 
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-gray-800 leading-snug">{n.title}</p>
-        <p className="text-sm text-gray-500 mt-0.5 leading-snug">{n.message}</p>
-        <p className="flex items-center gap-1 text-[11px] text-gray-400 mt-1.5">
-          {isToday ? <Clock className="w-3 h-3" /> : <Calendar className="w-3 h-3" />}
-          {formatTime(n.createdAt)}
-        </p>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-3 mb-2">
+            <p className="text-base font-bold text-white leading-tight">
+              {n.title}
+            </p>
+            {!n.read && (
+              <motion.span
+                className="w-2.5 h-2.5 rounded-full shrink-0 mt-1"
+                style={{ backgroundColor: getTypeColor(n.type) }}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.3 }}
+              />
+            )}
+          </div>
+          <p className="text-sm text-white/50 leading-snug mb-3">
+            {n.message}
+          </p>
+          <p className="text-xs text-white/30 font-medium">
+            {formatTime(n.createdAt)}
+          </p>
+        </div>
       </div>
 
       {!n.read && (
-        <span className="w-2 h-2 rounded-full bg-violet-500 shrink-0 mt-1.5" />
+        <motion.div
+          className="h-1 bg-linear-to-r"
+          style={{
+            backgroundImage: `linear-gradient(90deg, ${getTypeColor(n.type)}, transparent)`,
+          }}
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        />
       )}
-    </div>
+    </motion.div>
   );
 }
