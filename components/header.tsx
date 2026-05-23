@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Trophy, Newspaper, Bookmark, User, Bell, RefreshCw } from "lucide-react";
@@ -36,61 +35,88 @@ export default function Header() {
     router.push("/notifications");
   };
 
-  const activeClass = "flex items-center gap-1.5 bg-[#6b7280] px-3 py-1.5 rounded-lg";
-  const normalClass = "flex items-center gap-1.5 hover:text-gray-300 transition";
+  const activeClass =
+    "flex items-center gap-1.5 bg-white/10 border border-white/20 px-3 py-1.5 rounded-lg text-white";
+  const normalClass =
+    "flex items-center gap-1.5 text-gray-300 hover:text-white hover:bg-white/10 px-3 py-1.5 rounded-lg transition-all duration-200";
 
   return (
-    <header className="w-full bg-[#4a4a4a] border-b border-gray-600 sticky top-0 z-50">
-      <div className="w-full flex items-center justify-between px-6 py-2">
-        <Link href="/home" className="cursor-pointer">
-          <Image src="/images/GoalNepalLogo.png" alt="GoalNepal Logo" width={75} height={75} />
+    <header
+      className="w-full sticky top-0 z-50"
+      style={{
+        background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+      }}
+    >
+      <div className="absolute inset-0 border-b border-white/10" />
+      <div className="w-full flex items-center justify-between px-8 py-3 relative">
+        <Link href="/home" className="cursor-pointer group flex items-center gap-1">
+          <span className="text-2xl font-black tracking-tight text-white">Goal</span>
+          <span
+            className="text-2xl font-black tracking-tight px-2 py-0.5 rounded-lg"
+            style={{
+              background: "linear-gradient(195deg, #000, #ff7043)",
+              color: "#fff",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Nepal
+          </span>
         </Link>
 
-        <nav className="flex items-center gap-5 text-white text-sm">
+        <nav className="flex items-center gap-1 text-sm">
           <Link href="/tournaments" className={pathname === "/tournaments" ? activeClass : normalClass}>
             <Trophy className="w-4 h-4" />
-            <span>Tournaments</span>
+            <span className="font-medium">Tournaments</span>
           </Link>
           <Link href="/news" className={pathname === "/news" ? activeClass : normalClass}>
             <Newspaper className="w-4 h-4" />
-            <span>News</span>
+            <span className="font-medium">News</span>
           </Link>
           <Link href="/saved" className={pathname === "/saved" ? activeClass : normalClass}>
             <Bookmark className="w-4 h-4" />
-            <span>Saved</span>
+            <span className="font-medium">Saved</span>
           </Link>
           <Link href="/profile" className={pathname === "/profile" ? activeClass : normalClass}>
             <User className="w-4 h-4" />
-            <span>Profile</span>
+            <span className="font-medium">Profile</span>
           </Link>
 
-          <div className="relative" ref={ref}>
+          <div className="relative ml-1" ref={ref}>
             <button
               onClick={handleBellClick}
-              className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition ${open || pathname === "/notifications" ? "bg-[#6b7280]" : "hover:text-gray-300"}`}
+              className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all duration-200 font-medium ${
+                open || pathname === "/notifications"
+                  ? "bg-white/10 border border-white/20 text-white"
+                  : "text-gray-300 hover:text-white hover:bg-white/10"
+              }`}
             >
               <Bell className="w-4 h-4" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#ef5350] text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#ef5350] text-white text-[9px] font-bold rounded-full flex items-center justify-center shadow-lg">
                   {unreadCount > 9 ? "9+" : unreadCount}
                 </span>
               )}
             </button>
 
             {open && (
-              <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-2xl overflow-hidden z-50">
-                <div className="bg-[#4a4a4a] border-b border-gray-600 px-4 py-3 flex items-center justify-between">
-                  <span className="text-white font-bold text-base">Notifications</span>
+              <div
+                className="absolute right-0 mt-3 w-80 rounded-xl shadow-2xl overflow-hidden z-50 border border-white/10"
+                style={{
+                  background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+                }}
+              >
+                <div className="border-b border-white/10 px-4 py-3 flex items-center justify-between">
+                  <span className="text-white font-bold text-base tracking-wide">Notifications</span>
                   <button
                     onClick={refetch}
                     title="Refresh"
-                    className="hover:opacity-80 transition"
+                    className="hover:opacity-80 transition p-1 rounded-lg hover:bg-white/10"
                   >
-                    <RefreshCw className="w-4 h-4 text-white" />
+                    <RefreshCw className="w-4 h-4 text-gray-300" />
                   </button>
                 </div>
 
-                <div className="divide-y divide-gray-100 max-h-96 overflow-y-auto">
+                <div className="divide-y divide-white/10 max-h-96 overflow-y-auto">
                   {loading ? (
                     <div className="px-4 py-8 text-center text-gray-400 text-sm">Loading...</div>
                   ) : error ? (
@@ -106,29 +132,30 @@ export default function Header() {
                     notifications.slice(0, 5).map((n: INotification) => (
                       <div
                         key={n._id}
-                        className={`flex items-start gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition ${!n.read ? "bg-white" : "bg-gray-50/50"}`}
+                        className={`flex items-start gap-3 px-4 py-3 cursor-pointer hover:bg-white/5 transition ${
+                          !n.read ? "bg-white/5" : ""
+                        }`}
                       >
-                        <div className={`w-10 h-10 rounded-full shrink-0 flex items-center justify-center text-sm font-bold ${n.type === "NEW_TOURNAMENT" ? "bg-red-100" : "bg-purple-100"}`}>
+                        <div
+                          className={`w-10 h-10 rounded-full shrink-0 flex items-center justify-center text-sm font-bold ${
+                            n.type === "NEW_TOURNAMENT" ? "bg-red-500/20" : "bg-purple-500/20"
+                          }`}
+                        >
                           {n.type === "NEW_TOURNAMENT" ? "🏆" : "📋"}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-gray-800 leading-snug">{n.title}</p>
-                          <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{n.message}</p>
-                          <p className="text-xs text-gray-400 mt-1">
-                            {new Date(n.createdAt).toLocaleDateString()}
-                          </p>
+                          <p className="text-sm font-semibold text-white leading-snug">{n.title}</p>
+                          <p className="text-xs text-gray-400 mt-0.5 line-clamp-2">{n.message}</p>
+                          <p className="text-xs text-gray-500 mt-1">{new Date(n.createdAt).toLocaleDateString()}</p>
                         </div>
-                        {!n.read && <span className="w-2.5 h-2.5 rounded-full bg-[#4caf50] shrink-0 mt-1" />}
+                        {!n.read && <span className="w-2.5 h-2.5 rounded-full bg-[#4caf50] shrink-0 mt-1 shadow-lg shadow-green-500/30" />}
                       </div>
                     ))
                   )}
                 </div>
 
-                <div className="px-4 py-3 text-center border-t border-gray-100">
-                  <button
-                    onClick={handleSeeAll}
-                    className="text-[#4caf50] font-semibold text-sm hover:underline"
-                  >
+                <div className="px-4 py-3 text-center border-t border-white/10">
+                  <button onClick={handleSeeAll} className="text-[#4caf50] font-semibold text-sm hover:underline">
                     See all recent activity
                   </button>
                 </div>
