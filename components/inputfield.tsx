@@ -3,7 +3,7 @@ import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 type Props = {
   label: string;
   type: string;
-  placeholder?: string; // added placeholder support
+  placeholder?: string; 
   register: UseFormRegisterReturn;
   error?: FieldError;
 };
@@ -21,7 +21,7 @@ export default function InputField({
 
       <input
         type={type}
-        placeholder={placeholder} // now placeholder works
+        placeholder={placeholder}
         {...register}
         className="
           w-full 
