@@ -4,12 +4,12 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterSchemaType } from "@/app/(auth)/schema";
-import InputField from "@/components/inputfield";
 import Image from "next/image";
 import { handleRegister } from "@/lib/actions/auth-action";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -50,34 +50,83 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#1e1e1e]">
-      <div className="w-full md:w-1/2 flex items-center justify-center bg-[#fefee3]">
-        <form
+    <div
+      className="min-h-screen flex"
+      style={{ background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)" }}
+    >
+      <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-12 order-2 lg:order-1">
+        <motion.form
           onSubmit={handleSubmit(onSubmit)}
-          className="p-8 w-96 border border-black rounded-xl bg-white shadow-lg"
+          className="w-full max-w-md"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <h1 className="text-2xl font-bold text-center mb-6 text-black uppercase tracking-tight">
-            Register
-          </h1>
+          <div className="mb-10">
+            <motion.h1
+              className="text-4xl font-bold text-white mb-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              Create Account
+            </motion.h1>
+            <motion.p
+              className="text-white/40 text-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              Join our community of football enthusiasts
+            </motion.p>
+          </div>
 
-          <InputField
-            label="Full Name"
-            type="text"
-            placeholder="Enter your full name"
-            register={register("fullName")}
-            error={errors.fullName}
-          />
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <label className="block text-sm font-semibold text-white mb-3">
+              Full Name
+            </label>
+            <input
+              type="text"
+              placeholder="Santosh Shrestha"
+              {...register("fullName")}
+              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition"
+            />
+            {errors.fullName && (
+              <p className="text-red-400 text-xs mt-2">{errors.fullName.message}</p>
+            )}
+          </motion.div>
 
-          <InputField
-            label="Email"
-            type="email"
-            placeholder="example@mail.com"
-            register={register("email")}
-            error={errors.email}
-          />
+          <motion.div
+            className="mt-5"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+          >
+            <label className="block text-sm font-semibold text-white mb-3">
+              Email Address
+            </label>
+            <input
+              type="email"
+              placeholder="s@gmail.com"
+              {...register("email")}
+              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition"
+            />
+            {errors.email && (
+              <p className="text-red-400 text-xs mt-2">{errors.email.message}</p>
+            )}
+          </motion.div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <motion.div
+            className="mt-5"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <label className="block text-sm font-semibold text-white mb-3">
               Password
             </label>
             <div className="relative">
@@ -85,25 +134,28 @@ export default function RegisterPage() {
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 {...register("password")}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black pr-10 text-black"
+                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition pr-12"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/60 transition"
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
             {errors.password && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.password.message}
-              </p>
+              <p className="text-red-400 text-xs mt-2">{errors.password.message}</p>
             )}
-          </div>
+          </motion.div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <motion.div
+            className="mt-5"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45 }}
+          >
+            <label className="block text-sm font-semibold text-white mb-3">
               Confirm Password
             </label>
             <div className="relative">
@@ -111,54 +163,79 @@ export default function RegisterPage() {
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="••••••••"
                 {...register("confirmPassword")}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black pr-10 text-black"
+                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition pr-12"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/60 transition"
               >
-                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
             {errors.confirmPassword && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.confirmPassword.message}
-              </p>
+              <p className="text-red-400 text-xs mt-2">{errors.confirmPassword.message}</p>
             )}
-          </div>
+          </motion.div>
 
-          <button
+          <motion.button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white py-3 rounded-lg mt-6 font-bold hover:bg-zinc-800 transition-colors disabled:opacity-50"
+            className="w-full mt-8 px-6 py-3 rounded-lg bg-linear-to-r from-orange-500 to-orange-600 text-white font-bold hover:from-orange-600 hover:to-orange-700 transition flex items-center justify-center gap-2 disabled:opacity-50"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
           >
-            {loading ? "Signing Up..." : "Sign Up"}
-          </button>
+            {loading ? "Creating account..." : (
+              <>
+                Create Account
+                <ArrowRight size={18} />
+              </>
+            )}
+          </motion.button>
 
-          <p className="text-center mt-6 text-sm text-gray-600">
+          <motion.p
+            className="text-center mt-8 text-white/40 text-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+          >
             Already have an account?{" "}
-            <span
+            <motion.button
+              type="button"
               onClick={() => router.push("/login")}
-              className="text-black font-bold cursor-pointer hover:underline"
+              className="text-white/70 font-semibold hover:text-white transition"
+              whileHover={{ x: 2 }}
             >
-              Login
-            </span>
-          </p>
-        </form>
+              Sign in here
+            </motion.button>
+          </motion.p>
+        </motion.form>
       </div>
 
-      <div className="hidden md:flex w-1/2 flex-col items-center justify-center bg-[#4a4a4a] text-white p-8">
-        <Image
-          src="/images/image.png"
-          alt="Football Image"
-          width={350}
-          height={350}
-          className="mb-6 scale-x-[-1]"
-        />
-        <h2 className="text-3xl font-bold text-center mt-4">
-          Building Nepal&apos;s <br /> Football Future
-        </h2>
+      <div className="hidden lg:flex lg:w-1/2 flex-col items-center justify-center p-12 order-1 lg:order-2">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-md"
+        >
+          <Image
+            src="/images/image.png"
+            alt="Football"
+            width={300}
+            height={300}
+            className="mb-8 rounded-2xl scale-x-[-1]"
+          />
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Building Nepal&apos;s Football Future
+          </h2>
+          <p className="text-white/50 text-lg">
+            Be part of the revolution in sports management
+          </p>
+        </motion.div>
       </div>
     </div>
   );
