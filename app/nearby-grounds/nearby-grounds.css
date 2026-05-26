@@ -1,0 +1,270 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500&display=swap");
+
+:root {
+  --green: #16a34a;
+  --green-light: #dcfce7;
+  --green-dark: #14532d;
+  --surface: #f9fafb;
+  --border: #e5e7eb;
+  --text: #111827;
+  --muted: #6b7280;
+  --header-h: 56px;
+  --sidebar-w: 340px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.ng-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: "DM Sans", sans-serif;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.ng-header {
+  height: var(--header-h);
+  background: var(--green-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  flex-shrink: 0;
+  gap: 16px;
+}
+
+.ng-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ng-logo {
+  font-size: 20px;
+}
+
+.ng-brand-name {
+  font-family: "Sora", sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+
+.ng-title {
+  font-family: "Sora", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.2px;
+}
+
+.ng-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.ng-map-container {
+  flex: 1;
+  position: relative;
+}
+
+/* Sidebar */
+.grounds-sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.sidebar-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-header h2 {
+  font-family: "Sora", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.count {
+  background: var(--green-light);
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.grounds-list {
+  list-style: none;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.ground-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.ground-item:hover {
+  background: var(--surface);
+}
+
+.ground-item.active {
+  background: var(--green-light);
+  border-left: 3px solid var(--green);
+}
+
+.ground-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ground-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ground-info h3 {
+  font-family: "Sora", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ground-info .address {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ground-info .contact {
+  font-size: 12px;
+  color: var(--green-dark);
+  font-weight: 500;
+}
+
+.directions-btn {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--green);
+  background: var(--green-light);
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+  padding: 5px 10px;
+  text-decoration: none;
+  white-space: nowrap;
+  align-self: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.directions-btn:hover {
+  background: var(--green);
+  color: #fff;
+}
+
+/* State screens */
+.ng-state-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  padding: 40px 24px;
+  color: var(--text);
+}
+
+.ng-state-screen p {
+  color: var(--muted);
+  font-size: 14px;
+  max-width: 320px;
+}
+
+.ng-state-screen h2 {
+  font-family: "Sora", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.ng-error-icon {
+  font-size: 48px;
+}
+
+.ng-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Scrollbar */
+.grounds-list::-webkit-scrollbar {
+  width: 4px;
+}
+.grounds-list::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  :root {
+    --sidebar-w: 100%;
+  }
+
+  .ng-main {
+    flex-direction: column;
+  }
+
+  .grounds-sidebar {
+    height: 40vh;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ng-map-container {
+    height: 60vh;
+  }
+
+  .ng-title {
+    display: none;
+  }
+}
