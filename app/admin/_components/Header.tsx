@@ -2,6 +2,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
 import { LogOut, X } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Header() {
     const { logout, user } = useAuth();
@@ -22,63 +23,147 @@ export default function Header() {
 
     return (
         <>
-            <header className="sticky top-0 z-50 bg-[#4a4a4a] border-b border-black/10">
-                <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Global">
-                    <div className="flex h-16 items-center justify-end">
-                        <div className="flex items-center gap-2">
-                            <div className="h-6 flex items-center justify-center text-xs font-semibold text-white">
-                                {user?.email || 'Admin'}
-                            </div>
-                            <span className="text-sm font-medium sm:inline">
-                                <button
-                                    onClick={handleLogoutClick}
-                                    className="w-full border border-white/20 flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-white/10 transition-colors text-left text-white"
-                                >
-                                    Logout
-                                </button>
-                            </span>
+            <header
+                className="sticky top-0 z-50 border-b"
+                style={{
+                    background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+                    borderColor: "rgba(255,255,255,0.1)"
+                }}
+            >
+                <nav className="mx-auto max-w-7xl px-6 lg:px-8" aria-label="Global">
+                    <div className="flex h-16 items-center justify-between">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <h1 className="text-xl font-bold text-white">Admin Dashboard</h1>
+                        </motion.div>
+                        <div className="flex items-center gap-4">
+                            <motion.div
+                                className="text-sm text-white/70"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.2 }}
+                            >
+                                {user?.email || 'Administrator'}
+                            </motion.div>
+                            <motion.button
+                                onClick={handleLogoutClick}
+                                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border transition"
+                                style={{
+                                    borderColor: "rgba(224, 93, 46, 0.3)",
+                                    color: "#e05d2e"
+                                }}
+                                whileHover={{
+                                    backgroundColor: "rgba(224, 93, 46, 0.1)",
+                                    borderColor: "rgba(224, 93, 46, 0.5)"
+                                }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                <LogOut size={16} />
+                                Logout
+                            </motion.button>
                         </div>
                     </div>
                 </nav>
             </header>
 
             {showLogoutModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
-                    <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
-                        <button
+                <motion.div
+                    className="fixed inset-0 flex items-center justify-center z-50 px-4"
+                    style={{ backgroundColor: "rgba(0,0,0,0.75)" }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                >
+                    <motion.div
+                        className="rounded-2xl p-8 max-w-md w-full shadow-2xl relative"
+                        style={{
+                            background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+                            border: "1px solid rgba(255,255,255,0.1)"
+                        }}
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ duration: 0.4 }}
+                    >
+                        <motion.button
                             onClick={cancelLogout}
-                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+                            className="absolute top-6 right-6 text-white/40 hover:text-white/60 transition"
+                            whileHover={{ rotate: 90 }}
                         >
                             <X size={24} />
-                        </button>
-                        
+                        </motion.button>
+
                         <div className="text-center">
-                            <div className="bg-red-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <LogOut size={32} className="text-red-500" />
-                            </div>
-                            
-                            <h2 className="text-2xl font-bold text-gray-800 mb-3">Logout Confirmation</h2>
-                            <p className="text-gray-600 mb-8">
+                            <motion.div
+                                className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
+                                style={{
+                                    backgroundColor: "rgba(239, 68, 68, 0.15)",
+                                    border: "2px solid rgba(239, 68, 68, 0.3)"
+                                }}
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ delay: 0.2, type: "spring" }}
+                            >
+                                <LogOut size={32} style={{ color: "#ef4444" }} />
+                            </motion.div>
+
+                            <motion.h2
+                                className="text-2xl font-bold text-white mb-3"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.3 }}
+                            >
+                                Logout Confirmation
+                            </motion.h2>
+                            <motion.p
+                                className="text-white/50 mb-8"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.4 }}
+                            >
                                 Are you sure you want to logout? You&apos;ll need to sign in again to access your account.
-                            </p>
-                            
-                            <div className="flex gap-4">
-                                <button
+                            </motion.p>
+
+                            <motion.div
+                                className="flex gap-4"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.5 }}
+                            >
+                                <motion.button
                                     onClick={cancelLogout}
-                                    className="flex-1 py-3 px-6 bg-gray-100 text-gray-700 rounded-2xl font-bold hover:bg-gray-200 transition-colors"
+                                    className="flex-1 py-3 px-6 rounded-lg font-bold transition"
+                                    style={{
+                                        backgroundColor: "rgba(255,255,255,0.05)",
+                                        border: "1px solid rgba(255,255,255,0.1)",
+                                        color: "rgba(255,255,255,0.7)"
+                                    }}
+                                    whileHover={{
+                                        backgroundColor: "rgba(255,255,255,0.1)"
+                                    }}
+                                    whileTap={{ scale: 0.98 }}
                                 >
                                     Cancel
-                                </button>
-                                <button
+                                </motion.button>
+                                <motion.button
                                     onClick={confirmLogout}
-                                    className="flex-1 py-3 px-6 bg-red-500 text-white rounded-2xl font-bold hover:bg-red-600 transition-colors"
+                                    className="flex-1 py-3 px-6 rounded-lg font-bold text-white transition"
+                                    style={{
+                                        background: "linear-gradient(135deg, #ef4444, #dc2626)"
+                                    }}
+                                    whileHover={{
+                                        background: "linear-gradient(135deg, #dc2626, #b91c1c)"
+                                    }}
+                                    whileTap={{ scale: 0.98 }}
                                 >
                                     Logout
-                                </button>
-                            </div>
+                                </motion.button>
+                            </motion.div>
                         </div>
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
             )}
         </>
     );

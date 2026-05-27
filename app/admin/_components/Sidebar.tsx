@@ -2,59 +2,112 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
+import { motion } from "framer-motion";
+import { LayoutDashboard, Users, Trophy, Menu, X } from "lucide-react";
+import { useState } from "react";
 
 const ADMIN_LINKS = [
-    { href: "/admin", label: "Dashboard" },
-    { href: "/admin/users", label: "Users" },
-    { href: "/admin/tournaments", label: "Tournaments" },
+    { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/admin/users", label: "Users", icon: Users },
+    { href: "/admin/tournaments", label: "Tournaments", icon: Trophy },
 ];
 
 export default function Sidebar() {
     const pathname = usePathname();
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     const isActive = (href: string) => href === "/admin" ? pathname === href : pathname?.startsWith(href);
 
     return (
         <>
-            <aside className={`
-                fixed md:static 
-                top-0 left-0 
-                h-screen w-64 
-                bg-[#4a4a4a]
-                border-r border-black/10
-                z-40 overflow-y-auto`}
+            <button
+                onClick={() => setMobileOpen(!mobileOpen)}
+                className="md:hidden fixed top-20 left-4 z-30 p-2 rounded-lg bg-white/10 text-white"
             >
-                <div className="p-4 border-b border-white/10">
-                    <Link href="/admin" className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded bg-white flex items-center justify-center overflow-hidden">
-                            <Image 
-                                src="/images/GoalNepalLogo.png" 
-                                alt="Logo" 
-                                width={32} 
-                                height={32}
-                                className="object-contain"
-                            />
-                        </div>
-                        <span className="font-semibold text-white">Admin Panel</span>
-                    </Link>
-                </div>
+                {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
 
-                <nav className="p-2 space-y-1">
-                    {ADMIN_LINKS.map(link => (
-                        <Link
-                            key={link.href}
-                            href={link.href}
-                            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                                isActive(link.href)
-                                    ? "bg-white text-black"
-                                    : "text-white hover:bg-white/10"
-                            }`}
+            <aside
+                className={`
+                    fixed md:static 
+                    top-16 md:top-0 left-0 
+                    h-[calc(100vh-64px)] md:h-screen w-64 
+                    z-20 overflow-y-auto
+                    transition-transform duration-300 ease-out
+                    ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+                    border-r
+                `}
+                style={{
+                    background: "linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)",
+                    borderColor: "rgba(255,255,255,0.1)"
+                }}
+            >
+                <motion.div
+                    className="p-6 border-b"
+                    style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <Link href="/admin" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
+                        <span className="text-xl font-black tracking-tight text-white">Goal</span>
+                        <span
+                            className="text-xl font-black tracking-tight px-1.5 py-0.5 rounded-lg"
+                            style={{
+                                background: "linear-gradient(135deg, #e05d2e, #d45a28)",
+                                color: "#fff",
+                                letterSpacing: "-0.02em",
+                            }}
                         >
-                            <span>{link.label}</span>
-                        </Link>
-                    ))}
+                            Nepal
+                        </span>
+                    </Link>
+                </motion.div>
+
+                <nav className="p-4 space-y-2">
+                    {ADMIN_LINKS.map((link, idx) => {
+                        const Icon = link.icon;
+                        const active = isActive(link.href);
+
+                        return (
+                            <motion.div
+                                key={link.href}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: idx * 0.1, duration: 0.4 }}
+                            >
+                                <Link
+                                    href={link.href}
+                                    className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all ${
+                                        active
+                                            ? "text-white"
+                                            : "text-white/60 hover:text-white/80"
+                                    }`}
+                                    style={
+                                        active
+                                            ? {
+                                                background: "linear-gradient(135deg, #e05d2e 0%, #d45a28 100%)"
+                                            }
+                                            : {}
+                                    }
+                                    onClick={() => setMobileOpen(false)}
+                                >
+                                    <Icon size={18} />
+                                    <span>{link.label}</span>
+                                </Link>
+                            </motion.div>
+                        );
+                    })}
                 </nav>
+
+                <motion.div
+                    className="p-4 mt-auto border-t"
+                    style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                >
+                </motion.div>
             </aside>
         </>
     );
