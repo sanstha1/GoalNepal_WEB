@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useRef, useState } from "react";
@@ -17,6 +18,7 @@ import {
   Loader2,
   IndianRupee,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 type TournamentType = "football" | "futsal";
 
@@ -95,49 +97,98 @@ export default function AddTournamentPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fdfcf0]">
-      <div className="max-w-3xl mx-auto py-8 px-4 sm:px-6">
+    <div
+      className="min-h-screen px-6 py-12"
+      style={{
+        background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+      }}
+    >
+      <div className="max-w-3xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-10"
+        >
+          <h1 className="text-4xl font-bold text-white mb-2">Add Tournament</h1>
+          <p className="text-white/50">Create a new football or futsal tournament</p>
+        </motion.div>
 
-        <div className="flex items-center gap-4 mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">Add Tournament</h1>
-            <p className="text-gray-500 text-sm">Create a new football or futsal tournament</p>
-          </div>
-        </div>
+        <motion.form
+          onSubmit={handleSubmit}
+          className="space-y-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
+          <motion.div
+            className="rounded-xl border p-1.5"
+            style={{
+              background: "rgba(255,255,255,0.05)",
+              borderColor: "rgba(255,255,255,0.1)"
+            }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <div className="flex gap-1.5">
+              {(["football", "futsal"] as TournamentType[]).map((type) => (
+                <motion.button
+                  key={type}
+                  type="button"
+                  onClick={() => setTournamentType(type)}
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-semibold text-sm transition-all"
+                  style={
+                    tournamentType === type
+                      ? {
+                          background: "linear-gradient(135deg, #e05d2e, #d45a28)",
+                          color: "white"
+                        }
+                      : { color: "rgba(255,255,255,0.5)" }
+                  }
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <span className="text-base">{type === "football" ? "⚽" : "🥅"}</span>
+                  {type === "football" ? "Football" : "Futsal"}
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-
-          <div className="bg-white rounded-2xl p-1.5 border border-gray-100 shadow-sm flex gap-1.5">
-            {(["football", "futsal"] as TournamentType[]).map((type) => (
-              <button
-                key={type}
-                type="button"
-                onClick={() => setTournamentType(type)}
-                className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${
-                  tournamentType === type
-                    ? "bg-[#4a4a4a] text-white shadow-sm"
-                    : "text-gray-500 hover:bg-gray-50"
-                }`}
-              >
-                <span className="text-base">{type === "football" ? "⚽" : "🥅"}</span>
-                {type === "football" ? "Football" : "Futsal"}
-              </button>
-            ))}
-          </div>
-
-          <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Banner Image</p>
-            <div className="flex gap-3 items-start">
-              <button
+          <motion.div
+            className="rounded-xl border p-6"
+            style={{
+              background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+              borderColor: "rgba(255,255,255,0.1)"
+            }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+          >
+            <p className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-4">Banner Image</p>
+            <div className="flex gap-4 items-start">
+              <motion.button
                 type="button"
                 onClick={() => bannerInputRef.current?.click()}
-                className="w-24 h-24 shrink-0 flex flex-col items-center justify-center gap-1.5 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl hover:border-[#4a4a4a] hover:bg-gray-100 transition-all group"
+                className="w-24 h-24 shrink-0 flex flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-dashed transition"
+                style={{
+                  background: "rgba(255,255,255,0.02)",
+                  borderColor: "rgba(224, 93, 46, 0.3)"
+                }}
+                whileHover={{
+                  borderColor: "rgba(224, 93, 46, 0.5)",
+                  background: "rgba(224, 93, 46, 0.05)"
+                }}
               >
-                <div className="w-9 h-9 bg-[#4a4a4a] rounded-lg flex items-center justify-center group-hover:bg-[#333] transition-colors">
-                  <ImagePlus size={18} className="text-white" />
+                <div
+                  className="w-9 h-9 rounded-lg flex items-center justify-center transition"
+                  style={{ background: "rgba(224, 93, 46, 0.2)" }}
+                >
+                  <ImagePlus size={18} color="#e05d2e" />
                 </div>
-                <span className="text-xs text-gray-400 font-medium">Add Banner</span>
-              </button>
+                <span className="text-xs text-white/50 font-medium">Add Banner</span>
+              </motion.button>
               <input
                 ref={bannerInputRef}
                 type="file"
@@ -147,77 +198,107 @@ export default function AddTournamentPage() {
               />
 
               {bannerPreview ? (
-                <div className="relative flex-1 h-24">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                <div className="relative flex-1 h-24 rounded-lg overflow-hidden">
                   <img
                     src={bannerPreview}
                     alt="Banner preview"
-                    className="w-full h-full object-cover rounded-xl"
+                    className="w-full h-full object-cover"
                   />
-                  <div className="absolute bottom-0 left-0 right-0 h-9 rounded-b-xl bg-linear-to-t from-black/55 to-transparent flex items-end px-2.5 pb-1.5">
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-8 flex items-end px-3 pb-1.5"
+                    style={{
+                      background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.6))"
+                    }}
+                  >
                     <span className="text-white text-xs font-semibold">
                       {tournamentType === "football" ? "⚽ Football" : "🥅 Futsal"}
                     </span>
                   </div>
-                  <button
+                  <motion.button
                     type="button"
                     onClick={removeBanner}
-                    className="absolute top-1.5 right-1.5 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
+                    className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: "rgba(239, 68, 68, 0.3)" }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
                   >
-                    <X size={11} className="text-white" />
-                  </button>
+                    <X size={12} color="#ef4444" />
+                  </motion.button>
                 </div>
               ) : (
-                <div className="flex-1 h-24 bg-gray-50 border border-gray-200 rounded-xl flex flex-col items-center justify-center gap-1.5">
-                  <Trophy size={24} className="text-gray-200" />
-                  <span className="text-xs text-gray-300">Banner preview</span>
+                <div
+                  className="flex-1 h-24 rounded-lg flex flex-col items-center justify-center border"
+                  style={{
+                    background: "rgba(255,255,255,0.02)",
+                    borderColor: "rgba(255,255,255,0.1)"
+                  }}
+                >
+                  <Trophy size={24} color="rgba(255,255,255,0.1)" />
+                  <span className="text-xs text-white/20 mt-1">Banner preview</span>
                 </div>
               )}
             </div>
-          </div>
+          </motion.div>
 
-          <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-4">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Tournament Details</p>
+          <motion.div
+            className="rounded-xl border p-6 space-y-4"
+            style={{
+              background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+              borderColor: "rgba(255,255,255,0.1)"
+            }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <p className="text-xs font-semibold text-white/60 uppercase tracking-wider">Tournament Details</p>
 
             <div>
-              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1.5">
-                Title <span className="text-red-400">*</span>
+              <label className="text-xs font-semibold text-white/60 uppercase tracking-wider block mb-2">
+                Title <span style={{ color: "#ef4444" }}>*</span>
               </label>
-              <div className="flex items-center gap-3 border border-gray-200 rounded-xl px-3.5 py-2.5 focus-within:border-[#4a4a4a] transition-colors">
-                <Trophy size={16} className="text-gray-400 shrink-0" />
+              <div
+                className="flex items-center gap-3 border rounded-lg px-3.5 py-2.5 focus-within:border-white/30 transition"
+                style={{ borderColor: "rgba(255,255,255,0.1)" }}
+              >
+                <Trophy size={16} color="rgba(255,255,255,0.4)" />
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g., Kathmandu Futsal Cup 2025"
-                  className="flex-1 text-gray-800 text-sm outline-none bg-transparent placeholder-gray-300"
+                  className="flex-1 text-white text-sm outline-none bg-transparent placeholder-white/30"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1.5">
-                Location <span className="text-red-400">*</span>
+              <label className="text-xs font-semibold text-white/60 uppercase tracking-wider block mb-2">
+                Location <span style={{ color: "#ef4444" }}>*</span>
               </label>
-              <div className="flex items-center gap-3 border border-gray-200 rounded-xl px-3.5 py-2.5 focus-within:border-[#4a4a4a] transition-colors">
-                <MapPin size={16} className="text-gray-400 shrink-0" />
+              <div
+                className="flex items-center gap-3 border rounded-lg px-3.5 py-2.5 focus-within:border-white/30 transition"
+                style={{ borderColor: "rgba(255,255,255,0.1)" }}
+              >
+                <MapPin size={16} color="rgba(255,255,255,0.4)" />
                 <input
                   type="text"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   placeholder="e.g., Kathmandu, Nepal"
-                  className="flex-1 text-gray-800 text-sm outline-none bg-transparent placeholder-gray-300"
+                  className="flex-1 text-white text-sm outline-none bg-transparent placeholder-white/30"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1.5">
-                Date Range <span className="text-red-400">*</span>
+              <label className="text-xs font-semibold text-white/60 uppercase tracking-wider block mb-2">
+                Date Range <span style={{ color: "#ef4444" }}>*</span>
               </label>
               <div className="grid grid-cols-2 gap-3">
-                <div className={`rounded-xl p-3.5 border transition-all duration-200 ${startDate ? "bg-[#4a4a4a] border-[#4a4a4a]" : "bg-white border-gray-200"}`}>
-                  <div className={`flex items-center gap-1 mb-1 ${startDate ? "text-white/60" : "text-gray-400"}`}>
+                <div
+                  className={`rounded-lg p-3.5 border transition ${startDate ? "border-white/30 bg-white/5" : "border-white/10 bg-white/2"}`}
+                >
+                  <div className="flex items-center gap-1 mb-1 text-white/50">
                     <CalendarDays size={12} />
                     <span className="text-xs font-medium">Start Date</span>
                   </div>
@@ -229,11 +310,13 @@ export default function AddTournamentPage() {
                       setStartDate(e.target.value);
                       if (endDate && e.target.value > endDate) setEndDate("");
                     }}
-                    className={`w-full text-sm font-bold outline-none bg-transparent cursor-pointer ${startDate ? "text-white" : "text-gray-500"}`}
+                    className={`w-full text-sm font-bold outline-none bg-transparent cursor-pointer ${startDate ? "text-white" : "text-white/50"}`}
                   />
                 </div>
-                <div className={`rounded-xl p-3.5 border transition-all duration-200 ${endDate ? "bg-[#4a4a4a] border-[#4a4a4a]" : "bg-white border-gray-200"}`}>
-                  <div className={`flex items-center gap-1 mb-1 ${endDate ? "text-white/60" : "text-gray-400"}`}>
+                <div
+                  className={`rounded-lg p-3.5 border transition ${endDate ? "border-white/30 bg-white/5" : "border-white/10 bg-white/2"}`}
+                >
+                  <div className="flex items-center gap-1 mb-1 text-white/50">
                     <CalendarDays size={12} />
                     <span className="text-xs font-medium">End Date</span>
                   </div>
@@ -242,111 +325,137 @@ export default function AddTournamentPage() {
                     value={endDate}
                     min={startDate || new Date().toISOString().split("T")[0]}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className={`w-full text-sm font-bold outline-none bg-transparent cursor-pointer ${endDate ? "text-white" : "text-gray-500"}`}
+                    className={`w-full text-sm font-bold outline-none bg-transparent cursor-pointer ${endDate ? "text-white" : "text-white/50"}`}
                   />
                 </div>
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1.5">
+              <label className="text-xs font-semibold text-white/60 uppercase tracking-wider block mb-2">
                 Organizer
               </label>
-              <div className="flex items-center gap-3 border border-gray-200 rounded-xl px-3.5 py-2.5 focus-within:border-[#4a4a4a] transition-colors">
-                <Users size={16} className="text-gray-400 shrink-0" />
+              <div
+                className="flex items-center gap-3 border rounded-lg px-3.5 py-2.5 focus-within:border-white/30 transition"
+                style={{ borderColor: "rgba(255,255,255,0.1)" }}
+              >
+                <Users size={16} color="rgba(255,255,255,0.4)" />
                 <input
                   type="text"
                   value={organizer}
                   onChange={(e) => setOrganizer(e.target.value)}
                   placeholder="e.g., Nepal Football Association"
-                  className="flex-1 text-gray-800 text-sm outline-none bg-transparent placeholder-gray-300"
+                  className="flex-1 text-white text-sm outline-none bg-transparent placeholder-white/30"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1.5">
+                <label className="text-xs font-semibold text-white/60 uppercase tracking-wider block mb-2">
                   Prize Pool
                 </label>
-                <div className="flex items-center gap-3 border border-gray-200 rounded-xl px-3.5 py-2.5 focus-within:border-[#4a4a4a] transition-colors">
-                  <Medal size={16} className="text-gray-400 shrink-0" />
+                <div
+                  className="flex items-center gap-3 border rounded-lg px-3.5 py-2.5 focus-within:border-white/30 transition"
+                  style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                >
+                  <Medal size={16} color="rgba(255,255,255,0.4)" />
                   <input
                     type="text"
                     value={prize}
                     onChange={(e) => setPrize(e.target.value)}
                     placeholder="e.g., NPR 50,000"
-                    className="flex-1 text-gray-800 text-sm outline-none bg-transparent placeholder-gray-300"
+                    className="flex-1 text-white text-sm outline-none bg-transparent placeholder-white/30"
                   />
                 </div>
               </div>
               <div>
-                <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1.5">
+                <label className="text-xs font-semibold text-white/60 uppercase tracking-wider block mb-2">
                   Max Teams
                 </label>
-                <div className="flex items-center gap-3 border border-gray-200 rounded-xl px-3.5 py-2.5 focus-within:border-[#4a4a4a] transition-colors">
-                  <Users size={16} className="text-gray-400 shrink-0" />
+                <div
+                  className="flex items-center gap-3 border rounded-lg px-3.5 py-2.5 focus-within:border-white/30 transition"
+                  style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                >
+                  <Users size={16} color="rgba(255,255,255,0.4)" />
                   <input
                     type="number"
                     value={maxTeams}
                     onChange={(e) => setMaxTeams(e.target.value)}
                     placeholder="e.g., 16"
                     min={2}
-                    className="flex-1 text-gray-800 text-sm outline-none bg-transparent placeholder-gray-300"
+                    className="flex-1 text-white text-sm outline-none bg-transparent placeholder-white/30"
                   />
                 </div>
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1.5">
+              <label className="text-xs font-semibold text-white/60 uppercase tracking-wider block mb-2">
                 Registration Fee (NPR)
               </label>
-              <div className="flex items-center gap-3 border border-gray-200 rounded-xl px-3.5 py-2.5 focus-within:border-[#4a4a4a] transition-colors">
-                <IndianRupee size={16} className="text-gray-400 shrink-0" />
+              <div
+                className="flex items-center gap-3 border rounded-lg px-3.5 py-2.5 focus-within:border-white/30 transition"
+                style={{ borderColor: "rgba(255,255,255,0.1)" }}
+              >
+                <IndianRupee size={16} color="rgba(255,255,255,0.4)" />
                 <input
                   type="number"
                   value={registrationFee}
                   onChange={(e) => setRegistrationFee(e.target.value)}
                   placeholder="e.g., 500"
                   min={0}
-                  className="flex-1 text-gray-800 text-sm outline-none bg-transparent placeholder-gray-300"
+                  className="flex-1 text-white text-sm outline-none bg-transparent placeholder-white/30"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1.5">
+              <label className="text-xs font-semibold text-white/60 uppercase tracking-wider block mb-2">
                 Description
               </label>
-              <div className="flex gap-3 border border-gray-200 rounded-xl px-3.5 py-2.5 focus-within:border-[#4a4a4a] transition-colors">
-                <FileText size={16} className="text-gray-400 shrink-0 mt-0.5" />
+              <div
+                className="flex gap-3 border rounded-lg px-3.5 py-2.5 focus-within:border-white/30 transition"
+                style={{ borderColor: "rgba(255,255,255,0.1)" }}
+              >
+                <FileText size={16} color="rgba(255,255,255,0.4)" className="mt-0.5 shrink-0" />
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Describe the tournament rules, format, prizes..."
                   rows={4}
-                  className="flex-1 text-gray-800 text-sm outline-none bg-transparent placeholder-gray-300 resize-none"
+                  className="flex-1 text-white text-sm outline-none bg-transparent placeholder-white/30 resize-none"
                 />
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          <button
+          <motion.button
             type="submit"
             disabled={loading}
-            className="w-full py-4 bg-[#4a4a4a] text-white rounded-2xl font-bold text-sm hover:bg-[#333] transition-all shadow-md flex items-center justify-center gap-2.5 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full py-4 text-white rounded-lg font-bold text-sm flex items-center justify-center gap-2.5 transition disabled:opacity-60"
+            style={{
+              background: loading ? "rgba(224, 93, 46, 0.5)" : "linear-gradient(135deg, #e05d2e, #d45a28)"
+            }}
+            whileHover={!loading ? { scale: 1.02 } : {}}
+            whileTap={!loading ? { scale: 0.98 } : {}}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
           >
             {loading ? (
-              <Loader2 size={20} className="animate-spin" />
+              <>
+                <Loader2 size={20} className="animate-spin" />
+                Creating...
+              </>
             ) : (
               <>
                 <PlusCircle size={20} />
                 Add {tournamentType === "football" ? "Football" : "Futsal"} Tournament
               </>
             )}
-          </button>
-        </form>
+          </motion.button>
+        </motion.form>
       </div>
     </div>
   );

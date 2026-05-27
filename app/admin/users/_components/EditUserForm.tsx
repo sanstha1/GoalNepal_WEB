@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Controller, useForm } from "react-hook-form";
@@ -6,6 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef, useState, useTransition } from "react";
 import { toast } from "react-toastify";
 import { handleUpdateUser } from "@/lib/actions/admin/user-action";
+import { motion } from "framer-motion";
+import { X, Upload } from "lucide-react";
 
 interface EditUserFormProps {
   user: {
@@ -90,112 +93,186 @@ export default function EditUserForm({ user, onSuccess }: EditUserFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 bg-[#fefee3] p-6 rounded-lg">
-      <div className="mb-4">
-        {previewImage || user.profilePicture ? (
-          <div className="relative w-24 h-24">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={previewImage || getImageUrl(user.profilePicture)}
-              alt="Profile Image Preview"
-              className="w-24 h-24 rounded-full object-cover border border-black"
-            />
-            <Controller
-              name="profilePicture"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <button
-                  type="button"
-                  onClick={() => handleDismissImage(onChange)}
-                  className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 shadow-md"
-                >
-                  ✕
-                </button>
-              )}
-            />
-          </div>
-        ) : (
-          <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center border-2 border-dashed border-black">
-            <span className="text-black text-xs text-center">No Image</span>
-          </div>
-        )}
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1 text-black">Profile Image</label>
-        <Controller
-          name="profilePicture"
-          control={control}
-          render={({ field: { onChange } }) => (
-            <input
-              ref={fileInputRef}
-              type="file"
-              onChange={(e) => handleImageChange(e.target.files?.[0], onChange)}
-              accept=".jpg,.jpeg,.png,.webp"
-              className="block w-full text-sm text-black file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-black file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-50"
-            />
+    <motion.form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6"
+      style={{
+        background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+        borderRadius: "20px",
+        padding: "24px",
+        border: "1px solid rgba(255,255,255,0.1)"
+      }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-3">
+          Profile Picture
+        </label>
+        <div className="flex gap-4 items-start">
+          {previewImage || user.profilePicture ? (
+            <div className="relative w-20 h-20 shrink-0">
+              <img
+                src={previewImage || getImageUrl(user.profilePicture)}
+                alt="Profile"
+                className="w-20 h-20 rounded-lg object-cover"
+                style={{ border: "2px solid rgba(224, 93, 46, 0.3)" }}
+              />
+              <Controller
+                name="profilePicture"
+                control={control}
+                render={({ field: { onChange } }) => (
+                  <motion.button
+                    type="button"
+                    onClick={() => handleDismissImage(onChange)}
+                    className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-sm hover:opacity-80"
+                    style={{ backgroundColor: "rgba(239, 68, 68, 0.2)" }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <X size={14} color="#ef4444" />
+                  </motion.button>
+                )}
+              />
+            </div>
+          ) : (
+            <div
+              className="w-20 h-20 rounded-lg flex items-center justify-center shrink-0"
+              style={{
+                background: "rgba(255,255,255,0.05)",
+                border: "2px dashed rgba(255,255,255,0.1)"
+              }}
+            >
+              <span className="text-xs text-white/30">No image</span>
+            </div>
           )}
-        />
+
+          <Controller
+            name="profilePicture"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <motion.label
+                className="flex-1 cursor-pointer"
+                whileHover={{ scale: 1.02 }}
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  onChange={(e) => handleImageChange(e.target.files?.[0], onChange)}
+                  accept=".jpg,.jpeg,.png,.webp"
+                  className="hidden"
+                />
+                <div
+                  className="px-4 py-3 rounded-lg flex items-center justify-center gap-2 cursor-pointer transition border"
+                  style={{
+                    background: "rgba(224, 93, 46, 0.1)",
+                    border: "1.5px solid rgba(224, 93, 46, 0.3)"
+                  }}
+                >
+                  <Upload size={16} color="#e05d2e" />
+                  <span className="text-sm font-semibold text-white/70">Upload Image</span>
+                </div>
+              </motion.label>
+            )}
+          />
+        </div>
         {errors.profilePicture && (
-          <p className="text-sm text-red-600 mt-1">{errors.profilePicture.message as string}</p>
+          <p className="text-xs text-red-400 mt-2">{errors.profilePicture.message as string}</p>
         )}
-      </div>
+      </motion.div>
 
-      <div className="space-y-1">
-        <label className="text-sm font-medium text-black" htmlFor="fullName">Full Name</label>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+      >
+        <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">
+          Full Name
+        </label>
         <input
-          id="fullName"
           type="text"
-          className="h-10 w-full rounded-md border border-black bg-white px-3 text-sm outline-none focus:border-black text-black placeholder:text-black/60"
+          className="w-full px-4 py-3 rounded-lg bg-white/5 border text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition text-sm"
+          style={{ borderColor: "rgba(255,255,255,0.1)" }}
           {...register("fullName")}
-          placeholder="Santosh Shrestha"
+          placeholder="Enter full name"
         />
-        {errors.fullName && <p className="text-xs text-red-600">{errors.fullName.message}</p>}
-      </div>
+        {errors.fullName && <p className="text-xs text-red-400 mt-1">{errors.fullName.message}</p>}
+      </motion.div>
 
-      <div className="space-y-1">
-        <label className="text-sm font-medium text-black" htmlFor="email">Email</label>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">
+          Email
+        </label>
         <input
-          id="email"
           type="email"
-          className="h-10 w-full rounded-md border border-black bg-white px-3 text-sm outline-none focus:border-black text-black placeholder:text-black/60"
+          className="w-full px-4 py-3 rounded-lg bg-white/5 border text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition text-sm"
+          style={{ borderColor: "rgba(255,255,255,0.1)" }}
           {...register("email")}
-          placeholder="sthasantosh@example.com"
+          placeholder="Enter email"
         />
-        {errors.email && <p className="text-xs text-red-600">{errors.email.message}</p>}
-      </div>
+        {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email.message}</p>}
+      </motion.div>
 
-      <div className="space-y-1">
-        <label className="text-sm font-medium text-black" htmlFor="password">Password (leave empty to keep current)</label>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+      >
+        <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">
+          Password (leave empty to keep current)
+        </label>
         <input
-          id="password"
           type="password"
-          className="h-10 w-full rounded-md border border-black bg-white px-3 text-sm outline-none focus:border-black text-black placeholder:text-black/60"
+          className="w-full px-4 py-3 rounded-lg bg-white/5 border text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition text-sm"
+          style={{ borderColor: "rgba(255,255,255,0.1)" }}
           {...register("password")}
-          placeholder="••••••"
+          placeholder="••••••••"
         />
-        {errors.password && <p className="text-xs text-red-600">{errors.password.message}</p>}
-      </div>
+        {errors.password && <p className="text-xs text-red-400 mt-1">{errors.password.message}</p>}
+      </motion.div>
 
-      <div className="space-y-1">
-        <label className="text-sm font-medium text-black" htmlFor="confirmPassword">Confirm password</label>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">
+          Confirm Password
+        </label>
         <input
-          id="confirmPassword"
           type="password"
-          className="h-10 w-full rounded-md border border-black bg-white px-3 text-sm outline-none focus:border-black text-black placeholder:text-black/60"
+          className="w-full px-4 py-3 rounded-lg bg-white/5 border text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition text-sm"
+          style={{ borderColor: "rgba(255,255,255,0.1)" }}
           {...register("confirmPassword")}
-          placeholder="••••••"
+          placeholder="••••••••"
         />
-        {errors.confirmPassword && <p className="text-xs text-red-600">{errors.confirmPassword.message}</p>}
-      </div>
+        {errors.confirmPassword && <p className="text-xs text-red-400 mt-1">{errors.confirmPassword.message}</p>}
+      </motion.div>
 
-      <button
+      <motion.button
         type="submit"
         disabled={isSubmitting || pending}
-        className="h-10 w-full rounded-md bg-black text-white text-sm font-semibold hover:opacity-90 disabled:opacity-60 transition-all shadow-sm"
+        className="w-full py-3 rounded-lg text-white font-bold text-sm transition disabled:opacity-50"
+        style={{
+          background: "linear-gradient(135deg, #e05d2e, #d45a28)"
+        }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.35 }}
       >
-        {isSubmitting || pending ? "Updating account..." : "Update account"}
-      </button>
-    </form>
+        {isSubmitting || pending ? "Updating..." : "Update User"}
+      </motion.button>
+    </motion.form>
   );
 }
