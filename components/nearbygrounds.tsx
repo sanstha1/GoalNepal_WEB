@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { MapPin, Navigation, AlertCircle, Loader2 } from "lucide-react";
+import type { Icon, DivIcon } from "leaflet";
 
 interface Ground {
   id: number;
@@ -19,42 +20,47 @@ interface UserLocation {
   lng: number;
 }
 
+interface MapContentProps {
+  userLocation: UserLocation;
+  grounds: Ground[];
+}
+
 const MapContainer = dynamic(() => import("react-leaflet").then((m) => m.MapContainer), { ssr: false });
 const TileLayer = dynamic(() => import("react-leaflet").then((m) => m.TileLayer), { ssr: false });
 const Marker = dynamic(() => import("react-leaflet").then((m) => m.Marker), { ssr: false });
 const Popup = dynamic(() => import("react-leaflet").then((m) => m.Popup), { ssr: false });
 
-function MapContent({ userLocation, grounds }: { userLocation: UserLocation; grounds: Ground[] }) {
-  const [L, setL] = useState<any>(null);
+function MapContent({ userLocation, grounds }: MapContentProps) {
+  const [userIcon, setUserIcon] = useState<DivIcon | null>(null);
+  const [groundIcon, setGroundIcon] = useState<DivIcon | null>(null);
 
   useEffect(() => {
-    import("leaflet").then((leaflet) => {
-      leaflet.Icon.Default.mergeOptions({
+    import("leaflet").then((L) => {
+      L.Icon.Default.mergeOptions({
         iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
         iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
         shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
       });
-      setL(leaflet);
+
+      setUserIcon(
+        new L.DivIcon({
+          className: "",
+          html: `<div style="width:18px;height:18px;background:#4caf50;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 3px rgba(76,175,80,0.4)"></div>`,
+          iconSize: [18, 18],
+          iconAnchor: [9, 9],
+        })
+      );
+
+      setGroundIcon(
+        new L.DivIcon({
+          className: "",
+          html: `<div style="width:28px;height:28px;background:linear-gradient(135deg,#ef5350,#ff7043);border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.4);font-size:13px">⚽</div>`,
+          iconSize: [28, 28],
+          iconAnchor: [14, 14],
+        })
+      );
     });
   }, []);
-
-  const userIcon = L
-    ? new L.DivIcon({
-        className: "",
-        html: `<div style="width:18px;height:18px;background:#4caf50;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 3px rgba(76,175,80,0.4)"></div>`,
-        iconSize: [18, 18],
-        iconAnchor: [9, 9],
-      })
-    : undefined;
-
-  const groundIcon = L
-    ? new L.DivIcon({
-        className: "",
-        html: `<div style="width:28px;height:28px;background:linear-gradient(135deg,#ef5350,#ff7043);border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.4);font-size:13px">⚽</div>`,
-        iconSize: [28, 28],
-        iconAnchor: [14, 14],
-      })
-    : undefined;
 
   const handleDirections = (lat: number, lng: number, name: string) => {
     const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&destination_place_id=${encodeURIComponent(name)}`;
@@ -64,7 +70,7 @@ function MapContent({ userLocation, grounds }: { userLocation: UserLocation; gro
   return (
     <>
       {userIcon && (
-        <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
+        <Marker position={[userLocation.lat, userLocation.lng] as [number, number]} icon={userIcon as Icon}>
           <Popup>
             <div className="text-center p-1">
               <p className="font-bold text-sm text-gray-800">Your Location</p>
@@ -74,7 +80,7 @@ function MapContent({ userLocation, grounds }: { userLocation: UserLocation; gro
       )}
       {groundIcon &&
         grounds.map((g) => (
-          <Marker key={g.id} position={[g.lat, g.lng]} icon={groundIcon}>
+          <Marker key={g.id} position={[g.lat, g.lng] as [number, number]} icon={groundIcon as Icon}>
             <Popup>
               <div style={{ minWidth: "160px" }}>
                 <p style={{ fontWeight: 700, fontSize: "13px", marginBottom: "4px", color: "#1a1a2e" }}>{g.name}</p>
@@ -126,7 +132,7 @@ export default function NearbyGrounds() {
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        const loc: UserLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         setUserLocation(loc);
         setLoading(false);
         if (!hasFetched.current) {
@@ -149,7 +155,7 @@ export default function NearbyGrounds() {
       const data = await res.json();
       if (data.grounds) setGrounds(data.grounds);
     } catch {
-      // silently fail, map still shows
+      // silently fail
     } finally {
       setFetching(false);
     }
@@ -179,7 +185,10 @@ export default function NearbyGrounds() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#ef5350] to-[#ff7043] flex items-center justify-center shadow-lg">
+          <div
+            className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
+            style={{ background: "linear-gradient(135deg, #ef5350, #ff7043)" }}
+          >
             <MapPin className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -226,14 +235,14 @@ export default function NearbyGrounds() {
       >
         {userLocation && (
           <MapContainer
-            center={[userLocation.lat, userLocation.lng]}
+            center={[userLocation.lat, userLocation.lng] as [number, number]}
             zoom={14}
             style={{ height: "100%", width: "100%" }}
             zoomControl={true}
           >
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+              attribution="&copy; OpenStreetMap contributors"
             />
             <MapContent userLocation={userLocation} grounds={grounds} />
           </MapContainer>
@@ -248,15 +257,25 @@ export default function NearbyGrounds() {
               className="rounded-xl p-4 border border-white/10 flex items-start gap-3 transition-all hover:border-white/20"
               style={{ background: "rgba(255,255,255,0.04)" }}
             >
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#ef5350]/30 to-[#ff7043]/30 flex items-center justify-center shrink-0 text-lg">
+              <div
+                className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 text-lg"
+                style={{ background: "rgba(239,83,80,0.2)" }}
+              >
                 ⚽
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-white font-semibold text-sm truncate">{g.name}</p>
-                <p className="text-gray-500 text-xs mt-0.5 capitalize">{g.sport}{g.surface ? ` · ${g.surface}` : ""}</p>
+                <p className="text-gray-500 text-xs mt-0.5 capitalize">
+                  {g.sport}{g.surface ? ` · ${g.surface}` : ""}
+                </p>
               </div>
               <button
-                onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${g.lat},${g.lng}`, "_blank")}
+                onClick={() =>
+                  window.open(
+                    `https://www.google.com/maps/dir/?api=1&destination=${g.lat},${g.lng}`,
+                    "_blank"
+                  )
+                }
                 className="shrink-0 p-2 rounded-lg transition-all hover:scale-105"
                 style={{ background: "linear-gradient(135deg, #ef5350, #ff7043)" }}
                 title="Get Directions"
