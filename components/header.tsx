@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Trophy, Newspaper, Bookmark, User, Bell, RefreshCw } from "lucide-react";
+import { Trophy, Newspaper, Bookmark, User, Bell, RefreshCw, MapPinned } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useNotifications, INotification } from "../hooks/useNotifications";
 
@@ -79,6 +79,10 @@ export default function Header() {
           <Link href="/profile" className={pathname === "/profile" ? activeClass : normalClass}>
             <User className="w-4 h-4" />
             <span className="font-medium">Profile</span>
+          </Link>
+          <Link href="/grounds" className={pathname === "/grounds" ? activeClass : normalClass}>
+            <MapPinned className="w-4 h-4" />
+            <span className="font-medium">Grounds</span>
           </Link>
 
           <div className="relative ml-1" ref={ref}>

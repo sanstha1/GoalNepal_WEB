@@ -5,6 +5,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { SavedProvider } from "@/context/SavedContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "leaflet/dist/leaflet.css";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
