@@ -6,9 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import Image from "next/image";
-import InputField from "@/components/inputfield";
 import { forgetPasswordSchema, ForgetPasswordData } from "@/app/(auth)/schema";
 import { handleRequestPasswordReset } from "@/lib/actions/auth-action";
+import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
@@ -42,59 +43,114 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#1e1e1e]">
-      <div className="hidden md:flex w-1/2 flex-col items-center justify-center bg-[#4a4a4a] text-white p-8">
-        <Image
-          src="/images/image.png"
-          alt="Football Image"
-          width={350}
-          height={350}
-          className="mb-6"
-        />
-        <h2 className="text-3xl font-bold text-center">
-          Nepal&apos;s Home for <br /> Football & Futsal Events
-        </h2>
+    <div
+      className="min-h-screen flex"
+      style={{ background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)" }}
+    >
+      <div className="hidden lg:flex lg:w-1/2 flex-col items-center justify-center p-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-md"
+        >
+          <Image
+            src="/images/image.png"
+            alt="Football"
+            width={300}
+            height={300}
+            className="mb-8 rounded-2xl"
+          />
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Nepal&apos;s Home for Football & Futsal
+          </h2>
+          <p className="text-white/50 text-lg">
+            We&apos;ll help you recover your account quickly and securely
+          </p>
+        </motion.div>
       </div>
 
-      <div className="w-full md:w-1/2 flex items-center justify-center bg-[#fefee3]">
-        <form
+      <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-12">
+        <motion.form
           onSubmit={handleSubmit(onSubmit)}
-          className="p-8 w-96 rounded-xl border border-black shadow-lg bg-white"
+          className="w-full max-w-md"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <h1 className="text-2xl font-bold text-center mb-6 text-black uppercase tracking-tight">
-            Forgot Password
-          </h1>
+          <div className="mb-10">
+            <motion.h1
+              className="text-4xl font-bold text-white mb-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              Forgot Password?
+            </motion.h1>
+            <motion.p
+              className="text-white/40 text-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              Enter your email and we&apos;ll send you a reset link
+            </motion.p>
+          </div>
 
-          <p className="text-sm text-gray-600 text-center mb-6">
-            Enter your email address and we&apos;ll send you a link to reset your password.
-          </p>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <label className="block text-sm font-semibold text-white mb-3">
+              Email Address
+            </label>
+            <input
+              type="email"
+              placeholder="you@example.com"
+              {...register("email")}
+              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition"
+            />
+            {errors.email && (
+              <p className="text-red-400 text-xs mt-2">{errors.email.message}</p>
+            )}
+          </motion.div>
 
-          <InputField
-            label="Email"
-            type="email"
-            placeholder="example@mail.com"
-            register={register("email")}
-            error={errors.email}
-          />
-
-          <button
+          <motion.button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white py-3 rounded-lg mt-6 font-bold hover:bg-zinc-800 transition-colors disabled:opacity-50"
+            className="w-full mt-8 px-6 py-3 rounded-lg bg-linear-to-r from-orange-500 to-orange-600 text-white font-bold hover:from-orange-600 hover:to-orange-700 transition flex items-center justify-center gap-2 disabled:opacity-50"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
           >
-            {loading ? "Sending..." : "Send Reset Link"}
-          </button>
+            {loading ? "Sending..." : (
+              <>
+                Send Reset Link
+                <ArrowRight size={18} />
+              </>
+            )}
+          </motion.button>
 
-          <p className="text-center mt-6 text-sm text-gray-600">
+          <motion.p
+            className="text-center mt-8 text-white/40 text-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
             Remember your password?{" "}
-            <span
+            <motion.button
+              type="button"
               onClick={() => router.push("/login")}
-              className="text-black font-bold cursor-pointer hover:underline"
+              className="text-white/70 font-semibold hover:text-white transition"
+              whileHover={{ x: 2 }}
             >
-              Log In
-            </span>
-          </p>
-        </form>
+              Sign in
+            </motion.button>
+          </motion.p>
+        </motion.form>
       </div>
     </div>
   );
