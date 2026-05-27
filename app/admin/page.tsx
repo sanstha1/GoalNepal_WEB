@@ -1,22 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trophy, Users, ClipboardList, TrendingUp, Activity, Calendar, MapPin, ChevronRight } from "lucide-react";
+import { Trophy, Users, ClipboardList, TrendingUp, Activity, Calendar, MapPin, ChevronRight, ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 interface StatCard {
   label: string;
   value: string;
   change: string;
-  positive: boolean;
   icon: React.ReactNode;
   color: string;
-  bg: string;
 }
 
 interface RecentRegistration {
   team: string;
   tournament: string;
-  captain: string;
   time: string;
   type: "football" | "futsal";
 }
@@ -30,18 +29,16 @@ interface RecentTournament {
 }
 
 const MOCK_RECENT_REGISTRATIONS: RecentRegistration[] = [
-  { team: "Eagles FC", tournament: "Jhapa 5 Futsal Cup", captain: "Ram Thapa", time: "2 min ago", type: "futsal" },
-  { team: "Thunder Boys", tournament: "Kathmandu League", captain: "Sujal KC", time: "15 min ago", type: "football" },
-  { team: "Valley Warriors", tournament: "Pokhara Open", captain: "Bikash Rai", time: "1 hr ago", type: "football" },
-  { team: "Mountain Lions", tournament: "Jhapa 5 Futsal Cup", captain: "Niroj Shah", time: "3 hr ago", type: "futsal" },
-  { team: "City Strikers", tournament: "Lalitpur Cup", captain: "Aman Shrestha", time: "5 hr ago", type: "football" },
+  { team: "Eagles FC", tournament: "Jhapa 5 Futsal Cup", time: "2 min ago", type: "futsal" },
+  { team: "Thunder Boys", tournament: "Kathmandu League", time: "15 min ago", type: "football" },
+  { team: "Valley Warriors", tournament: "Pokhara Open", time: "1 hr ago", type: "football" },
+  { team: "Mountain Lions", tournament: "Jhapa 5 Futsal Cup", time: "3 hr ago", type: "futsal" },
 ];
 
 const MOCK_TOURNAMENTS: RecentTournament[] = [
-  { title: "Jhapa 5 Futsal Cup", location: "Jhapa, Nepal", date: "8 Mar - 29 Mar, 2026", registrations: 12, type: "futsal" },
-  { title: "Kathmandu Premier League", location: "Dasharath Stadium", date: "15 Mar - 10 Apr, 2026", registrations: 24, type: "football" },
-  { title: "Pokhara Open Tournament", location: "Pokhara, Nepal", date: "20 Mar - 5 Apr, 2026", registrations: 8, type: "football" },
-  { title: "Lalitpur Futsal Cup", location: "Lalitpur, Nepal", date: "1 Apr - 15 Apr, 2026", registrations: 6, type: "futsal" },
+  { title: "Jhapa 5 Futsal Cup", location: "Jhapa, Nepal", date: "8 Mar - 29 Mar", registrations: 12, type: "futsal" },
+  { title: "Kathmandu Premier League", location: "Dasharath Stadium", date: "15 Mar - 10 Apr", registrations: 24, type: "football" },
+  { title: "Pokhara Open Tournament", location: "Pokhara, Nepal", date: "20 Mar - 5 Apr", registrations: 8, type: "football" },
 ];
 
 export default function DashboardPage() {
@@ -49,7 +46,6 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Animate numbers on load
     const timer = setTimeout(() => {
       setStats({ users: 1284, tournaments: 48, registrations: 326, revenue: 94 });
       setLoading(false);
@@ -62,199 +58,254 @@ export default function DashboardPage() {
       label: "Total Users",
       value: loading ? "—" : stats.users.toLocaleString(),
       change: "+12% this month",
-      positive: true,
-      icon: <Users size={22} />,
+      icon: <Users size={20} />,
       color: "#3b82f6",
-      bg: "#eff6ff",
     },
     {
       label: "Active Tournaments",
       value: loading ? "—" : stats.tournaments.toString(),
       change: "+4 this week",
-      positive: true,
-      icon: <Trophy size={22} />,
-      color: "#f97316",
-      bg: "#fff7ed",
+      icon: <Trophy size={20} />,
+      color: "#e05d2e",
     },
     {
       label: "Total Registrations",
       value: loading ? "—" : stats.registrations.toLocaleString(),
       change: "+38 today",
-      positive: true,
-      icon: <ClipboardList size={22} />,
-      color: "#16a34a",
-      bg: "#f0fdf4",
+      icon: <ClipboardList size={20} />,
+      color: "#22c55e",
     },
     {
       label: "Completion Rate",
       value: loading ? "—" : `${stats.revenue}%`,
       change: "+2% vs last month",
-      positive: true,
-      icon: <TrendingUp size={22} />,
-      color: "#8b5cf6",
-      bg: "#f5f3ff",
+      icon: <TrendingUp size={20} />,
+      color: "#a78bfa",
     },
   ];
 
   return (
-    <div style={{ backgroundColor: "#fefee3", minHeight: "100vh", padding: "32px" }}>
+    <div className="space-y-8">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <h1 className="text-4xl font-bold text-white mb-2">Dashboard</h1>
+        <p className="text-white/50">Welcome back! Here&apos;s what&apos;s happening with GoalNepal today.</p>
+      </motion.div>
 
-      {/* Page Header */}
-      <div style={{ marginBottom: "28px" }}>
-        <h1 style={{ fontSize: "28px", fontWeight: 800, color: "#111827", margin: 0 }}>Dashboard</h1>
-        <p style={{ fontSize: "14px", color: "#6b7280", marginTop: "4px" }}>
-          Welcome back! Here&apos;s what&apos;s happening with GoalNepal today.
-        </p>
-      </div>
-
-      {/* Stat Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "28px" }}>
-        {statCards.map((card) => (
-          <div
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+      >
+        {statCards.map((card, idx) => (
+          <motion.div
             key={card.label}
+            className="rounded-xl border p-6"
             style={{
-              backgroundColor: "white",
-              borderRadius: "16px",
-              padding: "20px",
-              border: "1px solid #f3f4f6",
-              boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+              background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+              borderColor: "rgba(255,255,255,0.1)"
             }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.05, duration: 0.4 }}
+            whileHover={{ borderColor: "rgba(224, 93, 46, 0.3)" }}
           >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
-              <span style={{ fontSize: "13px", fontWeight: 600, color: "#6b7280" }}>{card.label}</span>
-              <div style={{ width: "40px", height: "40px", borderRadius: "10px", backgroundColor: card.bg, display: "flex", alignItems: "center", justifyContent: "center", color: card.color }}>
+            <div className="flex items-start justify-between mb-4">
+              <span className="text-xs font-semibold text-white/60 uppercase tracking-wider">{card.label}</span>
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ background: `${card.color}20`, color: card.color }}
+              >
                 {card.icon}
               </div>
             </div>
-            <div style={{ fontSize: "30px", fontWeight: 800, color: "#111827", marginBottom: "6px" }}>{card.value}</div>
-            <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-              <TrendingUp size={12} style={{ color: "#16a34a" }} />
-              <span style={{ fontSize: "12px", color: "#16a34a", fontWeight: 600 }}>{card.change}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Two column layout */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "20px" }}>
-
-        {/* Recent Registrations */}
-        <div style={{ backgroundColor: "white", borderRadius: "16px", padding: "24px", border: "1px solid #f3f4f6", boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
-            <div>
-              <h2 style={{ fontSize: "16px", fontWeight: 700, color: "#111827", margin: 0 }}>Recent Registrations</h2>
-              <p style={{ fontSize: "12px", color: "#9ca3af", marginTop: "2px" }}>Latest team sign-ups</p>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "4px", backgroundColor: "#f0fdf4", padding: "4px 10px", borderRadius: "100px" }}>
-              <Activity size={12} style={{ color: "#16a34a" }} />
-              <span style={{ fontSize: "11px", fontWeight: 700, color: "#16a34a" }}>LIVE</span>
-            </div>
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-            {MOCK_RECENT_REGISTRATIONS.map((reg, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 12px", borderRadius: "12px", backgroundColor: "#f9fafb" }}>
-                <div style={{
-                  width: "36px", height: "36px", borderRadius: "10px", flexShrink: 0,
-                  backgroundColor: reg.type === "football" ? "#111827" : "#f97316",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "16px"
-                }}>
-                  {reg.type === "football" ? "⚽" : "🥅"}
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: "13px", fontWeight: 700, color: "#111827", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{reg.team}</div>
-                  <div style={{ fontSize: "11px", color: "#6b7280", marginTop: "1px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{reg.tournament}</div>
-                </div>
-                <div style={{ textAlign: "right", flexShrink: 0 }}>
-                  <div style={{ fontSize: "11px", color: "#9ca3af" }}>{reg.time}</div>
-                </div>
+            <div className="mb-2">
+              <div className="text-3xl font-bold text-white mb-1">{card.value}</div>
+              <div className="flex items-center gap-1 text-xs font-semibold text-green-400">
+                <ArrowUpRight size={12} />
+                {card.change}
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Active Tournaments */}
-        <div style={{ backgroundColor: "white", borderRadius: "16px", padding: "24px", border: "1px solid #f3f4f6", boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
-            <div>
-              <h2 style={{ fontSize: "16px", fontWeight: 700, color: "#111827", margin: 0 }}>Active Tournaments</h2>
-              <p style={{ fontSize: "12px", color: "#9ca3af", marginTop: "2px" }}>Currently ongoing events</p>
             </div>
-            <a href="/admin/tournaments" style={{ display: "flex", alignItems: "center", gap: "2px", fontSize: "12px", fontWeight: 600, color: "#3b82f6", textDecoration: "none" }}>
-              View all <ChevronRight size={14} />
-            </a>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      <motion.div
+        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
+        <motion.div
+          className="lg:col-span-2 rounded-xl border p-6"
+          style={{
+            background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+            borderColor: "rgba(255,255,255,0.1)"
+          }}
+          whileHover={{ borderColor: "rgba(224, 93, 46, 0.3)" }}
+        >
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-white">Recent Registrations</h2>
+              <p className="text-xs text-white/50 mt-1">Latest team sign-ups</p>
+            </div>
+            <div
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
+              style={{ background: "rgba(34, 197, 94, 0.15)", color: "#22c55e" }}
+            >
+              <Activity size={12} />
+              LIVE
+            </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-            {MOCK_TOURNAMENTS.map((t, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", borderRadius: "12px", border: "1px solid #f3f4f6" }}>
-                <div style={{
-                  width: "36px", height: "36px", borderRadius: "10px", flexShrink: 0,
-                  backgroundColor: t.type === "football" ? "#111827" : "#fff7ed",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "16px"
-                }}>
-                  {t.type === "football" ? "⚽" : "🥅"}
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: "13px", fontWeight: 700, color: "#111827", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{t.title}</div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "3px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
-                      <MapPin size={10} style={{ color: "#9ca3af" }} />
-                      <span style={{ fontSize: "11px", color: "#6b7280" }}>{t.location}</span>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
-                      <Calendar size={10} style={{ color: "#9ca3af" }} />
-                      <span style={{ fontSize: "11px", color: "#6b7280" }}>{t.date}</span>
-                    </div>
+          <div className="space-y-2">
+            {MOCK_RECENT_REGISTRATIONS.map((reg, idx) => (
+              <motion.div
+                key={idx}
+                className="flex items-center justify-between p-4 rounded-lg border transition"
+                style={{
+                  background: "rgba(255,255,255,0.02)",
+                  borderColor: "rgba(255,255,255,0.05)"
+                }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.05 }}
+                whileHover={{ background: "rgba(255,255,255,0.05)", borderColor: "rgba(224, 93, 46, 0.2)" }}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center text-base shrink-0"
+                    style={{
+                      background: reg.type === "football" ? "rgba(0,0,0,0.3)" : "rgba(224, 93, 46, 0.2)",
+                      color: reg.type === "football" ? "white" : "#e05d2e"
+                    }}
+                  >
+                    {reg.type === "football" ? "⚽" : "🥅"}
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-white">{reg.team}</div>
+                    <div className="text-xs text-white/50 mt-0.5">{reg.tournament}</div>
                   </div>
                 </div>
-                <div style={{ flexShrink: 0, textAlign: "right" }}>
-                  <div style={{ fontSize: "15px", fontWeight: 800, color: "#111827" }}>{t.registrations}</div>
-                  <div style={{ fontSize: "10px", color: "#9ca3af" }}>teams</div>
-                </div>
-              </div>
+                <span className="text-xs text-white/40">{reg.time}</span>
+              </motion.div>
             ))}
           </div>
-        </div>
-      </div>
+        </motion.div>
 
-      {/* Quick Actions */}
-      <div style={{ backgroundColor: "white", borderRadius: "16px", padding: "24px", border: "1px solid #f3f4f6", boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
-        <h2 style={{ fontSize: "16px", fontWeight: 700, color: "#111827", margin: "0 0 16px 0" }}>Quick Actions</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "12px" }}>
-          {[
-            { label: "Add Tournament", icon: "🏆", href: "/admin/tournaments", color: "#111827" },
-            { label: "Manage Users", icon: "👥", href: "/admin/users", color: "#3b82f6" },
-            { label: "View Registrations", icon: "📋", href: "", color: "#16a34a" },
-            { label: "Generate Report", icon: "📊", href: "", color: "#8b5cf6" },
-          ].map((action) => (
-            <a
-              key={action.label}
-              href={action.href}
+        <motion.div
+          className="rounded-xl border p-6"
+          style={{
+            background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+            borderColor: "rgba(255,255,255,0.1)"
+          }}
+          whileHover={{ borderColor: "rgba(224, 93, 46, 0.3)" }}
+        >
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-white">Top Info</h2>
+              <p className="text-xs text-white/50 mt-1">Quick stats</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              { label: "Active Now", value: "42", icon: "⚡", color: "#22c55e" },
+              { label: "Pending", value: "8", icon: "⏳", color: "#f59e0b" },
+              { label: "This Month", value: "156", icon: "📊", color: "#3b82f6" },
+            ].map((item, idx) => (
+              <motion.div
+                key={idx}
+                className="flex items-center justify-between p-3 rounded-lg"
+                style={{ background: "rgba(255,255,255,0.02)", borderLeft: `3px solid ${item.color}` }}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.05 }}
+              >
+                <span className="text-xs text-white/60">{item.label}</span>
+                <span className="text-base font-bold" style={{ color: item.color }}>{item.value}</span>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        className="rounded-xl border p-6"
+        style={{
+          background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+          borderColor: "rgba(255,255,255,0.1)"
+        }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+        whileHover={{ borderColor: "rgba(224, 93, 46, 0.3)" }}
+      >
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-bold text-white">Active Tournaments</h2>
+            <p className="text-xs text-white/50 mt-1">Currently ongoing events</p>
+          </div>
+          <Link href="/admin/tournaments">
+            <motion.button
+              className="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-semibold transition"
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                padding: "14px 16px",
-                borderRadius: "12px",
-                backgroundColor: "#f9fafb",
-                border: "1.5px solid #f3f4f6",
-                textDecoration: "none",
-                transition: "all 0.15s",
+                color: "#e05d2e",
+                background: "rgba(224, 93, 46, 0.1)",
+                border: "1px solid rgba(224, 93, 46, 0.2)"
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "#f3f4f6"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "#f9fafb"; }}
+              whileHover={{ background: "rgba(224, 93, 46, 0.2)" }}
             >
-              <span style={{ fontSize: "20px" }}>{action.icon}</span>
-              <span style={{ fontSize: "13px", fontWeight: 700, color: "#111827" }}>{action.label}</span>
-              <ChevronRight size={14} style={{ color: "#9ca3af", marginLeft: "auto" }} />
-            </a>
+              View All
+              <ChevronRight size={14} />
+            </motion.button>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {MOCK_TOURNAMENTS.map((t, idx) => (
+            <motion.div
+              key={idx}
+              className="rounded-lg border p-4 hover:border-white/20 transition"
+              style={{
+                background: "rgba(255,255,255,0.02)",
+                borderColor: "rgba(255,255,255,0.1)"
+              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.05 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-sm shrink-0"
+                  style={{
+                    background: t.type === "football" ? "rgba(0,0,0,0.3)" : "rgba(224, 93, 46, 0.2)"
+                  }}
+                >
+                  {t.type === "football" ? "⚽" : "🥅"}
+                </div>
+                <span className="text-xs font-bold text-white/60">{t.registrations} teams</span>
+              </div>
+              <h3 className="text-sm font-bold text-white mb-2 line-clamp-2">{t.title}</h3>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 text-xs text-white/50">
+                  <MapPin size={12} />
+                  <span className="truncate">{t.location}</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-white/50">
+                  <Calendar size={12} />
+                  <span>{t.date}</span>
+                </div>
+              </div>
+            </motion.div>
           ))}
         </div>
-      </div>
-
+      </motion.div>
     </div>
   );
 }
