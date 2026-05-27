@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { MapPin, Navigation, AlertCircle, Loader2 } from "lucide-react";
+import { MapPin, Navigation, AlertCircle, Loader2, ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 import type { Icon, DivIcon } from "leaflet";
 
 interface Ground {
@@ -25,10 +26,76 @@ interface MapContentProps {
   grounds: Ground[];
 }
 
-const MapContainer = dynamic(() => import("react-leaflet").then((m) => m.MapContainer), { ssr: false });
-const TileLayer = dynamic(() => import("react-leaflet").then((m) => m.TileLayer), { ssr: false });
-const Marker = dynamic(() => import("react-leaflet").then((m) => m.Marker), { ssr: false });
-const Popup = dynamic(() => import("react-leaflet").then((m) => m.Popup), { ssr: false });
+const OVERPASS_ENDPOINTS = [
+  "https://overpass-api.de/api/interpreter",
+  "https://overpass.kumi.systems/api/interpreter",
+  "https://lz4.overpass-api.de/api/interpreter",
+];
+
+interface OverpassElement {
+  id: number;
+  lat?: number;
+  lon?: number;
+  center?: { lat: number; lon: number };
+  tags?: Record<string, string>;
+}
+
+async function queryOverpass(lat: number, lng: number, radius: number): Promise<Ground[]> {
+  const query = `
+    [out:json][timeout:30];
+    (
+      node["leisure"="pitch"](around:${radius},${lat},${lng});
+      way["leisure"="pitch"](around:${radius},${lat},${lng});
+      node["leisure"="sports_centre"](around:${radius},${lat},${lng});
+      way["leisure"="sports_centre"](around:${radius},${lat},${lng});
+      node["sport"~"football|soccer|futsal|multi",i](around:${radius},${lat},${lng});
+      way["sport"~"football|soccer|futsal|multi",i](around:${radius},${lat},${lng});
+    );
+    out center tags;
+  `;
+
+  for (const endpoint of OVERPASS_ENDPOINTS) {
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `data=${encodeURIComponent(query)}`,
+        signal: AbortSignal.timeout(32000),
+      });
+
+      if (!res.ok) continue;
+      const json = await res.json();
+      const seen = new Set<number>();
+
+      return ((json.elements ?? []) as OverpassElement[])
+        .map((el) => {
+          const elLat = el.lat ?? el.center?.lat;
+          const elLng = el.lon ?? el.center?.lon;
+          if (!elLat || !elLng || seen.has(el.id)) return null;
+          seen.add(el.id);
+
+          return {
+            id: el.id,
+            name:
+              el.tags?.name ||
+              el.tags?.["name:en"] ||
+              el.tags?.["name:ne"] ||
+              "Unnamed Ground",
+            lat: elLat,
+            lng: elLng,
+            sport: el.tags?.sport || el.tags?.leisure || "pitch",
+            surface: el.tags?.surface || null,
+            type: el.tags?.leisure || "pitch",
+          };
+        })
+        .filter(Boolean) as Ground[];
+    } catch {
+      continue;
+    }
+  }
+
+  return [];
+}
 
 function MapContent({ userLocation, grounds }: MapContentProps) {
   const [userIcon, setUserIcon] = useState<DivIcon | null>(null);
@@ -41,7 +108,6 @@ function MapContent({ userLocation, grounds }: MapContentProps) {
         iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
         shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
       });
-
       setUserIcon(
         new L.DivIcon({
           className: "",
@@ -50,48 +116,47 @@ function MapContent({ userLocation, grounds }: MapContentProps) {
           iconAnchor: [9, 9],
         })
       );
-
       setGroundIcon(
         new L.DivIcon({
           className: "",
-          html: `<div style="width:28px;height:28px;background:linear-gradient(135deg,#ef5350,#ff7043);border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.4);font-size:13px">⚽</div>`,
-          iconSize: [28, 28],
-          iconAnchor: [14, 14],
+          html: `<div style="width:30px;height:30px;background:linear-gradient(135deg,#ef5350,#ff7043);border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.5);font-size:14px">⚽</div>`,
+          iconSize: [30, 30],
+          iconAnchor: [15, 15],
         })
       );
     });
   }, []);
 
-  const handleDirections = (lat: number, lng: number, name: string) => {
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&destination_place_id=${encodeURIComponent(name)}`;
-    window.open(url, "_blank");
-  };
-
   return (
     <>
       {userIcon && (
-        <Marker position={[userLocation.lat, userLocation.lng] as [number, number]} icon={userIcon as Icon}>
+        <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon as Icon}>
           <Popup>
-            <div className="text-center p-1">
-              <p className="font-bold text-sm text-gray-800">Your Location</p>
+            <div style={{ textAlign: "center", padding: "4px" }}>
+              <p style={{ fontWeight: 700, fontSize: "13px", color: "#1a1a2e" }}>Your Location</p>
             </div>
           </Popup>
         </Marker>
       )}
       {groundIcon &&
         grounds.map((g) => (
-          <Marker key={g.id} position={[g.lat, g.lng] as [number, number]} icon={groundIcon as Icon}>
+          <Marker key={g.id} position={[g.lat, g.lng]} icon={groundIcon as Icon}>
             <Popup>
-              <div style={{ minWidth: "160px" }}>
+              <div style={{ minWidth: "170px" }}>
                 <p style={{ fontWeight: 700, fontSize: "13px", marginBottom: "4px", color: "#1a1a2e" }}>{g.name}</p>
                 <p style={{ fontSize: "11px", color: "#666", marginBottom: "8px", textTransform: "capitalize" }}>
-                  {g.sport} · {g.surface || g.type}
+                  {g.sport}{g.surface ? ` · ${g.surface}` : ""}
                 </p>
                 <button
-                  onClick={() => handleDirections(g.lat, g.lng, g.name)}
+                  onClick={() =>
+                    window.open(
+                      `https://www.google.com/maps/dir/?api=1&destination=${g.lat},${g.lng}&destination_place_id=${encodeURIComponent(g.name)}`,
+                      "_blank"
+                    )
+                  }
                   style={{
                     width: "100%",
-                    padding: "6px 0",
+                    padding: "7px 0",
                     background: "linear-gradient(135deg, #ef5350, #ff7043)",
                     color: "#fff",
                     border: "none",
@@ -102,10 +167,10 @@ function MapContent({ userLocation, grounds }: MapContentProps) {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: "4px",
+                    gap: "5px",
                   }}
                 >
-                  <span>🧭</span> Get Directions
+                  🧭 Get Directions
                 </button>
               </div>
             </Popup>
@@ -115,12 +180,19 @@ function MapContent({ userLocation, grounds }: MapContentProps) {
   );
 }
 
+const MapContainer = dynamic(() => import("react-leaflet").then((m) => m.MapContainer), { ssr: false });
+const TileLayer = dynamic(() => import("react-leaflet").then((m) => m.TileLayer), { ssr: false });
+const Marker = dynamic(() => import("react-leaflet").then((m) => m.Marker), { ssr: false });
+const Popup = dynamic(() => import("react-leaflet").then((m) => m.Popup), { ssr: false });
+
 export default function NearbyGrounds() {
+  const router = useRouter();
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [grounds, setGrounds] = useState<Ground[]>([]);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [fetching, setFetching] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const hasFetched = useRef(false);
 
   useEffect(() => {
@@ -129,7 +201,6 @@ export default function NearbyGrounds() {
       setLoading(false);
       return;
     }
-
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const loc: UserLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
@@ -150,12 +221,16 @@ export default function NearbyGrounds() {
 
   const fetchGrounds = async (loc: UserLocation) => {
     setFetching(true);
+    setFetchError(null);
     try {
-      const res = await fetch(`/api/grounds?lat=${loc.lat}&lng=${loc.lng}&radius=5000`);
-      const data = await res.json();
-      if (data.grounds) setGrounds(data.grounds);
+      // Query Overpass directly from the browser — server-side is blocked by network policy
+      const results = await queryOverpass(loc.lat, loc.lng, 10000);
+      setGrounds(results);
+      if (results.length === 0) {
+        setFetchError("No grounds found. OSM coverage may be limited in your area.");
+      }
     } catch {
-      // silently fail
+      setFetchError("Failed to reach Overpass API. Check your internet connection.");
     } finally {
       setFetching(false);
     }
@@ -177,14 +252,29 @@ export default function NearbyGrounds() {
           <AlertCircle className="w-8 h-8 text-[#ef5350]" />
         </div>
         <p className="text-white font-semibold text-center">{locationError}</p>
+        <button
+          onClick={() => router.push("/home")}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white"
+          style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)" }}
+        >
+          <ArrowLeft className="w-4 h-4" /> Back to Home
+        </button>
       </div>
     );
   }
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => router.push("/home")}
+            className="flex items-center justify-center w-9 h-9 rounded-xl transition-all hover:scale-105"
+            style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)" }}
+          >
+            <ArrowLeft className="w-4 h-4 text-white" />
+          </button>
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
             style={{ background: "linear-gradient(135deg, #ef5350, #ff7043)" }}
@@ -193,17 +283,17 @@ export default function NearbyGrounds() {
           </div>
           <div>
             <h1 className="text-white font-black text-xl tracking-tight">Nearby Grounds</h1>
-            <p className="text-gray-400 text-xs">Football & futsal grounds within 5km</p>
+            <p className="text-gray-400 text-xs">Football & futsal grounds within 10km</p>
           </div>
         </div>
+
         <div className="flex items-center gap-3">
-          {fetching && (
+          {fetching ? (
             <div className="flex items-center gap-2 text-gray-400 text-sm">
               <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Loading grounds...</span>
+              <span>Searching grounds...</span>
             </div>
-          )}
-          {!fetching && (
+          ) : (
             <div
               className="px-3 py-1.5 rounded-lg text-sm font-semibold"
               style={{ background: "rgba(76,175,80,0.15)", color: "#4caf50", border: "1px solid rgba(76,175,80,0.3)" }}
@@ -215,12 +305,8 @@ export default function NearbyGrounds() {
             <button
               onClick={() => fetchGrounds(userLocation)}
               disabled={fetching}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all"
-              style={{
-                background: "rgba(239,83,80,0.15)",
-                color: "#ef5350",
-                border: "1px solid rgba(239,83,80,0.3)",
-              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all disabled:opacity-50"
+              style={{ background: "rgba(239,83,80,0.15)", color: "#ef5350", border: "1px solid rgba(239,83,80,0.3)" }}
             >
               <Navigation className="w-3.5 h-3.5" />
               Refresh
@@ -229,16 +315,13 @@ export default function NearbyGrounds() {
         </div>
       </div>
 
-      <div
-        className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl"
-        style={{ height: "520px" }}
-      >
+      {/* Map */}
+      <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl" style={{ height: "520px" }}>
         {userLocation && (
           <MapContainer
-            center={[userLocation.lat, userLocation.lng] as [number, number]}
-            zoom={14}
+            center={[userLocation.lat, userLocation.lng]}
+            zoom={13}
             style={{ height: "100%", width: "100%" }}
-            zoomControl={true}
           >
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -249,6 +332,18 @@ export default function NearbyGrounds() {
         )}
       </div>
 
+      {/* Status messages */}
+      {!fetching && fetchError && (
+        <div
+          className="rounded-xl px-5 py-4 border border-white/10 text-center"
+          style={{ background: "rgba(255,255,255,0.03)" }}
+        >
+          <p className="text-gray-400 text-sm">{fetchError}</p>
+          <p className="text-gray-500 text-xs mt-1">Try zooming out on the map or check back later.</p>
+        </div>
+      )}
+
+      {/* Ground cards */}
       {grounds.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {grounds.map((g) => (
@@ -271,14 +366,10 @@ export default function NearbyGrounds() {
               </div>
               <button
                 onClick={() =>
-                  window.open(
-                    `https://www.google.com/maps/dir/?api=1&destination=${g.lat},${g.lng}`,
-                    "_blank"
-                  )
+                  window.open(`https://www.google.com/maps/dir/?api=1&destination=${g.lat},${g.lng}`, "_blank")
                 }
                 className="shrink-0 p-2 rounded-lg transition-all hover:scale-105"
                 style={{ background: "linear-gradient(135deg, #ef5350, #ff7043)" }}
-                title="Get Directions"
               >
                 <Navigation className="w-3.5 h-3.5 text-white" />
               </button>
