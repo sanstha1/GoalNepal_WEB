@@ -17,7 +17,7 @@ export default function InputField({
 }: Props) {
   return (
     <div className="mb-4">
-      <label className="block mb-1 text-black font-medium">{label}</label>
+      <label className="block mb-1 text-[#2F2F2F] font-medium">{label}</label>
 
       <input
         type={type}
@@ -26,19 +26,19 @@ export default function InputField({
         className="
           w-full 
           px-3 py-2 
-          border border-black 
+          border border-[#E5E7EB] 
           rounded
           bg-white
-          text-black
-          placeholder-gray-500
+          text-[#2F2F2F]
+          placeholder-[#9CA3AF]
           focus:outline-none
           focus:ring-2
-          focus:ring-black
+          focus:ring-[#FF8A2A]
         "
       />
 
       {error && (
-        <p className="text-red-500 text-sm mt-1">
+        <p className="text-[#EF4444] text-sm mt-1">
           {error.message}
         </p>
       )}

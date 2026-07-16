@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { Trophy, Newspaper, Bookmark, User, Bell, RefreshCw, MapPinned, Menu, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
@@ -38,9 +39,9 @@ export default function Header() {
   };
 
   const activeClass =
-    "flex items-center gap-2 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all";
+    "flex items-center gap-2 text-[#2F2F2F] px-4 py-2 rounded-lg text-sm font-semibold transition-all";
   const normalClass =
-    "flex items-center gap-2 text-white/60 hover:text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all hover:bg-white/5";
+    "flex items-center gap-2 text-[#6B7280] hover:text-[#2F2F2F] px-4 py-2 rounded-lg text-sm font-semibold transition-all hover:bg-[#FFF4E8]";
 
   const navItems = [
     { href: "/tournaments", label: "Tournaments", icon: Trophy },
@@ -54,8 +55,8 @@ export default function Header() {
     <header
       className="w-full sticky top-0 z-50 border-b"
       style={{
-        background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
-        borderColor: "rgba(255,255,255,0.1)"
+        background: "#FFFFFF",
+        borderColor: "#E5E7EB"
       }}
     >
       <div className="w-full flex items-center justify-between px-6 lg:px-8 py-4">
@@ -65,17 +66,14 @@ export default function Header() {
           transition={{ duration: 0.5 }}
         >
           <Link href="/home" className="cursor-pointer group flex items-center gap-2">
-            <span className="text-2xl font-black tracking-tight text-white">Goal</span>
-            <span
-              className="text-2xl font-black tracking-tight px-2 py-0.5 rounded-lg"
-              style={{
-                background: "linear-gradient(135deg, #e05d2e, #d45a28)",
-                color: "#fff",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Nepal
-            </span>
+            <Image
+              src="/images/logo2.png"
+              alt="GoalNepal"
+              width={140}
+              height={40}
+              style={{ height: "40px", width: "auto" }}
+              priority
+            />
           </Link>
         </motion.div>
 
@@ -96,8 +94,8 @@ export default function Header() {
                   style={
                     isActive
                       ? {
-                          backgroundColor: "rgba(224, 93, 46, 0.1)",
-                          borderLeft: "2px solid #e05d2e"
+                          backgroundColor: "#FFF4E8",
+                          borderLeft: "2px solid #FF8A2A"
                         }
                       : {}
                   }
@@ -122,14 +120,14 @@ export default function Header() {
               onClick={handleBellClick}
               className={`relative flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-semibold text-sm ${
                 open || pathname === "/notifications"
-                  ? "text-white"
-                  : "text-white/60 hover:text-white hover:bg-white/5"
+                  ? "text-[#2F2F2F]"
+                  : "text-[#6B7280] hover:text-[#2F2F2F] hover:bg-[#FFF4E8]"
               }`}
               style={
                 open || pathname === "/notifications"
                   ? {
-                      backgroundColor: "rgba(224, 93, 46, 0.1)",
-                      borderLeft: "2px solid #e05d2e"
+                      backgroundColor: "#FFF4E8",
+                      borderLeft: "2px solid #FF8A2A"
                     }
                   : {}
               }
@@ -142,7 +140,7 @@ export default function Header() {
                 <motion.span
                   className="absolute -top-2 -right-2 w-5 h-5 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-lg"
                   style={{
-                    background: "linear-gradient(135deg, #e05d2e, #d45a28)"
+                    background: "linear-gradient(135deg, #FF8A2A, #F97316)"
                   }}
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -158,30 +156,30 @@ export default function Header() {
                 <motion.div
                   className="absolute right-0 mt-3 w-96 rounded-xl shadow-2xl overflow-hidden z-50 border"
                   style={{
-                    background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
-                    borderColor: "rgba(255,255,255,0.1)"
+                    background: "#FFFFFF",
+                    borderColor: "#E5E7EB"
                   }}
                   initial={{ opacity: 0, y: -10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -10, scale: 0.95 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <div className="border-b px-5 py-4 flex items-center justify-between" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
-                    <span className="text-white font-bold text-base">Notifications</span>
+                  <div className="border-b px-5 py-4 flex items-center justify-between" style={{ borderColor: "#E5E7EB" }}>
+                    <span className="text-[#2F2F2F] font-bold text-base">Notifications</span>
                     <motion.button
                       onClick={refetch}
                       title="Refresh"
-                      className="p-1.5 rounded-lg hover:bg-white/10 transition"
+                      className="p-1.5 rounded-lg hover:bg-[#FFF4E8] transition"
                       whileHover={{ rotate: 180 }}
                       whileTap={{ scale: 0.9 }}
                     >
-                      <RefreshCw className="w-4 h-4 text-white/60" />
+                      <RefreshCw className="w-4 h-4 text-[#6B7280]" />
                     </motion.button>
                   </div>
 
-                  <div className="divide-y max-h-96 overflow-y-auto" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
+                  <div className="divide-y max-h-96 overflow-y-auto" style={{ borderColor: "#E5E7EB" }}>
                     {loading ? (
-                      <div className="px-5 py-10 text-center text-white/40 text-sm">
+                      <div className="px-5 py-10 text-center text-[#9CA3AF] text-sm">
                         <motion.div
                           animate={{ opacity: [0.5, 1, 0.5] }}
                           transition={{ duration: 2, repeat: Infinity }}
@@ -190,11 +188,11 @@ export default function Header() {
                         </motion.div>
                       </div>
                     ) : error ? (
-                      <div className="px-5 py-10 text-center text-red-400 text-sm">
+                      <div className="px-5 py-10 text-center text-[#EF4444] text-sm">
                         {error}
                         <motion.button
                           onClick={refetch}
-                          className="block mx-auto mt-3 text-orange-500 underline text-xs font-semibold hover:text-orange-400"
+                          className="block mx-auto mt-3 text-[#FF8A2A] underline text-xs font-semibold hover:text-[#F97316]"
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                         >
@@ -202,17 +200,17 @@ export default function Header() {
                         </motion.button>
                       </div>
                     ) : notifications.length === 0 ? (
-                      <div className="px-5 py-10 text-center text-white/40 text-sm">
+                      <div className="px-5 py-10 text-center text-[#9CA3AF] text-sm">
                         No notifications yet
                       </div>
                     ) : (
                       notifications.slice(0, 5).map((n: INotification, idx) => (
                         <motion.div
                           key={n._id}
-                          className="flex items-start gap-3 px-5 py-4 cursor-pointer hover:bg-white/5 transition group"
+                          className="flex items-start gap-3 px-5 py-4 cursor-pointer hover:bg-[#FFF4E8] transition group"
                           style={
                             !n.read
-                              ? { backgroundColor: "rgba(224, 93, 46, 0.08)" }
+                              ? { backgroundColor: "#FFF4E8" }
                               : {}
                           }
                           initial={{ opacity: 0, x: -20 }}
@@ -223,22 +221,22 @@ export default function Header() {
                           <motion.div
                             className="w-10 h-10 rounded-lg shrink-0 flex items-center justify-center text-base font-bold flex-none"
                             style={{
-                              backgroundColor: n.type === "NEW_TOURNAMENT" ? "rgba(224, 93, 46, 0.15)" : "rgba(100, 200, 255, 0.15)",
-                              borderLeft: `3px solid ${n.type === "NEW_TOURNAMENT" ? "#e05d2e" : "#64c8ff"}`
+                              backgroundColor: n.type === "NEW_TOURNAMENT" ? "#FFF4E8" : "rgba(100, 200, 255, 0.15)",
+                              borderLeft: `3px solid ${n.type === "NEW_TOURNAMENT" ? "#FF8A2A" : "#64c8ff"}`
                             }}
                           >
                             {n.type === "NEW_TOURNAMENT" ? "🏆" : "📋"}
                           </motion.div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-white leading-snug group-hover:text-white/90">{n.title}</p>
-                            <p className="text-xs text-white/50 mt-1 line-clamp-2">{n.message}</p>
-                            <p className="text-xs text-white/30 mt-2">{new Date(n.createdAt).toLocaleDateString()}</p>
+                            <p className="text-sm font-semibold text-[#2F2F2F] leading-snug group-hover:text-[#2F2F2F]">{n.title}</p>
+                            <p className="text-xs text-[#6B7280] mt-1 line-clamp-2">{n.message}</p>
+                            <p className="text-xs text-[#9CA3AF] mt-2">{new Date(n.createdAt).toLocaleDateString()}</p>
                           </div>
                           {!n.read && (
                             <motion.span
                               className="w-2.5 h-2.5 rounded-full shrink-0 mt-1.5 flex-none shadow-lg"
                               style={{
-                                background: "linear-gradient(135deg, #e05d2e, #d45a28)"
+                                background: "linear-gradient(135deg, #FF8A2A, #F97316)"
                               }}
                               initial={{ scale: 0 }}
                               animate={{ scale: 1 }}
@@ -252,14 +250,14 @@ export default function Header() {
 
                   <motion.div
                     className="px-5 py-3 text-center border-t"
-                    style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                    style={{ borderColor: "#E5E7EB" }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3 }}
                   >
                     <motion.button
                       onClick={handleSeeAll}
-                      className="text-orange-500 font-semibold text-sm hover:text-orange-400 transition"
+                      className="text-[#FF8A2A] font-semibold text-sm hover:text-[#F97316] transition"
                       whileHover={{ x: 2 }}
                     >
                       See all notifications →
@@ -272,7 +270,7 @@ export default function Header() {
 
           <motion.button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-lg hover:bg-white/10 transition text-white/60 hover:text-white"
+            className="lg:hidden p-2 rounded-lg hover:bg-[#FFF4E8] transition text-[#6B7280] hover:text-[#2F2F2F]"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -285,7 +283,7 @@ export default function Header() {
         {mobileMenuOpen && (
           <motion.div
             className="lg:hidden border-t px-6 py-4 space-y-2"
-            style={{ borderColor: "rgba(255,255,255,0.1)" }}
+            style={{ borderColor: "#E5E7EB" }}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -307,8 +305,8 @@ export default function Header() {
                     style={
                       isActive
                         ? {
-                            backgroundColor: "rgba(224, 93, 46, 0.1)",
-                            borderLeft: "2px solid #e05d2e"
+                            backgroundColor: "#FFF4E8",
+                            borderLeft: "2px solid #FF8A2A"
                           }
                         : {}
                     }

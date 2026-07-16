@@ -2,6 +2,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, Trophy, Users, MapPin, Calendar, CheckCircle2 } from "lucide-react";
 
@@ -28,8 +29,14 @@ export default function Dashboard() {
 
       <div style={{ position: "relative", zIndex: 10, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 48px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-          <span style={{ fontFamily: "'Sora', sans-serif", fontSize: "24px", fontWeight: 900, color: "#2F2F2F", letterSpacing: "-0.02em" }}>Goal</span>
-          <span style={{ fontFamily: "'Sora', sans-serif", fontSize: "24px", fontWeight: 900, letterSpacing: "-0.02em", color: "#fff", background: "linear-gradient(195deg, #FF8A2A, #F97316)", padding: "2px 10px", borderRadius: "8px" }}>Nepal</span>
+          <Image
+            src="/images/logo2.png"
+            alt="GoalNepal"
+            width={140}
+            height={40}
+            style={{ height: "40px", width: "auto" }}
+            priority
+          />
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#FF8A2A", background: "#FFF4E8", border: "1px solid rgba(255,138,42,0.2)", borderRadius: "100px", padding: "5px 14px" }}>
           <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#FF8A2A", display: "inline-block" }} />
