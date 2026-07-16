@@ -37,16 +37,16 @@ const BADGE_STYLE: React.CSSProperties = {
   fontWeight: 600,
   letterSpacing: "0.08em",
   textTransform: "uppercase" as const,
-  color: "#e05d2e",
-  background: "rgba(224,93,46,0.1)",
-  border: "1px solid rgba(224,93,46,0.2)",
+  color: "#FF8A2A",
+  background: "#FFF4E8",
+  border: "1px solid rgba(255,138,42,0.2)",
   borderRadius: "100px",
   padding: "4px 12px",
   marginBottom: "20px",
 };
 
 const SECTION_STYLE: React.CSSProperties = {
-  background: "#080810",
+  background: "#FAFAFA",
   minHeight: "100vh",
   display: "flex",
   alignItems: "center",
@@ -54,6 +54,7 @@ const SECTION_STYLE: React.CSSProperties = {
 
 export default function HomePage() {
   const [heroVisible, setHeroVisible] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [scrollY, setScrollY] = useState(0);
 
   const [s1Ref, s1Visible] = useFadeIn();
@@ -79,7 +80,7 @@ export default function HomePage() {
     fontSize: "120px",
     fontWeight: 700,
     lineHeight: 1,
-    color: "rgba(255,255,255,0.04)",
+    color: "rgba(0,0,0,0.04)",
     position: "absolute",
     top: "-16px",
     left: "-8px",
@@ -87,14 +88,13 @@ export default function HomePage() {
   };
 
   return (
-    <div style={{ background: "#080810", color: "#fff", fontFamily: "'DM Sans', sans-serif" }}>
+    <div style={{ background: "#FAFAFA", color: "#2F2F2F", fontFamily: "'DM Sans', sans-serif" }}>
       <link
         href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Sora:wght@600;700;800&display=swap"
         rel="stylesheet"
       />
       <Header />
 
-      {/* HERO */}
       <section
         style={{
           position: "relative",
@@ -102,31 +102,15 @@ export default function HomePage() {
           display: "flex",
           alignItems: "center",
           overflow: "hidden",
-          background: "#08080f",
+          background: "#FAFAFA",
         }}
       >
         <div
           style={{
             position: "absolute",
             inset: 0,
-            transform: `translateY(${scrollY * 0.3}px)`,
-          }}
-        >
-          <Image
-            src="/images/football1.jpg"
-            alt="Football Background"
-            fill
-            priority
-            style={{ objectFit: "cover", opacity: 0.18 }}
-          />
-        </div>
-
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
             background:
-              "radial-gradient(ellipse 60% 60% at 50% 100%, rgba(224,93,46,0.12) 0%, transparent 70%)",
+              "radial-gradient(ellipse 60% 60% at 80% 30%, rgba(255,138,42,0.08) 0%, transparent 70%)",
           }}
         />
 
@@ -137,7 +121,7 @@ export default function HomePage() {
             left: 0,
             right: 0,
             height: "1px",
-            background: "linear-gradient(90deg, transparent, rgba(224,93,46,0.5), transparent)",
+            background: "linear-gradient(90deg, transparent, rgba(255,138,42,0.4), transparent)",
           }}
         />
 
@@ -145,124 +129,167 @@ export default function HomePage() {
           style={{
             position: "relative",
             zIndex: 10,
-            maxWidth: "820px",
+            maxWidth: "1200px",
+            width: "100%",
             margin: "0 auto",
             padding: "0 32px",
-            textAlign: "center",
+            display: "grid",
+            gridTemplateColumns: "1.1fr 0.9fr",
+            gap: "48px",
+            alignItems: "center",
           }}
         >
-          <div
-            style={{
-              ...BADGE_STYLE,
-              opacity: heroVisible ? 1 : 0,
-              transform: heroVisible ? "translateY(0)" : "translateY(12px)",
-              transition: "all 0.5s ease",
-            }}
-          >
-            <span
+          <div style={{ textAlign: "left" }}>
+            <div
               style={{
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                background: "#e05d2e",
-                display: "inline-block",
+                ...BADGE_STYLE,
+                opacity: heroVisible ? 1 : 0,
+                transform: heroVisible ? "translateY(0)" : "translateY(12px)",
+                transition: "all 0.5s ease",
               }}
-            />
-            Nepal&apos;s #1 Football Platform
+            >
+              <span
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: "50%",
+                  background: "#FF8A2A",
+                  display: "inline-block",
+                }}
+              />
+              Nepal&apos;s #1 Football Platform
+            </div>
+
+            <h1
+              style={{
+                fontFamily: "'Sora', sans-serif",
+                fontSize: "clamp(40px, 6vw, 64px)",
+                fontWeight: 800,
+                lineHeight: 1.08,
+                margin: "0 0 24px",
+                opacity: heroVisible ? 1 : 0,
+                transform: heroVisible ? "translateY(0)" : "translateY(20px)",
+                transition: "all 0.6s ease 0.1s",
+              }}
+            >
+              Where Football
+              <br />
+              <span style={{ color: "#FF8A2A" }}>Meets Passion</span>{" "}
+              <span style={{ fontSize: "0.7em" }}>🇳🇵</span>
+            </h1>
+
+            <p
+              style={{
+                fontSize: "18px",
+                color: "#6B7280",
+                lineHeight: 1.65,
+                maxWidth: "480px",
+                margin: "0 0 40px",
+                fontWeight: 300,
+                opacity: heroVisible ? 1 : 0,
+                transform: heroVisible ? "translateY(0)" : "translateY(20px)",
+                transition: "all 0.6s ease 0.2s",
+              }}
+            >
+              Discover, register, and manage football & futsal tournaments across Nepal — all in one place.
+            </p>
+
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+                flexWrap: "wrap",
+                opacity: heroVisible ? 1 : 0,
+                transform: heroVisible ? "translateY(0)" : "translateY(20px)",
+                transition: "all 0.6s ease 0.3s",
+              }}
+            >
+              <Link
+                href="/tournaments"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  background: "#FF8A2A",
+                  color: "#fff",
+                  fontWeight: 600,
+                  fontSize: "15px",
+                  padding: "13px 28px",
+                  borderRadius: "10px",
+                  textDecoration: "none",
+                  transition: "opacity 0.2s",
+                }}
+              >
+                Explore Tournaments <ArrowRight size={16} />
+              </Link>
+              <Link
+                href="/news"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  background: "#FFFFFF",
+                  color: "#2F2F2F",
+                  fontWeight: 500,
+                  fontSize: "15px",
+                  padding: "13px 28px",
+                  borderRadius: "10px",
+                  textDecoration: "none",
+                  border: "1px solid #E5E7EB",
+                  transition: "background 0.2s",
+                }}
+              >
+                Latest News
+              </Link>
+            </div>
           </div>
 
-          <h1
-            style={{
-              fontFamily: "'Sora', sans-serif",
-              fontSize: "clamp(40px, 6vw, 72px)",
-              fontWeight: 800,
-              lineHeight: 1.08,
-              margin: "0 0 24px",
-              opacity: heroVisible ? 1 : 0,
-              transform: heroVisible ? "translateY(0)" : "translateY(20px)",
-              transition: "all 0.6s ease 0.1s",
-            }}
-          >
-            Where Football
-            <br />
-            <span style={{ color: "#e05d2e" }}>Meets Passion</span>{" "}
-            <span style={{ fontSize: "0.7em" }}>🇳🇵</span>
-          </h1>
-
-          <p
-            style={{
-              fontSize: "18px",
-              color: "rgba(255,255,255,0.45)",
-              lineHeight: 1.65,
-              maxWidth: "520px",
-              margin: "0 auto 40px",
-              fontWeight: 300,
-              opacity: heroVisible ? 1 : 0,
-              transform: heroVisible ? "translateY(0)" : "translateY(20px)",
-              transition: "all 0.6s ease 0.2s",
-            }}
-          >
-            Discover, register, and manage football & futsal tournaments across Nepal — all in one place.
-          </p>
-
           <div
             style={{
-              display: "flex",
-              gap: "12px",
-              justifyContent: "center",
-              flexWrap: "wrap",
+              position: "relative",
               opacity: heroVisible ? 1 : 0,
               transform: heroVisible ? "translateY(0)" : "translateY(20px)",
-              transition: "all 0.6s ease 0.3s",
+              transition: "all 0.7s ease 0.15s",
             }}
           >
-            <Link
-              href="/tournaments"
+            <div
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                background: "#e05d2e",
-                color: "#fff",
-                fontWeight: 600,
-                fontSize: "15px",
-                padding: "13px 28px",
-                borderRadius: "10px",
-                textDecoration: "none",
-                transition: "opacity 0.2s",
+                position: "relative",
+                borderRadius: "24px",
+                overflow: "hidden",
+                boxShadow: "0 20px 60px rgba(0,0,0,0.08)",
               }}
             >
-              Explore Tournaments <ArrowRight size={16} />
-            </Link>
-            <Link
-              href="/news"
+              <Image
+                src="/images/football.png"
+                alt="Football"
+                width={600}
+                height={600}
+                style={{ width: "100%", height: "auto", display: "block" }}
+                priority
+              />
+            </div>
+            <div
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                background: "rgba(255,255,255,0.06)",
-                color: "rgba(255,255,255,0.8)",
-                fontWeight: 500,
-                fontSize: "15px",
-                padding: "13px 28px",
-                borderRadius: "10px",
-                textDecoration: "none",
-                border: "1px solid rgba(255,255,255,0.1)",
-                transition: "background 0.2s",
+                position: "absolute",
+                bottom: "-24px",
+                left: "-24px",
+                width: "120px",
+                height: "120px",
+                background: "#FFF4E8",
+                borderRadius: "50%",
+                zIndex: -1,
               }}
-            >
-              Latest News
-            </Link>
+            />
           </div>
         </div>
       </section>
 
-      {/* SECTION DIVIDER LABEL */}
       <div
         style={{
           textAlign: "center",
           padding: "64px 24px 0",
-          background: "#080810",
+          background: "#FAFAFA",
         }}
       >
         <span style={BADGE_STYLE}>See it in action</span>
@@ -274,11 +301,10 @@ export default function HomePage() {
             margin: "0 0 4px",
           }}
         >
-          GoalNepal in <span style={{ color: "#e05d2e" }}>Action</span>
+          GoalNepal in <span style={{ color: "#FF8A2A" }}>Action</span>
         </h2>
       </div>
 
-      {/* NUMBERED SECTION 1 — Tournaments */}
       <section style={{ ...SECTION_STYLE, padding: "80px 0" }}>
         <div
           ref={s1Ref}
@@ -305,7 +331,7 @@ export default function HomePage() {
                   fontWeight: 600,
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.3)",
+                  color: "#9CA3AF",
                   margin: "0 0 16px",
                 }}
               >
@@ -321,11 +347,11 @@ export default function HomePage() {
                 }}
               >
                 Find Every Match <br />
-                <span style={{ color: "#e05d2e" }}>Across Nepal</span>
+                <span style={{ color: "#FF8A2A" }}>Across Nepal</span>
               </h3>
               <p
                 style={{
-                  color: "rgba(255,255,255,0.4)",
+                  color: "#6B7280",
                   lineHeight: 1.7,
                   fontSize: "16px",
                   fontWeight: 300,
@@ -343,25 +369,24 @@ export default function HomePage() {
                   key={f}
                   style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}
                 >
-                  <CheckCircle2 size={16} style={{ color: "#e05d2e", flexShrink: 0 }} />
-                  <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "14px" }}>{f}</span>
+                  <CheckCircle2 size={16} style={{ color: "#FF8A2A", flexShrink: 0 }} />
+                  <span style={{ color: "#6B7280", fontSize: "14px" }}>{f}</span>
                 </div>
               ))}
             </div>
           </div>
 
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <MockupCard icon={<Trophy size={36} style={{ color: "#e05d2e" }} />} title="Active Tournaments" count="24" sub="Across 7 cities" />
+            <MockupCard icon={<Trophy size={36} style={{ color: "#FF8A2A" }} />} title="Active Tournaments" count="24" sub="Across 7 cities" />
           </div>
         </div>
       </section>
 
-      {/* NUMBERED SECTION 2 — Registration */}
       <section
         style={{
           ...SECTION_STYLE,
           padding: "80px 0",
-          background: "#0b0b16",
+          background: "#FFFFFF",
         }}
       >
         <div
@@ -389,11 +414,11 @@ export default function HomePage() {
                   fontWeight: 600,
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.3)",
+                  color: "#9CA3AF",
                   margin: "0 0 16px",
                 }}
               >
-                Easy Registration
+                Seamless Payments
               </p>
               <h3
                 style={{
@@ -404,43 +429,42 @@ export default function HomePage() {
                   lineHeight: 1.2,
                 }}
               >
-                Register Teams <br />
-                <span style={{ color: "#e05d2e" }}>In Minutes</span>
+                Join Tournaments <br />
+                <span style={{ color: "#FF8A2A" }}>Pay with eSewa</span>
               </h3>
               <p
                 style={{
-                  color: "rgba(255,255,255,0.4)",
+                  color: "#6B7280",
                   lineHeight: 1.7,
                   fontSize: "16px",
                   fontWeight: 300,
                   marginBottom: "32px",
                 }}
               >
-                No paperwork, no phone calls. Register your team and players for any tournament with just a few taps. Manage rosters, track registrations, all in one dashboard.
+                No paperwork, no phone calls. Register for any tournament and pay securely through eSewa in just a few taps — instantly confirmed on your dashboard.
               </p>
               {[
-                "One-click team registration",
-                "Player roster management",
-                "Confirmation & receipts instantly",
+                "One-click tournament registration",
+                "Secure payments via eSewa integration",
+                "Instant confirmation & digital receipt",
               ].map((f) => (
                 <div
                   key={f}
                   style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}
                 >
-                  <CheckCircle2 size={16} style={{ color: "#e05d2e", flexShrink: 0 }} />
-                  <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "14px" }}>{f}</span>
+                  <CheckCircle2 size={16} style={{ color: "#FF8A2A", flexShrink: 0 }} />
+                  <span style={{ color: "#6B7280", fontSize: "14px" }}>{f}</span>
                 </div>
               ))}
             </div>
           </div>
 
           <div style={{ order: 1, display: "flex", justifyContent: "center" }}>
-            <MockupCard icon={<Calendar size={36} style={{ color: "#e05d2e" }} />} title="Team Registrations" count="1,240+" sub="Teams this season" />
+            <MockupCard icon={<Calendar size={36} style={{ color: "#FF8A2A" }} />} title="Registrations Completed" count="1,240+" sub="This season" />
           </div>
         </div>
       </section>
 
-      {/* NUMBERED SECTION 3 — Community */}
       <section style={{ ...SECTION_STYLE, padding: "80px 0" }}>
         <div
           ref={s3Ref}
@@ -467,7 +491,7 @@ export default function HomePage() {
                   fontWeight: 600,
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.3)",
+                  color: "#9CA3AF",
                   margin: "0 0 16px",
                 }}
               >
@@ -483,11 +507,11 @@ export default function HomePage() {
                 }}
               >
                 Connect Players,<br />
-                <span style={{ color: "#e05d2e" }}>Organizers & Fans</span>
+                <span style={{ color: "#FF8A2A" }}>Organizers & Fans</span>
               </h3>
               <p
                 style={{
-                  color: "rgba(255,255,255,0.4)",
+                  color: "#6B7280",
                   lineHeight: 1.7,
                   fontSize: "16px",
                   fontWeight: 300,
@@ -505,23 +529,22 @@ export default function HomePage() {
                   key={f}
                   style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}
                 >
-                  <CheckCircle2 size={16} style={{ color: "#e05d2e", flexShrink: 0 }} />
-                  <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "14px" }}>{f}</span>
+                  <CheckCircle2 size={16} style={{ color: "#FF8A2A", flexShrink: 0 }} />
+                  <span style={{ color: "#6B7280", fontSize: "14px" }}>{f}</span>
                 </div>
               ))}
             </div>
           </div>
 
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <MockupCard icon={<Users size={36} style={{ color: "#e05d2e" }} />} title="Active Players" count="8,500+" sub="Across Nepal" />
+            <MockupCard icon={<Users size={36} style={{ color: "#FF8A2A" }} />} title="Active Players" count="8,500+" sub="Across Nepal" />
           </div>
         </div>
       </section>
 
-      {/* FEATURES GRID */}
       <section
         style={{
-          background: "#0b0b16",
+          background: "#FFFFFF",
           padding: "100px 40px",
           textAlign: "center",
         }}
@@ -540,11 +563,11 @@ export default function HomePage() {
             }}
           >
             Everything we{" "}
-            <span style={{ color: "#e05d2e" }}>provide</span>
+            <span style={{ color: "#FF8A2A" }}>provide</span>
           </h2>
           <p
             style={{
-              color: "rgba(255,255,255,0.35)",
+              color: "#9CA3AF",
               fontSize: "16px",
               fontWeight: 300,
               maxWidth: "480px",
@@ -554,7 +577,7 @@ export default function HomePage() {
               transition: "all 0.6s ease 0.1s",
             }}
           >
-            From tournament discovery to team management, GoalNepal turns your football journey into organized success — effortlessly.
+            From tournament discovery to secure payments, GoalNepal turns your football journey into organized success — effortlessly.
           </p>
 
           <div
@@ -568,35 +591,35 @@ export default function HomePage() {
           >
             {[
               {
-                icon: <Trophy size={28} style={{ color: "#e05d2e" }} />,
+                icon: <Trophy size={28} style={{ color: "#FF8A2A" }} />,
                 title: "Tournament Discovery",
                 desc: "Browse all active and upcoming tournaments with filters by city and format.",
                 delay: "0s",
               },
               {
-                icon: <Calendar size={28} style={{ color: "#e05d2e" }} />,
+                icon: <Calendar size={28} style={{ color: "#FF8A2A" }} />,
                 title: "Smart Scheduling",
                 desc: "Daily fixture updates, automated reminders, and match schedule exports.",
                 delay: "0.08s",
               },
               {
-                icon: <MapPin size={28} style={{ color: "#e05d2e" }} />,
+                icon: <MapPin size={28} style={{ color: "#FF8A2A" }} />,
                 title: "Location Aware",
                 desc: "Discover matches and events happening near you on an interactive map.",
                 delay: "0.16s",
               },
               {
-                icon: <Users size={28} style={{ color: "#e05d2e" }} />,
-                title: "Team Management",
-                desc: "Manage rosters, track registrations, and coordinate with your squad.",
+                icon: <Users size={28} style={{ color: "#FF8A2A" }} />,
+                title: "Seamless eSewa Payments",
+                desc: "Pay tournament fees securely through integrated eSewa checkout.",
                 delay: "0.24s",
               },
             ].map(({ icon, title, desc, delay }) => (
               <div
                 key={title}
                 style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.07)",
+                  background: "#FFFFFF",
+                  border: "1px solid #E5E7EB",
                   borderRadius: "14px",
                   padding: "28px 24px",
                   textAlign: "left",
@@ -609,7 +632,7 @@ export default function HomePage() {
                   style={{
                     width: "52px",
                     height: "52px",
-                    background: "rgba(224,93,46,0.1)",
+                    background: "#FFF4E8",
                     borderRadius: "12px",
                     display: "flex",
                     alignItems: "center",
@@ -625,6 +648,7 @@ export default function HomePage() {
                     fontSize: "16px",
                     fontWeight: 600,
                     margin: "0 0 8px",
+                    color: "#2F2F2F",
                   }}
                 >
                   {title}
@@ -632,7 +656,7 @@ export default function HomePage() {
                 <p
                   style={{
                     fontSize: "14px",
-                    color: "rgba(255,255,255,0.35)",
+                    color: "#6B7280",
                     lineHeight: 1.6,
                     margin: 0,
                     fontWeight: 300,
@@ -646,8 +670,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* TRUST / PRIVACY STRIP */}
-      <section style={{ background: "#080810", padding: "80px 40px" }}>
+      <section style={{ background: "#FAFAFA", padding: "80px 40px" }}>
         <div ref={privacyRef}>
           <div
             style={{
@@ -663,17 +686,17 @@ export default function HomePage() {
           >
             {[
               {
-                icon: <Shield size={24} style={{ color: "#e05d2e" }} />,
+                icon: <Shield size={24} style={{ color: "#FF8A2A" }} />,
                 title: "Private & Secure",
-                desc: "Your data and team info are kept private and never shared with third parties.",
+                desc: "Your data and payment details are kept private and never shared with third parties.",
               },
               {
-                icon: <Wifi size={24} style={{ color: "#e05d2e" }} />,
+                icon: <Wifi size={24} style={{ color: "#FF8A2A" }} />,
                 title: "Works Offline",
                 desc: "Access your saved tournaments and schedules even without internet.",
               },
               {
-                icon: <MapPin size={24} style={{ color: "#e05d2e" }} />,
+                icon: <MapPin size={24} style={{ color: "#FF8A2A" }} />,
                 title: "Hyper Local",
                 desc: "Content curated for Nepal — cities, leagues, and venues you actually know.",
               },
@@ -684,8 +707,8 @@ export default function HomePage() {
                   display: "flex",
                   gap: "16px",
                   alignItems: "flex-start",
-                  background: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255,255,255,0.06)",
+                  background: "#FFFFFF",
+                  border: "1px solid #E5E7EB",
                   borderRadius: "12px",
                   padding: "24px",
                 }}
@@ -694,7 +717,7 @@ export default function HomePage() {
                   style={{
                     width: "44px",
                     height: "44px",
-                    background: "rgba(224,93,46,0.1)",
+                    background: "#FFF4E8",
                     borderRadius: "10px",
                     display: "flex",
                     alignItems: "center",
@@ -711,6 +734,7 @@ export default function HomePage() {
                       fontWeight: 600,
                       fontSize: "15px",
                       margin: "0 0 6px",
+                      color: "#2F2F2F",
                     }}
                   >
                     {title}
@@ -718,7 +742,7 @@ export default function HomePage() {
                   <p
                     style={{
                       fontSize: "13px",
-                      color: "rgba(255,255,255,0.35)",
+                      color: "#6B7280",
                       margin: 0,
                       lineHeight: 1.55,
                       fontWeight: 300,
@@ -733,8 +757,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section style={{ background: "#0b0b16", padding: "100px 40px" }}>
+      <section style={{ background: "#FFFFFF", padding: "100px 40px" }}>
         <div ref={testimonialsRef} style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "60px" }}>
             <span style={BADGE_STYLE}>What players say</span>
@@ -749,7 +772,7 @@ export default function HomePage() {
                 transition: "all 0.6s ease",
               }}
             >
-              Trusted by <span style={{ color: "#e05d2e" }}>Nepal&apos;s players</span>
+              Trusted by <span style={{ color: "#FF8A2A" }}>Nepal&apos;s players</span>
             </h2>
           </div>
 
@@ -764,7 +787,7 @@ export default function HomePage() {
               {
                 name: "Rajan Shrestha",
                 role: "Futsal Player, Kathmandu",
-                text: "GoalNepal made tournament registration super easy. No more calling organizers again and again.",
+                text: "GoalNepal made tournament registration super easy. Paying the fee through eSewa took seconds.",
                 delay: "0s",
               },
               {
@@ -776,15 +799,15 @@ export default function HomePage() {
               {
                 name: "Anish Gurung",
                 role: "Tournament Organizer",
-                text: "Managing teams and players has never been this smooth. This platform is a game changer.",
+                text: "Managing registrations and payments has never been this smooth. This platform is a game changer.",
                 delay: "0.2s",
               },
             ].map(({ name, role, text, delay }) => (
               <div
                 key={name}
                 style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.07)",
+                  background: "#FFFFFF",
+                  border: "1px solid #E5E7EB",
                   borderRadius: "14px",
                   padding: "28px 24px",
                   opacity: testimonialsVisible ? 1 : 0,
@@ -795,7 +818,7 @@ export default function HomePage() {
                 <div
                   style={{
                     fontSize: "28px",
-                    color: "#e05d2e",
+                    color: "#FF8A2A",
                     fontFamily: "Georgia, serif",
                     lineHeight: 1,
                     marginBottom: "12px",
@@ -806,7 +829,7 @@ export default function HomePage() {
                 <p
                   style={{
                     fontSize: "15px",
-                    color: "rgba(255,255,255,0.55)",
+                    color: "#6B7280",
                     lineHeight: 1.65,
                     margin: "0 0 24px",
                     fontWeight: 300,
@@ -820,13 +843,13 @@ export default function HomePage() {
                       width: "36px",
                       height: "36px",
                       borderRadius: "50%",
-                      background: "rgba(224,93,46,0.15)",
+                      background: "#FFF4E8",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       fontSize: "13px",
                       fontWeight: 600,
-                      color: "#e05d2e",
+                      color: "#FF8A2A",
                     }}
                   >
                     {name[0]}
@@ -838,6 +861,7 @@ export default function HomePage() {
                         fontWeight: 600,
                         fontSize: "14px",
                         margin: 0,
+                        color: "#2F2F2F",
                       }}
                     >
                       {name}
@@ -845,7 +869,7 @@ export default function HomePage() {
                     <p
                       style={{
                         fontSize: "12px",
-                        color: "rgba(255,255,255,0.3)",
+                        color: "#9CA3AF",
                         margin: 0,
                         fontWeight: 300,
                       }}
@@ -860,10 +884,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FINAL CTA */}
       <section
         style={{
-          background: "#080810",
+          background: "#FAFAFA",
           padding: "100px 40px",
           textAlign: "center",
           position: "relative",
@@ -875,7 +898,7 @@ export default function HomePage() {
             position: "absolute",
             inset: 0,
             background:
-              "radial-gradient(ellipse 50% 70% at 50% 100%, rgba(224,93,46,0.1) 0%, transparent 70%)",
+              "radial-gradient(ellipse 50% 70% at 50% 100%, rgba(255,138,42,0.08) 0%, transparent 70%)",
           }}
         />
         <div
@@ -902,18 +925,18 @@ export default function HomePage() {
           >
             Take your football journey
             <br />
-            <span style={{ color: "#e05d2e" }}>to the next level</span>
+            <span style={{ color: "#FF8A2A" }}>to the next level</span>
           </h2>
           <p
             style={{
               fontSize: "16px",
-              color: "rgba(255,255,255,0.35)",
+              color: "#6B7280",
               lineHeight: 1.65,
               margin: "0 0 40px",
               fontWeight: 300,
             }}
           >
-            No spreadsheets needed. GoalNepal keeps tracking your teams and tournaments as easy as talking about them.
+            No spreadsheets needed. GoalNepal keeps tracking your tournaments and payments as easy as talking about them.
           </p>
 
           <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
@@ -923,7 +946,7 @@ export default function HomePage() {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "8px",
-                background: "#e05d2e",
+                background: "#FF8A2A",
                 color: "#fff",
                 fontWeight: 600,
                 fontSize: "15px",
@@ -940,14 +963,14 @@ export default function HomePage() {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "8px",
-                background: "rgba(255,255,255,0.05)",
-                color: "rgba(255,255,255,0.7)",
+                background: "#FFFFFF",
+                color: "#6B7280",
                 fontWeight: 500,
                 fontSize: "15px",
                 padding: "14px 32px",
                 borderRadius: "10px",
                 textDecoration: "none",
-                border: "1px solid rgba(255,255,255,0.1)",
+                border: "1px solid #E5E7EB",
               }}
             >
               Read News
@@ -975,8 +998,8 @@ function MockupCard({
   return (
     <div
       style={{
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.08)",
+        background: "#FFFFFF",
+        border: "1px solid #E5E7EB",
         borderRadius: "20px",
         padding: "40px",
         minWidth: "260px",
@@ -992,7 +1015,7 @@ function MockupCard({
           right: "-40px",
           width: "140px",
           height: "140px",
-          background: "rgba(224,93,46,0.06)",
+          background: "rgba(255,138,42,0.06)",
           borderRadius: "50%",
         }}
       />
@@ -1000,7 +1023,7 @@ function MockupCard({
         style={{
           width: "72px",
           height: "72px",
-          background: "rgba(224,93,46,0.1)",
+          background: "#FFF4E8",
           borderRadius: "18px",
           display: "flex",
           alignItems: "center",
@@ -1013,7 +1036,7 @@ function MockupCard({
       <p
         style={{
           fontSize: "13px",
-          color: "rgba(255,255,255,0.35)",
+          color: "#9CA3AF",
           fontWeight: 400,
           margin: "0 0 8px",
           letterSpacing: "0.04em",
@@ -1026,7 +1049,7 @@ function MockupCard({
           fontFamily: "'Sora', sans-serif",
           fontSize: "44px",
           fontWeight: 800,
-          color: "#fff",
+          color: "#2F2F2F",
           margin: "0 0 4px",
           lineHeight: 1,
         }}
@@ -1036,7 +1059,7 @@ function MockupCard({
       <p
         style={{
           fontSize: "13px",
-          color: "rgba(255,255,255,0.3)",
+          color: "#9CA3AF",
           margin: 0,
           fontWeight: 300,
         }}

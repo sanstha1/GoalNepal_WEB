@@ -33,16 +33,16 @@ function SavedCard({ tournament }: { tournament: Tournament }) {
 
   return (
     <motion.div
-      className="rounded-2xl border border-white/10 overflow-hidden shadow-lg flex flex-col hover:shadow-xl transition"
+      className="rounded-2xl border border-[#E5E7EB] overflow-hidden shadow-lg flex flex-col hover:shadow-xl transition"
       style={{
-        background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+        background: "#FFFFFF",
       }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       whileHover={{ scale: 1.03 }}
     >
-      <div className="relative h-48 bg-gray-900">
+      <div className="relative h-48 bg-[#FFF4E8]">
         {bannerUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -55,21 +55,22 @@ function SavedCard({ tournament }: { tournament: Tournament }) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <Trophy size={40} className="text-gray-500" />
+            <Trophy size={40} className="text-[#FF8A2A]" />
           </div>
         )}
         <button
           onClick={handleRemove}
           className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full shadow flex items-center justify-center hover:scale-110 transition-transform"
+          style={{ border: "1px solid #E5E7EB" }}
         >
-          <Bookmark size={15} className="text-black fill-black" />
+          <Bookmark size={15} className="text-[#FF8A2A] fill-[#FF8A2A]" />
         </button>
         <div className="absolute top-3 left-3">
           <span
             className={`text-xs font-bold px-3 py-1 rounded-full ${
               tournament.type === "football"
-                ? "bg-[#4caf50] text-white"
-                : "bg-yellow-400 text-black"
+                ? "bg-[#FF8A2A] text-white"
+                : "bg-[#F59E0B] text-white"
             }`}
           >
             {tournament.type === "football" ? "⚽ Football" : "🥅 Futsal"}
@@ -78,26 +79,27 @@ function SavedCard({ tournament }: { tournament: Tournament }) {
       </div>
 
       <div className="p-5 flex flex-col flex-1">
-        <h2 className="font-bold text-white text-base mb-3 line-clamp-2 leading-snug">
+        <h2 className="font-bold text-[#2F2F2F] text-base mb-3 line-clamp-2 leading-snug">
           {tournament.title}
         </h2>
         <div className="space-y-1.5 mb-4">
-          <div className="flex items-center gap-1.5 text-gray-400 text-sm">
+          <div className="flex items-center gap-1.5 text-[#6B7280] text-sm">
             <MapPin size={13} className="shrink-0" />
             <span className="truncate">{tournament.location}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-gray-400 text-sm">
+          <div className="flex items-center gap-1.5 text-[#6B7280] text-sm">
             <Calendar size={13} className="shrink-0" />
             <span>{formatDateRange(tournament.startDate, tournament.endDate)}</span>
           </div>
         </div>
         <div className="mt-auto flex gap-3">
-          <button className="flex-1 bg-[#4caf50] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#43a047] transition-colors">
+          <button className="flex-1 bg-[#FF8A2A] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#F97316] transition-colors">
             Register
           </button>
           <button
             onClick={handleRemove}
-            className="flex-1 bg-gray-700 text-white py-3 rounded-xl font-bold text-sm hover:bg-gray-600 transition-colors"
+            className="flex-1 bg-[#FFFFFF] text-[#2F2F2F] py-3 rounded-xl font-bold text-sm hover:bg-[#FFF4E8] transition-colors"
+            style={{ border: "1px solid #E5E7EB" }}
           >
             Remove
           </button>
@@ -114,22 +116,22 @@ export default function SavedPage() {
     <div
       className="min-h-screen flex flex-col"
       style={{
-        background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+        background: "#FAFAFA",
       }}
     >
       <Header />
-      <main className="flex-1 max-w-7xl mx-auto px-6 py-12 w-full text-gray-300">
+      <main className="flex-1 max-w-7xl mx-auto px-6 py-12 w-full text-[#2F2F2F]">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="mb-10"
         >
-          <h1 className="text-4xl font-bold text-white">Saved Tournaments</h1>
-          <p className="mt-2 text-gray-400 text-sm">
+          <h1 className="text-4xl font-bold text-[#2F2F2F]">Saved Tournaments</h1>
+          <p className="mt-2 text-[#6B7280] text-sm">
             Your bookmarked tournaments that you&apos;re interested in
           </p>
-          <p className="mt-3 text-gray-400 text-sm font-medium">
+          <p className="mt-3 text-[#6B7280] text-sm font-medium">
             You have {savedTournaments.length} saved tournament{savedTournaments.length !== 1 ? "s" : ""}
           </p>
         </motion.div>
@@ -141,11 +143,11 @@ export default function SavedPage() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
           >
-            <Bookmark size={48} className="text-gray-500 mb-4" />
-            <p className="text-gray-400 font-medium">No saved tournaments yet</p>
-            <p className="text-gray-500 text-sm mt-1">
+            <Bookmark size={48} className="text-[#9CA3AF] mb-4" />
+            <p className="text-[#6B7280] font-medium">No saved tournaments yet</p>
+            <p className="text-[#9CA3AF] text-sm mt-1">
               Bookmark tournaments from the{" "}
-              <a href="/tournaments" className="underline hover:text-[#4caf50]">
+              <a href="/tournaments" className="underline hover:text-[#FF8A2A]">
                 Tournaments page
               </a>
             </p>

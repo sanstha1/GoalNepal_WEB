@@ -59,18 +59,18 @@ export default function TournamentNewsPage() {
       <main
         className="min-h-screen px-6 py-12"
         style={{
-          background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+          background: "#FAFAFA",
         }}
       >
-        <div className="max-w-7xl mx-auto text-gray-300">
+        <div className="max-w-7xl mx-auto text-[#2F2F2F]">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="mb-12 text-center"
           >
-            <h1 className="text-5xl font-bold mb-4 text-white">Tournament News & Updates</h1>
-            <p className="text-gray-400 text-lg">
+            <h1 className="text-5xl font-bold mb-4 text-[#2F2F2F]">Tournament News & Updates</h1>
+            <p className="text-[#6B7280] text-lg">
               Stay updated with the latest news, live matches, and player highlights
             </p>
           </motion.div>
@@ -78,7 +78,7 @@ export default function TournamentNewsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2 space-y-8">
               <motion.h2
-                className="text-3xl font-bold mb-6 text-white"
+                className="text-3xl font-bold mb-6 text-[#2F2F2F]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
@@ -89,9 +89,9 @@ export default function TournamentNewsPage() {
               {newsItems.map((news, index) => (
                 <motion.div
                   key={news.id}
-                  className="rounded-xl border border-white/10 overflow-hidden shadow-lg hover:shadow-xl transition"
+                  className="rounded-xl border border-[#E5E7EB] overflow-hidden shadow-lg hover:shadow-xl transition"
                   style={{
-                    background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+                    background: "#FFFFFF",
                   }}
                   initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -107,20 +107,20 @@ export default function TournamentNewsPage() {
                         <span
                           className={`px-3 py-1 rounded text-sm font-bold ${
                             news.type === "LIVE"
-                              ? "bg-red-500 text-white"
+                              ? "bg-[#EF4444] text-white"
                               : news.type === "NEWS"
-                              ? "bg-blue-600 text-white"
+                              ? "bg-[#FF8A2A] text-white"
                               : news.type === "RESULT"
-                              ? "bg-green-600 text-white"
-                              : "bg-yellow-600 text-black"
+                              ? "bg-[#34A853] text-white"
+                              : "bg-[#F59E0B] text-white"
                           }`}
                         >
                           {news.type}
                         </span>
-                        <span className="text-gray-400 text-sm">{news.time}</span>
+                        <span className="text-[#9CA3AF] text-sm">{news.time}</span>
                       </div>
-                      <h3 className="text-xl font-bold mb-2 text-white">{news.title}</h3>
-                      <p className="text-gray-400">{news.description}</p>
+                      <h3 className="text-xl font-bold mb-2 text-[#2F2F2F]">{news.title}</h3>
+                      <p className="text-[#6B7280]">{news.description}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -133,29 +133,29 @@ export default function TournamentNewsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
               >
-                <h2 className="text-3xl font-bold mb-6 text-white">Upcoming Matches</h2>
+                <h2 className="text-3xl font-bold mb-6 text-[#2F2F2F]">Upcoming Matches</h2>
                 <div className="space-y-6">
                   {upcomingMatches.map((match, index) => (
                     <motion.div
                       key={match.id}
-                      className="rounded-xl border border-white/10 p-6 shadow-lg"
+                      className="rounded-xl border border-[#E5E7EB] p-6 shadow-lg"
                       style={{
-                        background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+                        background: "#FFFFFF",
                       }}
                       initial={{ opacity: 0, y: 40 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: index * 0.2 }}
                       whileHover={{ scale: 1.03 }}
                     >
-                      <div className="flex items-center gap-2 text-gray-400 mb-4">
+                      <div className="flex items-center gap-2 text-[#9CA3AF] mb-4">
                         <Clock className="w-4 h-4" />
                         <span className="text-sm">{match.date}</span>
                       </div>
                       <div className="text-center">
-                        <p className="font-semibold text-lg mb-2 text-white">{match.team1}</p>
-                        <p className="text-gray-400 text-sm mb-2">VS</p>
-                        <p className="font-semibold text-lg mb-4 text-white">{match.team2}</p>
-                        <button className="w-full bg-[#4caf50] hover:bg-[#43a047] text-white py-2 rounded transition">
+                        <p className="font-semibold text-lg mb-2 text-[#2F2F2F]">{match.team1}</p>
+                        <p className="text-[#9CA3AF] text-sm mb-2">VS</p>
+                        <p className="font-semibold text-lg mb-4 text-[#2F2F2F]">{match.team2}</p>
+                        <button className="w-full bg-[#FF8A2A] hover:bg-[#F97316] text-white py-2 rounded transition">
                           Set Reminder
                         </button>
                       </div>
@@ -165,9 +165,9 @@ export default function TournamentNewsPage() {
               </motion.div>
 
               <motion.div
-                className="rounded-xl border border-white/10 p-6 shadow-lg"
+                className="rounded-xl border border-[#E5E7EB] p-6 shadow-lg"
                 style={{
-                  background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+                  background: "#FFFFFF",
                 }}
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -175,16 +175,16 @@ export default function TournamentNewsPage() {
               >
                 <div className="flex items-center gap-2 mb-4">
                   <span className="text-2xl">🏆</span>
-                  <h3 className="text-xl font-bold text-white">Top Performers</h3>
+                  <h3 className="text-xl font-bold text-[#2F2F2F]">Top Performers</h3>
                 </div>
                 <div className="space-y-3">
                   {topPerformers.map((player) => (
                     <div key={player.id} className="flex items-center justify-between py-2">
                       <div className="flex items-center gap-3">
-                        <span className="text-gray-400">⭐</span>
-                        <span className="font-medium text-white">{player.name}</span>
+                        <span className="text-[#9CA3AF]">⭐</span>
+                        <span className="font-medium text-[#2F2F2F]">{player.name}</span>
                       </div>
-                      <span className="text-[#4caf50] font-semibold">{player.goals} goals</span>
+                      <span className="text-[#34A853] font-semibold">{player.goals} goals</span>
                     </div>
                   ))}
                 </div>
