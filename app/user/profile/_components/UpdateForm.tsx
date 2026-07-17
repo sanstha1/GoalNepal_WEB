@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, Resolver } from "react-hook-form";
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -25,9 +25,9 @@ export type UpdateUserData = z.infer<typeof updateUserSchema>;
 
 export default function UpdateUserForm({ user }: { user: AuthUser }) {
   const { register, handleSubmit, control, formState: { errors, isSubmitting } } = useForm<UpdateUserData>({
-    resolver: zodResolver(updateUserSchema),
+    resolver: zodResolver(updateUserSchema) as Resolver<UpdateUserData>,
     values: {
-      fullname: user?.fullname || '',
+      fullname: user?.fullName || '',
       email: user?.email || '',
     },
   });
@@ -82,10 +82,10 @@ const onSubmit = async (data: UpdateUserData) => {
 
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto bg-white shadow rounded-lg overflow-hidden">
+    <div className="min-h-screen bg-[#FAFAFA] py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto bg-white shadow rounded-lg overflow-hidden border border-[#E5E7EB]">
         <div className="px-6 py-8 sm:px-10">
-          <h1 className="text-2xl font-bold mb-4">Edit Profile</h1>
+          <h1 className="text-2xl font-bold mb-4 text-[#2F2F2F]">Edit Profile</h1>
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             {/* Image Preview */}
             <div className="mb-4">
@@ -99,7 +99,7 @@ const onSubmit = async (data: UpdateUserData) => {
                       <button
                         type="button"
                         onClick={() => handleDismissImage(onChange)}
-                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
+                        className="absolute top-0 right-0 bg-[#EF4444] text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-[#DC2626]"
                       >
                         ✕
                       </button>
@@ -110,15 +110,15 @@ const onSubmit = async (data: UpdateUserData) => {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={getImageUrl(user.profilePicture) || ''} alt="Profile Image" className="w-24 h-24 rounded-full object-cover" />
               ) : (
-                <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
-                  <span className="text-gray-600">No Image</span>
+                <div className="w-24 h-24 bg-[#FFF4E8] rounded-full flex items-center justify-center">
+                  <span className="text-[#6B7280]">No Image</span>
                 </div>
               )}
             </div>
 
             {/* Image Upload */}
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Profile Image</label>
+              <label className="block text-sm font-medium mb-1 text-[#2F2F2F]">Profile Image</label>
               <Controller
                 name="image"
                 control={control}
@@ -126,37 +126,37 @@ const onSubmit = async (data: UpdateUserData) => {
                   <input ref={fileInputRef} type="file" onChange={(e) => handleImageChange(e.target.files?.[0], onChange)} accept=".jpg,.jpeg,.png,.webp" />
                 )}
               />
-              {errors.image && <p className="text-sm text-red-600">{errors.image.message}</p>}
+              {errors.image && <p className="text-sm text-[#EF4444]">{errors.image.message}</p>}
             </div>
 
             {/* Full Name */}
             <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="fullname">Full Name</label>
+              <label className="block text-sm font-medium mb-1 text-[#2F2F2F]" htmlFor="fullname">Full Name</label>
               <input
                 id="fullname"
                 type="text"
                 {...register("fullname")}
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="w-full border border-[#E5E7EB] rounded px-3 py-2 text-[#2F2F2F] bg-white focus:outline-none focus:border-[#FF8A2A] focus:ring-4 focus:ring-[rgba(255,138,42,0.15)]"
               />
-              {errors.fullname && <p className="text-sm text-red-600">{errors.fullname.message}</p>}
+              {errors.fullname && <p className="text-sm text-[#EF4444]">{errors.fullname.message}</p>}
             </div>
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="email">Email</label>
+              <label className="block text-sm font-medium mb-1 text-[#2F2F2F]" htmlFor="email">Email</label>
               <input
                 id="email"
                 type="email"
                 {...register("email")}
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="w-full border border-[#E5E7EB] rounded px-3 py-2 text-[#2F2F2F] bg-white focus:outline-none focus:border-[#FF8A2A] focus:ring-4 focus:ring-[rgba(255,138,42,0.15)]"
               />
-              {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
+              {errors.email && <p className="text-sm text-[#EF4444]">{errors.email.message}</p>}
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+              className="px-4 py-2 bg-[#FF8A2A] text-white rounded hover:bg-[#F97316] disabled:opacity-50"
             >
               {isSubmitting ? 'Updating...' : 'Update Profile'}
             </button>

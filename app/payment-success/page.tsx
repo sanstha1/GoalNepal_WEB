@@ -33,7 +33,7 @@ export default function PaymentSuccessPage() {
     <div
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+        backgroundColor: "#FAFAFA",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -52,14 +52,14 @@ export default function PaymentSuccessPage() {
           maxWidth: "420px",
           borderRadius: "24px",
           overflow: "hidden",
-          background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
-          border: "1px solid rgba(255,255,255,0.1)",
-          boxShadow: "0 24px 60px rgba(0,0,0,0.4)",
+          backgroundColor: "#FFFFFF",
+          border: "1px solid #E5E7EB",
+          boxShadow: "0 24px 60px rgba(0,0,0,0.12)",
         }}
       >
         <div
           style={{
-            background: "linear-gradient(135deg, #16a34a, #15803d)",
+            backgroundColor: "#34A853",
             padding: "40px 24px 32px",
             display: "flex",
             flexDirection: "column",
@@ -76,7 +76,7 @@ export default function PaymentSuccessPage() {
               right: "-30px",
               width: "120px",
               height: "120px",
-              background: "rgba(255,255,255,0.05)",
+              background: "rgba(255,255,255,0.08)",
               borderRadius: "50%",
             }}
           />
@@ -88,8 +88,8 @@ export default function PaymentSuccessPage() {
               width: "72px",
               height: "72px",
               borderRadius: "50%",
-              backgroundColor: "rgba(255,255,255,0.15)",
-              border: "2px solid rgba(255,255,255,0.4)",
+              backgroundColor: "rgba(255,255,255,0.2)",
+              border: "2px solid rgba(255,255,255,0.5)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -101,7 +101,7 @@ export default function PaymentSuccessPage() {
           <h1 style={{ color: "white", fontSize: "24px", fontWeight: 800, margin: 0, fontFamily: "'Sora', sans-serif" }}>
             Payment Successful!
           </h1>
-          <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "14px", marginTop: "8px", fontWeight: 300 }}>
+          <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "14px", marginTop: "8px", fontWeight: 300 }}>
             Your registration is confirmed
           </p>
         </div>
@@ -114,36 +114,36 @@ export default function PaymentSuccessPage() {
               gap: "8px",
               justifyContent: "center",
               marginBottom: "24px",
-              backgroundColor: "rgba(22,163,74,0.1)",
-              border: "1px solid rgba(22,163,74,0.25)",
+              backgroundColor: "rgba(52,168,83,0.1)",
+              border: "1px solid rgba(52,168,83,0.25)",
               borderRadius: "999px",
               padding: "10px 20px",
             }}
           >
-            <Trophy size={14} style={{ color: "#4ade80" }} />
-            <span style={{ fontSize: "13px", fontWeight: 700, color: "#4ade80", letterSpacing: "0.04em" }}>
+            <Trophy size={14} style={{ color: "#34A853" }} />
+            <span style={{ fontSize: "13px", fontWeight: 700, color: "#34A853", letterSpacing: "0.04em" }}>
               eSewa Payment Verified
             </span>
           </div>
 
           <div
             style={{
-              backgroundColor: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.08)",
+              backgroundColor: "#FAFAFA",
+              border: "1px solid #E5E7EB",
               borderRadius: "14px",
               padding: "18px",
               marginBottom: "24px",
             }}
           >
-            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)", lineHeight: "1.7", textAlign: "center", margin: 0, fontWeight: 300 }}>
+            <p style={{ fontSize: "13px", color: "#6B7280", lineHeight: "1.7", textAlign: "center", margin: 0, fontWeight: 300 }}>
               Your registration fee has been paid successfully and your team has been registered. The organizer will review and confirm shortly.
             </p>
           </div>
 
           <div style={{ textAlign: "center", marginBottom: "20px" }}>
-            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.3)", margin: 0 }}>
+            <p style={{ fontSize: "13px", color: "#9CA3AF", margin: 0 }}>
               Redirecting to tournaments in{" "}
-              <span style={{ fontWeight: 800, color: "#4ade80" }}>{countdown}s</span>
+              <span style={{ fontWeight: 800, color: "#34A853" }}>{countdown}s</span>
             </p>
           </div>
 
@@ -155,7 +155,7 @@ export default function PaymentSuccessPage() {
               width: "100%",
               height: "50px",
               borderRadius: "12px",
-              backgroundColor: "#16a34a",
+              backgroundColor: "#34A853",
               color: "white",
               border: "none",
               fontWeight: 700,
