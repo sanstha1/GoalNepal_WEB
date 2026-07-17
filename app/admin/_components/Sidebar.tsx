@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { LayoutDashboard, Users, Trophy, Menu, X } from "lucide-react";
@@ -50,17 +51,14 @@ export default function Sidebar() {
                     transition={{ duration: 0.5 }}
                 >
                     <Link href="/admin" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
-                        <span className="text-xl font-black tracking-tight text-[#2F2F2F]">Goal</span>
-                        <span
-                            className="text-xl font-black tracking-tight px-1.5 py-0.5 rounded-lg"
-                            style={{
-                                backgroundColor: "#FF8A2A",
-                                color: "#fff",
-                                letterSpacing: "-0.02em",
-                            }}
-                        >
-                            Nepal
-                        </span>
+                        <Image
+                            src="/images/logo2.png"
+                            alt="GoalNepal"
+                            width={140}
+                            height={40}
+                            priority
+                            style={{ height: "36px", width: "auto" }}
+                        />
                     </Link>
                 </motion.div>
 
