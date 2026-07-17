@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <main
                     className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-6"
                     style={{
-                        background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)"
+                        backgroundColor: "#FAFAFA"
                     }}
                 >
                     <div className="max-w-7xl mx-auto">

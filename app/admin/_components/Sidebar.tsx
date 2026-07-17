@@ -22,7 +22,7 @@ export default function Sidebar() {
         <>
             <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="md:hidden fixed top-20 left-4 z-30 p-2 rounded-lg bg-white/10 text-white"
+                className="md:hidden fixed top-20 left-4 z-30 p-2 rounded-lg bg-white border border-[#E5E7EB] text-[#2F2F2F]"
             >
                 {mobileOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -38,23 +38,23 @@ export default function Sidebar() {
                     border-r
                 `}
                 style={{
-                    background: "linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)",
-                    borderColor: "rgba(255,255,255,0.1)"
+                    backgroundColor: "#FFFFFF",
+                    borderColor: "#E5E7EB"
                 }}
             >
                 <motion.div
                     className="p-6 border-b"
-                    style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                    style={{ borderColor: "#E5E7EB" }}
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                 >
                     <Link href="/admin" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
-                        <span className="text-xl font-black tracking-tight text-white">Goal</span>
+                        <span className="text-xl font-black tracking-tight text-[#2F2F2F]">Goal</span>
                         <span
                             className="text-xl font-black tracking-tight px-1.5 py-0.5 rounded-lg"
                             style={{
-                                background: "linear-gradient(135deg, #e05d2e, #d45a28)",
+                                backgroundColor: "#FF8A2A",
                                 color: "#fff",
                                 letterSpacing: "-0.02em",
                             }}
@@ -81,12 +81,12 @@ export default function Sidebar() {
                                     className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all ${
                                         active
                                             ? "text-white"
-                                            : "text-white/60 hover:text-white/80"
+                                            : "text-[#6B7280] hover:text-[#2F2F2F]"
                                     }`}
                                     style={
                                         active
                                             ? {
-                                                background: "linear-gradient(135deg, #e05d2e 0%, #d45a28 100%)"
+                                                backgroundColor: "#FF8A2A"
                                             }
                                             : {}
                                     }
@@ -102,7 +102,7 @@ export default function Sidebar() {
 
                 <motion.div
                     className="p-4 mt-auto border-t"
-                    style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                    style={{ borderColor: "#E5E7EB" }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}

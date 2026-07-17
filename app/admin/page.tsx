@@ -66,14 +66,14 @@ export default function DashboardPage() {
       value: loading ? "—" : stats.tournaments.toString(),
       change: "+4 this week",
       icon: <Trophy size={20} />,
-      color: "#e05d2e",
+      color: "#FF8A2A",
     },
     {
       label: "Total Registrations",
       value: loading ? "—" : stats.registrations.toLocaleString(),
       change: "+38 today",
       icon: <ClipboardList size={20} />,
-      color: "#22c55e",
+      color: "#34A853",
     },
     {
       label: "Completion Rate",
@@ -91,8 +91,8 @@ export default function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h1 className="text-4xl font-bold text-white mb-2">Dashboard</h1>
-        <p className="text-white/50">Welcome back! Here&apos;s what&apos;s happening with GoalNepal today.</p>
+        <h1 className="text-4xl font-bold text-[#2F2F2F] mb-2">Dashboard</h1>
+        <p className="text-[#6B7280]">Welcome back! Here&apos;s what&apos;s happening with GoalNepal today.</p>
       </motion.div>
 
       <motion.div
@@ -106,16 +106,16 @@ export default function DashboardPage() {
             key={card.label}
             className="rounded-xl border p-6"
             style={{
-              background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
-              borderColor: "rgba(255,255,255,0.1)"
+              backgroundColor: "#FFFFFF",
+              borderColor: "#E5E7EB"
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.05, duration: 0.4 }}
-            whileHover={{ borderColor: "rgba(224, 93, 46, 0.3)" }}
+            whileHover={{ borderColor: "rgba(255, 138, 42, 0.3)" }}
           >
             <div className="flex items-start justify-between mb-4">
-              <span className="text-xs font-semibold text-white/60 uppercase tracking-wider">{card.label}</span>
+              <span className="text-xs font-semibold text-[#6B7280] uppercase tracking-wider">{card.label}</span>
               <div
                 className="w-10 h-10 rounded-lg flex items-center justify-center"
                 style={{ background: `${card.color}20`, color: card.color }}
@@ -124,8 +124,8 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="mb-2">
-              <div className="text-3xl font-bold text-white mb-1">{card.value}</div>
-              <div className="flex items-center gap-1 text-xs font-semibold text-green-400">
+              <div className="text-3xl font-bold text-[#2F2F2F] mb-1">{card.value}</div>
+              <div className="flex items-center gap-1 text-xs font-semibold" style={{ color: "#34A853" }}>
                 <ArrowUpRight size={12} />
                 {card.change}
               </div>
@@ -143,19 +143,19 @@ export default function DashboardPage() {
         <motion.div
           className="lg:col-span-2 rounded-xl border p-6"
           style={{
-            background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
-            borderColor: "rgba(255,255,255,0.1)"
+            backgroundColor: "#FFFFFF",
+            borderColor: "#E5E7EB"
           }}
-          whileHover={{ borderColor: "rgba(224, 93, 46, 0.3)" }}
+          whileHover={{ borderColor: "rgba(255, 138, 42, 0.3)" }}
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-xl font-bold text-white">Recent Registrations</h2>
-              <p className="text-xs text-white/50 mt-1">Latest team sign-ups</p>
+              <h2 className="text-xl font-bold text-[#2F2F2F]">Recent Registrations</h2>
+              <p className="text-xs text-[#6B7280] mt-1">Latest team sign-ups</p>
             </div>
             <div
               className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
-              style={{ background: "rgba(34, 197, 94, 0.15)", color: "#22c55e" }}
+              style={{ background: "rgba(52, 168, 83, 0.12)", color: "#34A853" }}
             >
               <Activity size={12} />
               LIVE
@@ -168,30 +168,30 @@ export default function DashboardPage() {
                 key={idx}
                 className="flex items-center justify-between p-4 rounded-lg border transition"
                 style={{
-                  background: "rgba(255,255,255,0.02)",
-                  borderColor: "rgba(255,255,255,0.05)"
+                  backgroundColor: "#FAFAFA",
+                  borderColor: "#E5E7EB"
                 }}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.05 }}
-                whileHover={{ background: "rgba(255,255,255,0.05)", borderColor: "rgba(224, 93, 46, 0.2)" }}
+                whileHover={{ backgroundColor: "#FFF4E8", borderColor: "rgba(255, 138, 42, 0.25)" }}
               >
                 <div className="flex items-center gap-3">
                   <div
                     className="w-10 h-10 rounded-lg flex items-center justify-center text-base shrink-0"
                     style={{
-                      background: reg.type === "football" ? "rgba(0,0,0,0.3)" : "rgba(224, 93, 46, 0.2)",
-                      color: reg.type === "football" ? "white" : "#e05d2e"
+                      background: reg.type === "football" ? "#F3F4F6" : "rgba(255, 138, 42, 0.15)",
+                      color: reg.type === "football" ? "#2F2F2F" : "#FF8A2A"
                     }}
                   >
                     {reg.type === "football" ? "⚽" : "🥅"}
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-white">{reg.team}</div>
-                    <div className="text-xs text-white/50 mt-0.5">{reg.tournament}</div>
+                    <div className="text-sm font-semibold text-[#2F2F2F]">{reg.team}</div>
+                    <div className="text-xs text-[#6B7280] mt-0.5">{reg.tournament}</div>
                   </div>
                 </div>
-                <span className="text-xs text-white/40">{reg.time}</span>
+                <span className="text-xs text-[#9CA3AF]">{reg.time}</span>
               </motion.div>
             ))}
           </div>
@@ -200,33 +200,33 @@ export default function DashboardPage() {
         <motion.div
           className="rounded-xl border p-6"
           style={{
-            background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
-            borderColor: "rgba(255,255,255,0.1)"
+            backgroundColor: "#FFFFFF",
+            borderColor: "#E5E7EB"
           }}
-          whileHover={{ borderColor: "rgba(224, 93, 46, 0.3)" }}
+          whileHover={{ borderColor: "rgba(255, 138, 42, 0.3)" }}
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-xl font-bold text-white">Top Info</h2>
-              <p className="text-xs text-white/50 mt-1">Quick stats</p>
+              <h2 className="text-xl font-bold text-[#2F2F2F]">Top Info</h2>
+              <p className="text-xs text-[#6B7280] mt-1">Quick stats</p>
             </div>
           </div>
 
           <div className="space-y-4">
             {[
-              { label: "Active Now", value: "42", icon: "⚡", color: "#22c55e" },
-              { label: "Pending", value: "8", icon: "⏳", color: "#f59e0b" },
+              { label: "Active Now", value: "42", icon: "⚡", color: "#34A853" },
+              { label: "Pending", value: "8", icon: "⏳", color: "#F59E0B" },
               { label: "This Month", value: "156", icon: "📊", color: "#3b82f6" },
             ].map((item, idx) => (
               <motion.div
                 key={idx}
                 className="flex items-center justify-between p-3 rounded-lg"
-                style={{ background: "rgba(255,255,255,0.02)", borderLeft: `3px solid ${item.color}` }}
+                style={{ backgroundColor: "#FAFAFA", borderLeft: `3px solid ${item.color}` }}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.05 }}
               >
-                <span className="text-xs text-white/60">{item.label}</span>
+                <span className="text-xs text-[#6B7280]">{item.label}</span>
                 <span className="text-base font-bold" style={{ color: item.color }}>{item.value}</span>
               </motion.div>
             ))}
@@ -237,28 +237,28 @@ export default function DashboardPage() {
       <motion.div
         className="rounded-xl border p-6"
         style={{
-          background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
-          borderColor: "rgba(255,255,255,0.1)"
+          backgroundColor: "#FFFFFF",
+          borderColor: "#E5E7EB"
         }}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
-        whileHover={{ borderColor: "rgba(224, 93, 46, 0.3)" }}
+        whileHover={{ borderColor: "rgba(255, 138, 42, 0.3)" }}
       >
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-xl font-bold text-white">Active Tournaments</h2>
-            <p className="text-xs text-white/50 mt-1">Currently ongoing events</p>
+            <h2 className="text-xl font-bold text-[#2F2F2F]">Active Tournaments</h2>
+            <p className="text-xs text-[#6B7280] mt-1">Currently ongoing events</p>
           </div>
           <Link href="/admin/tournaments">
             <motion.button
               className="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-semibold transition"
               style={{
-                color: "#e05d2e",
-                background: "rgba(224, 93, 46, 0.1)",
-                border: "1px solid rgba(224, 93, 46, 0.2)"
+                color: "#FF8A2A",
+                backgroundColor: "rgba(255, 138, 42, 0.1)",
+                border: "1px solid rgba(255, 138, 42, 0.2)"
               }}
-              whileHover={{ background: "rgba(224, 93, 46, 0.2)" }}
+              whileHover={{ backgroundColor: "rgba(255, 138, 42, 0.2)" }}
             >
               View All
               <ChevronRight size={14} />
@@ -270,10 +270,10 @@ export default function DashboardPage() {
           {MOCK_TOURNAMENTS.map((t, idx) => (
             <motion.div
               key={idx}
-              className="rounded-lg border p-4 hover:border-white/20 transition"
+              className="rounded-lg border p-4 hover:border-[#FF8A2A]/30 transition"
               style={{
-                background: "rgba(255,255,255,0.02)",
-                borderColor: "rgba(255,255,255,0.1)"
+                backgroundColor: "#FAFAFA",
+                borderColor: "#E5E7EB"
               }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -284,20 +284,20 @@ export default function DashboardPage() {
                 <div
                   className="w-8 h-8 rounded-lg flex items-center justify-center text-sm shrink-0"
                   style={{
-                    background: t.type === "football" ? "rgba(0,0,0,0.3)" : "rgba(224, 93, 46, 0.2)"
+                    background: t.type === "football" ? "#F3F4F6" : "rgba(255, 138, 42, 0.15)"
                   }}
                 >
                   {t.type === "football" ? "⚽" : "🥅"}
                 </div>
-                <span className="text-xs font-bold text-white/60">{t.registrations} teams</span>
+                <span className="text-xs font-bold text-[#6B7280]">{t.registrations} teams</span>
               </div>
-              <h3 className="text-sm font-bold text-white mb-2 line-clamp-2">{t.title}</h3>
+              <h3 className="text-sm font-bold text-[#2F2F2F] mb-2 line-clamp-2">{t.title}</h3>
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-xs text-white/50">
+                <div className="flex items-center gap-2 text-xs text-[#6B7280]">
                   <MapPin size={12} />
                   <span className="truncate">{t.location}</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-white/50">
+                <div className="flex items-center gap-2 text-xs text-[#6B7280]">
                   <Calendar size={12} />
                   <span>{t.date}</span>
                 </div>

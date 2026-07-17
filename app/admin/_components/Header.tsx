@@ -26,8 +26,8 @@ export default function Header() {
             <header
                 className="sticky top-0 z-50 border-b"
                 style={{
-                    background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
-                    borderColor: "rgba(255,255,255,0.1)"
+                    backgroundColor: "#FFFFFF",
+                    borderColor: "#E5E7EB"
                 }}
             >
                 <nav className="mx-auto max-w-7xl px-6 lg:px-8" aria-label="Global">
@@ -37,11 +37,11 @@ export default function Header() {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.5 }}
                         >
-                            <h1 className="text-xl font-bold text-white">Admin Dashboard</h1>
+                            <h1 className="text-xl font-bold text-[#2F2F2F]">Admin Dashboard</h1>
                         </motion.div>
                         <div className="flex items-center gap-4">
                             <motion.div
-                                className="text-sm text-white/70"
+                                className="text-sm text-[#6B7280]"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.2 }}
@@ -52,12 +52,12 @@ export default function Header() {
                                 onClick={handleLogoutClick}
                                 className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border transition"
                                 style={{
-                                    borderColor: "rgba(224, 93, 46, 0.3)",
-                                    color: "#e05d2e"
+                                    borderColor: "rgba(255, 138, 42, 0.3)",
+                                    color: "#FF8A2A"
                                 }}
                                 whileHover={{
-                                    backgroundColor: "rgba(224, 93, 46, 0.1)",
-                                    borderColor: "rgba(224, 93, 46, 0.5)"
+                                    backgroundColor: "rgba(255, 138, 42, 0.1)",
+                                    borderColor: "rgba(255, 138, 42, 0.5)"
                                 }}
                                 whileTap={{ scale: 0.95 }}
                             >
@@ -72,7 +72,7 @@ export default function Header() {
             {showLogoutModal && (
                 <motion.div
                     className="fixed inset-0 flex items-center justify-center z-50 px-4"
-                    style={{ backgroundColor: "rgba(0,0,0,0.75)" }}
+                    style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
@@ -80,8 +80,8 @@ export default function Header() {
                     <motion.div
                         className="rounded-2xl p-8 max-w-md w-full shadow-2xl relative"
                         style={{
-                            background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
-                            border: "1px solid rgba(255,255,255,0.1)"
+                            backgroundColor: "#FFFFFF",
+                            border: "1px solid #E5E7EB"
                         }}
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -89,7 +89,7 @@ export default function Header() {
                     >
                         <motion.button
                             onClick={cancelLogout}
-                            className="absolute top-6 right-6 text-white/40 hover:text-white/60 transition"
+                            className="absolute top-6 right-6 text-[#9CA3AF] hover:text-[#6B7280] transition"
                             whileHover={{ rotate: 90 }}
                         >
                             <X size={24} />
@@ -99,18 +99,18 @@ export default function Header() {
                             <motion.div
                                 className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
                                 style={{
-                                    backgroundColor: "rgba(239, 68, 68, 0.15)",
-                                    border: "2px solid rgba(239, 68, 68, 0.3)"
+                                    backgroundColor: "rgba(239, 68, 68, 0.1)",
+                                    border: "2px solid rgba(239, 68, 68, 0.25)"
                                 }}
                                 initial={{ scale: 0 }}
                                 animate={{ scale: 1 }}
                                 transition={{ delay: 0.2, type: "spring" }}
                             >
-                                <LogOut size={32} style={{ color: "#ef4444" }} />
+                                <LogOut size={32} style={{ color: "#EF4444" }} />
                             </motion.div>
 
                             <motion.h2
-                                className="text-2xl font-bold text-white mb-3"
+                                className="text-2xl font-bold text-[#2F2F2F] mb-3"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.3 }}
@@ -118,7 +118,7 @@ export default function Header() {
                                 Logout Confirmation
                             </motion.h2>
                             <motion.p
-                                className="text-white/50 mb-8"
+                                className="text-[#6B7280] mb-8"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.4 }}
@@ -136,12 +136,12 @@ export default function Header() {
                                     onClick={cancelLogout}
                                     className="flex-1 py-3 px-6 rounded-lg font-bold transition"
                                     style={{
-                                        backgroundColor: "rgba(255,255,255,0.05)",
-                                        border: "1px solid rgba(255,255,255,0.1)",
-                                        color: "rgba(255,255,255,0.7)"
+                                        backgroundColor: "#FAFAFA",
+                                        border: "1px solid #E5E7EB",
+                                        color: "#2F2F2F"
                                     }}
                                     whileHover={{
-                                        backgroundColor: "rgba(255,255,255,0.1)"
+                                        backgroundColor: "#F3F4F6"
                                     }}
                                     whileTap={{ scale: 0.98 }}
                                 >
@@ -151,10 +151,10 @@ export default function Header() {
                                     onClick={confirmLogout}
                                     className="flex-1 py-3 px-6 rounded-lg font-bold text-white transition"
                                     style={{
-                                        background: "linear-gradient(135deg, #ef4444, #dc2626)"
+                                        backgroundColor: "#EF4444"
                                     }}
                                     whileHover={{
-                                        background: "linear-gradient(135deg, #dc2626, #b91c1c)"
+                                        backgroundColor: "#DC2626"
                                     }}
                                     whileTap={{ scale: 0.98 }}
                                 >
