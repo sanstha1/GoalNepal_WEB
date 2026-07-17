@@ -80,10 +80,10 @@ export default function CreateUserForm({ onSuccess }: { onSuccess?: () => void }
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-6"
             style={{
-                background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+                backgroundColor: "#FFFFFF",
                 borderRadius: "20px",
                 padding: "24px",
-                border: "1px solid rgba(255,255,255,0.1)"
+                border: "1px solid #E5E7EB"
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -94,7 +94,7 @@ export default function CreateUserForm({ onSuccess }: { onSuccess?: () => void }
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
             >
-                <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-3">
+                <label className="block text-xs font-semibold text-[#6B7280] uppercase tracking-wider mb-3">
                     Profile Picture
                 </label>
                 <div className="flex gap-4 items-start">
@@ -104,7 +104,7 @@ export default function CreateUserForm({ onSuccess }: { onSuccess?: () => void }
                                 src={previewImage}
                                 alt="Profile"
                                 className="w-20 h-20 rounded-lg object-cover"
-                                style={{ border: "2px solid rgba(224, 93, 46, 0.3)" }}
+                                style={{ border: "2px solid rgba(255, 138, 42, 0.3)" }}
                             />
                             <Controller
                                 name="profilePicture"
@@ -114,11 +114,11 @@ export default function CreateUserForm({ onSuccess }: { onSuccess?: () => void }
                                         type="button"
                                         onClick={() => handleDismissImage(onChange)}
                                         className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-sm"
-                                        style={{ backgroundColor: "rgba(239, 68, 68, 0.2)" }}
+                                        style={{ backgroundColor: "rgba(239, 68, 68, 0.15)" }}
                                         whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.9 }}
                                     >
-                                        <X size={14} color="#ef4444" />
+                                        <X size={14} color="#EF4444" />
                                     </motion.button>
                                 )}
                             />
@@ -127,11 +127,11 @@ export default function CreateUserForm({ onSuccess }: { onSuccess?: () => void }
                         <div
                             className="w-20 h-20 rounded-lg flex items-center justify-center shrink-0"
                             style={{
-                                background: "rgba(255,255,255,0.05)",
-                                border: "2px dashed rgba(255,255,255,0.1)"
+                                backgroundColor: "#FAFAFA",
+                                border: "2px dashed #E5E7EB"
                             }}
                         >
-                            <span className="text-xs text-white/30">No image</span>
+                            <span className="text-xs text-[#9CA3AF]">No image</span>
                         </div>
                     )}
 
@@ -153,19 +153,19 @@ export default function CreateUserForm({ onSuccess }: { onSuccess?: () => void }
                                 <div
                                     className="px-4 py-3 rounded-lg flex items-center justify-center gap-2 cursor-pointer transition border"
                                     style={{
-                                        background: "rgba(224, 93, 46, 0.1)",
-                                        border: "1.5px solid rgba(224, 93, 46, 0.3)"
+                                        backgroundColor: "#FFF4E8",
+                                        border: "1.5px solid rgba(255, 138, 42, 0.3)"
                                     }}
                                 >
-                                    <Upload size={16} color="#e05d2e" />
-                                    <span className="text-sm font-semibold text-white/70">Upload Image</span>
+                                    <Upload size={16} color="#FF8A2A" />
+                                    <span className="text-sm font-semibold text-[#2F2F2F]">Upload Image</span>
                                 </div>
                             </motion.label>
                         )}
                     />
                 </div>
                 {errors.profilePicture && (
-                    <p className="text-xs text-red-400 mt-2">{errors.profilePicture.message as string}</p>
+                    <p className="text-xs text-[#EF4444] mt-2">{errors.profilePicture.message as string}</p>
                 )}
             </motion.div>
 
@@ -174,18 +174,18 @@ export default function CreateUserForm({ onSuccess }: { onSuccess?: () => void }
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 }}
             >
-                <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-semibold text-[#6B7280] uppercase tracking-wider mb-2">
                     Full Name
                 </label>
                 <input
                     type="text"
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition text-sm"
-                    style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                    className="w-full px-4 py-3 rounded-lg bg-white border text-[#2F2F2F] placeholder-[#9CA3AF] focus:outline-none focus:border-[#FF8A2A] focus:ring-4 focus:ring-[rgba(255,138,42,0.15)] transition text-sm"
+                    style={{ borderColor: "#E5E7EB" }}
                     {...register("fullName")}
                     placeholder="Enter full name"
                 />
                 {errors.fullName && (
-                    <p className="text-xs text-red-400 mt-1">{errors.fullName.message}</p>
+                    <p className="text-xs text-[#EF4444] mt-1">{errors.fullName.message}</p>
                 )}
             </motion.div>
 
@@ -194,18 +194,18 @@ export default function CreateUserForm({ onSuccess }: { onSuccess?: () => void }
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
             >
-                <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-semibold text-[#6B7280] uppercase tracking-wider mb-2">
                     Email
                 </label>
                 <input
                     type="email"
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition text-sm"
-                    style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                    className="w-full px-4 py-3 rounded-lg bg-white border text-[#2F2F2F] placeholder-[#9CA3AF] focus:outline-none focus:border-[#FF8A2A] focus:ring-4 focus:ring-[rgba(255,138,42,0.15)] transition text-sm"
+                    style={{ borderColor: "#E5E7EB" }}
                     {...register("email")}
                     placeholder="Enter email"
                 />
                 {errors.email && (
-                    <p className="text-xs text-red-400 mt-1">{errors.email.message}</p>
+                    <p className="text-xs text-[#EF4444] mt-1">{errors.email.message}</p>
                 )}
             </motion.div>
 
@@ -214,18 +214,18 @@ export default function CreateUserForm({ onSuccess }: { onSuccess?: () => void }
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
             >
-                <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-semibold text-[#6B7280] uppercase tracking-wider mb-2">
                     Password
                 </label>
                 <input
                     type="password"
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition text-sm"
-                    style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                    className="w-full px-4 py-3 rounded-lg bg-white border text-[#2F2F2F] placeholder-[#9CA3AF] focus:outline-none focus:border-[#FF8A2A] focus:ring-4 focus:ring-[rgba(255,138,42,0.15)] transition text-sm"
+                    style={{ borderColor: "#E5E7EB" }}
                     {...register("password")}
                     placeholder="••••••••"
                 />
                 {errors.password && (
-                    <p className="text-xs text-red-400 mt-1">{errors.password.message}</p>
+                    <p className="text-xs text-[#EF4444] mt-1">{errors.password.message}</p>
                 )}
             </motion.div>
 
@@ -234,18 +234,18 @@ export default function CreateUserForm({ onSuccess }: { onSuccess?: () => void }
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
             >
-                <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-semibold text-[#6B7280] uppercase tracking-wider mb-2">
                     Confirm Password
                 </label>
                 <input
                     type="password"
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition text-sm"
-                    style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                    className="w-full px-4 py-3 rounded-lg bg-white border text-[#2F2F2F] placeholder-[#9CA3AF] focus:outline-none focus:border-[#FF8A2A] focus:ring-4 focus:ring-[rgba(255,138,42,0.15)] transition text-sm"
+                    style={{ borderColor: "#E5E7EB" }}
                     {...register("confirmPassword")}
                     placeholder="••••••••"
                 />
                 {errors.confirmPassword && (
-                    <p className="text-xs text-red-400 mt-1">{errors.confirmPassword.message}</p>
+                    <p className="text-xs text-[#EF4444] mt-1">{errors.confirmPassword.message}</p>
                 )}
             </motion.div>
 
@@ -254,7 +254,7 @@ export default function CreateUserForm({ onSuccess }: { onSuccess?: () => void }
                 disabled={isSubmitting || pending}
                 className="w-full py-3 rounded-lg text-white font-bold text-sm transition disabled:opacity-50"
                 style={{
-                    background: "linear-gradient(135deg, #e05d2e, #d45a28)"
+                    backgroundColor: "#FF8A2A"
                 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
