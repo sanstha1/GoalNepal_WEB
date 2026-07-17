@@ -45,7 +45,7 @@ export default function NotificationsPage() {
   return (
     <div
       className="min-h-screen flex flex-col"
-      style={{ background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)" }}
+      style={{ backgroundColor: "#FAFAFA" }}
     >
       <div style={{ position: "sticky", top: 0, left: 0, right: 0, zIndex: 50, width: "100%" }}>
         <Header />
@@ -62,16 +62,16 @@ export default function NotificationsPage() {
             <div className="flex items-center gap-4 mb-2">
               <motion.button
                 onClick={() => router.back()}
-                className="w-10 h-10 rounded-full flex items-center justify-center border border-white/10 bg-white/5 text-white hover:bg-white/10 transition"
+                className="w-10 h-10 rounded-full flex items-center justify-center border border-[#E5E7EB] bg-white text-[#2F2F2F] hover:bg-[#FAFAFA] transition"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <ArrowLeft className="w-5 h-5" />
               </motion.button>
               <div>
-                <h1 className="text-4xl font-bold text-white">Notifications</h1>
+                <h1 className="text-4xl font-bold text-[#2F2F2F]">Notifications</h1>
                 {unreadCount > 0 && (
-                  <p className="text-sm text-white/40 mt-1">{unreadCount} unread messages</p>
+                  <p className="text-sm text-[#9CA3AF] mt-1">{unreadCount} unread messages</p>
                 )}
               </div>
             </div>
@@ -79,7 +79,7 @@ export default function NotificationsPage() {
 
           <motion.button
             onClick={markAllRead}
-            className="mb-8 flex items-center gap-2 text-sm font-semibold text-white px-4 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition"
+            className="mb-8 flex items-center gap-2 text-sm font-semibold text-[#2F2F2F] px-4 py-2 rounded-lg border border-[#E5E7EB] bg-white hover:bg-[#FAFAFA] transition"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             initial={{ opacity: 0 }}
@@ -92,7 +92,7 @@ export default function NotificationsPage() {
 
           {loading ? (
             <motion.div
-              className="py-16 text-center text-white/40"
+              className="py-16 text-center text-[#9CA3AF]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
@@ -100,7 +100,7 @@ export default function NotificationsPage() {
             </motion.div>
           ) : notifications.length === 0 ? (
             <motion.div
-              className="py-16 text-center text-white/40"
+              className="py-16 text-center text-[#9CA3AF]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
@@ -143,7 +143,7 @@ function Section({ label, notifications, formatTime }: SectionProps) {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <p className="text-xs font-bold uppercase tracking-widest text-white/30 mb-4 px-2">
+      <p className="text-xs font-bold uppercase tracking-widest text-[#9CA3AF] mb-4 px-2">
         {label}
       </p>
       <div className="space-y-3">
@@ -168,8 +168,8 @@ interface NotifCardProps {
 
 function NotifCard({ n, formatTime, index }: NotifCardProps) {
   const getTypeColor = (type: string) => {
-    if (type === "NEW_TOURNAMENT") return "#e05d2e";
-    if (type === "PAYMENT") return "#22c55e";
+    if (type === "NEW_TOURNAMENT") return "#FF8A2A";
+    if (type === "PAYMENT") return "#34A853";
     return "#3b82f6";
   };
 
@@ -181,14 +181,14 @@ function NotifCard({ n, formatTime, index }: NotifCardProps) {
 
   return (
     <motion.div
-      className="rounded-xl border border-white/10 overflow-hidden shadow-lg group cursor-pointer"
+      className="rounded-xl border border-[#E5E7EB] overflow-hidden shadow-lg group cursor-pointer"
       style={{
-        background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+        backgroundColor: "#FFFFFF",
       }}
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
-      whileHover={{ scale: 1.01, borderColor: "rgba(224, 93, 46, 0.3)" }}
+      whileHover={{ scale: 1.01, borderColor: "rgba(255, 138, 42, 0.3)" }}
     >
       <div className="p-5 flex gap-4">
         <div
@@ -203,7 +203,7 @@ function NotifCard({ n, formatTime, index }: NotifCardProps) {
 
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-3 mb-2">
-            <p className="text-base font-bold text-white leading-tight">
+            <p className="text-base font-bold text-[#2F2F2F] leading-tight">
               {n.title}
             </p>
             {!n.read && (
@@ -216,10 +216,10 @@ function NotifCard({ n, formatTime, index }: NotifCardProps) {
               />
             )}
           </div>
-          <p className="text-sm text-white/50 leading-snug mb-3">
+          <p className="text-sm text-[#6B7280] leading-snug mb-3">
             {n.message}
           </p>
-          <p className="text-xs text-white/30 font-medium">
+          <p className="text-xs text-[#9CA3AF] font-medium">
             {formatTime(n.createdAt)}
           </p>
         </div>
